@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CashierController;
 use App\Http\Controllers\WarehouseController;
 
 Route::get('/', function () {
@@ -25,4 +26,7 @@ Route::put('/warehouse/{id}', [WarehouseController::class, 'update'])->name('war
 Route::delete('/warehouse/{id}', [WarehouseController::class, 'destroy'])->name('warehouse.destroy');
 
 
+
+Route::get('/sales/create', [CashierController::class, 'create'])->name('sales.create');
+Route::post('/sales', [CashierController::class, 'store'])->name('sales.store');
 
