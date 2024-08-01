@@ -11,8 +11,10 @@ class Sale extends Model
 
     protected $fillable = [
         'user_id',
-        'sale_date',
-        'total_price',
+    'buyer_id',
+    'sale_date',
+    'total_price',
+    'payment',
     ];
 
     public function user()

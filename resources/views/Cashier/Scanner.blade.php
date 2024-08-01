@@ -7,7 +7,12 @@
 </head>
 <body>
     <div class="container mt-5">
-        <h1 class="mb-4">Create Sale</h1>
+        <div class="d-flex justify-content-between align-items-end"><h1 class="mb-4">Create Sale | BARCODE</h1>
+            <a href="create" class="d-sm-inline-block btn btn-sm  shadow-sm" style="background-color: rgba(116, 101, 194, 1); color:white; ">
+                <i class="fa fa-book fa-sm text-white-50"></i> Manual
+            </a>
+        </div>
+
 
         @if (session('success'))
             <div class="alert alert-success">
@@ -15,11 +20,30 @@
             </div>
         @endif
 
-        <form id="saleForm" action="{{ route('sales.stores') }}" method="POST">
+        <form id="saleForm" action="{{ route('sales.store') }}" method="POST">
             @csrf
             <div class="form-group">
                 <label for="sale_date">Sale Date:</label>
                 <input type="date" id="sale_date" name="sale_date" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label for="buyer_id">Buyer:</label>
+                <select id="buyer_id" name="buyer_id" class="form-control">
+                    <option value="">Select a buyer (optional)</option>
+                    @foreach ($buyers as $buyer)
+                        <option value="{{ $buyer->id }}">{{ $buyer->username }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="payment">Payment Method:</label>
+                <select id="payment" name="payment" class="form-control" required>
+                    <option value="Cash">Cash</option>
+                    <option value="E-Wallet">E-Wallet</option>
+                    <option value="Bank">Bank</option>
+                </select>
             </div>
 
             <div class="form-group">
@@ -41,10 +65,6 @@
 
             <button type="button" class="btn btn-primary" onclick="confirmSale()">Submit Sale</button>
         </form>
-
-
-
-
 
         <h2 class="mt-5">Sales Data</h2>
 
@@ -145,20 +165,17 @@
             $('#total_price').val(totalPrice.toFixed(2));
         }
 
-
         function confirmSale() {
-                const totalPrice = document.getElementById('total_price').value;
-                const isConfirmed = confirm(`Are you sure you want to submit this sale with a total price of $${totalPrice}?`);
+            const totalPrice = document.getElementById('total_price').value;
+            const isConfirmed = confirm(`Are you sure you want to submit this sale with a total price of $${totalPrice}?`);
 
-                if (isConfirmed) {
-                    // Set the hidden input's value to true
-                    document.getElementById('isConfirmed').value = "true";
-                    // Submit the form
-                    document.getElementById('saleForm').submit();
-                }
+            if (isConfirmed) {
+                // Set the hidden input's value to true
+                document.getElementById('isConfirmed').value = "true";
+                // Submit the form
+                document.getElementById('saleForm').submit();
             }
-
-
+        }
     </script>
 </body>
 </html>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Sale;
 use App\Models\Items;
 use App\Models\SalesItem;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,14 +14,17 @@ class CashierController extends Controller
     public function create()
     {
         $items = Items::all(); // Get all items to populate the dropdown
+        $buyers = User::all(); // Get all buyers
         $sales = Sale::with('user')->get(); // Fetch sales data with associated user
-        return view('cashier.index', compact('items', 'sales'));
+        return view('cashier.index', compact('items', 'buyers', 'sales'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
             'sale_date' => 'required|date',
+            'buyer_id' => 'nullable|exists:users,id',
+            'payment' => 'required|in:Cash,E-Wallet,Bank',
             'items' => 'required|array',
             'items.*.item_id' => 'required|exists:item,id',
             'items.*.quantity' => 'required|integer|min:1',
@@ -31,9 +35,12 @@ class CashierController extends Controller
         // Create the sale
         $sale = Sale::create([
             'user_id' => $userId,
+            'buyer_id' => $request->buyer_id,
             'sale_date' => $request->sale_date,
-            'total_price' => 0, // Total price will be calculated later
+            'total_price' => 0,
+            'payment' => $request->payment,
         ]);
+
 
         $totalPrice = 0;
 

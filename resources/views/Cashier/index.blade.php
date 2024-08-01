@@ -6,7 +6,12 @@
 </head>
 <body>
     <div class="container mt-5">
-        <h1 class="mb-4">Create Sale</h1>
+
+        <div class="d-flex justify-content-between align-items-end"><h1 class="mb-4">Create Sale | MANUAL</h1>
+            <a href="creates" class="d-sm-inline-block btn btn-sm  shadow-sm" style="background-color: rgba(116, 101, 194, 1); color:white; ">
+                <i class="fa fa-book fa-sm text-white-50"></i> Barcode
+            </a>
+        </div>
 
         @if (session('success'))
             <div class="alert alert-success">
@@ -20,6 +25,25 @@
             <div class="form-group">
                 <label for="sale_date">Sale Date:</label>
                 <input type="date" id="sale_date" name="sale_date" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label for="buyer_id">Buyer:</label>
+                <select id="buyer_id" name="buyer_id" class="form-control">
+                    <option value="">Select a buyer</option>
+                    @foreach ($buyers as $buyer)
+                        <option value="{{ $buyer->id }}">{{ $buyer->username }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="payment">Payment Method:</label>
+                <select id="payment" name="payment" class="form-control" required>
+                    <option value="Cash">Cash</option>
+                    <option value="E-Wallet">E-Wallet</option>
+                    <option value="Bank">Bank</option>
+                </select>
             </div>
 
             <div id="items-container">
@@ -83,8 +107,6 @@
         </table>
     </div>
 
-
-    
     <script>
         let itemCount = 1;
 

@@ -16,6 +16,8 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->dateTime('sale_date');
             $table->decimal('total_price', 10, 2); // Menambahkan kolom total_price
+            $table->enum('payment', ['Cash', 'E-Wallet', 'Bank'])->default('Cash');
+            $table->foreignId('buyer_id')->nullable()->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }
