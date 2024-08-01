@@ -84,8 +84,7 @@
     </div>
 
 
-    <input id="barcode">
-    <input id="barcode">
+    
     <script>
         let itemCount = 1;
 
