@@ -33,9 +33,11 @@ Route::delete('/warehouse/{id}', [WarehouseController::class, 'destroy'])->name(
 //cashier
 Route::get('/sales/create', [CashierController::class, 'create'])->name('sales.create');
 Route::post('/sales', [CashierController::class, 'store'])->name('sales.store');
-Route::get('/sales/creates', [SalesController::class, 'create'])->name('sales.creates');
+
+Route::get('/sales/creates', [SalesController::class, 'create'])->name('sales.create');
 Route::post('/sales/stores', [SalesController::class, 'store'])->name('sales.stores');
-Route::post('/sales/barcode', [ScannerController::class, 'processBarcode'])->name('sales.barcode');
+Route::post('/sales/barcode', [SalesController::class, 'barcode'])->name('sales.barcode');
+
 
 //transaction
 Route::get('/transaction', [TransactionController::class, 'transaction'])->name('transaction.index');

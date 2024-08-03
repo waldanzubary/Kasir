@@ -16,12 +16,33 @@ class items extends Model
         'price',
         'stock',
         'image',
+        'status',
 
     ];
 
-    /**
-     * Get the peminjamans for the book.
-     */
+    public function setStatus()
+    {
+        if ($this->stock == 0) {
+            $this->status = 'outStock';
+        } else {
+            $this->status = 'inStock';
+        }
+    }
 
+    public function reduceStock($quantity)
+    {
+        if ($this->stock >= $quantity) {
+            $this->stock -= $quantity;
+            $this->setStatus();
+            $this->save();
+            return true;
+        }
+        return false;
+    }
+
+    public function isInStock()
+    {
+        return $this->stock > 0;
+    }
 
 }

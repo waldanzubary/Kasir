@@ -39,36 +39,35 @@
 <!-- Content Row -->
 <div class="row">
     @foreach ($Item as $item)
-    <div class="col-xl-3">
-        <div class="card shadow mb-4">
-            <!-- Card Header - Dropdown -->
-            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                <h6 class="m-0 font-weight-bold text-primary">{{ $item->itemName }}</h6>
-                <p>Stock: {{ $item->stock }}</p>
-                <p>Price: RP. {{ $item->price }}</p>
+<div class="col-xl-3">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h6 class="m-0 font-weight-bold text-primary">{{ $item->itemName }}</h6>
+            <p>Stock: {{ $item->stock }}</p>
+            <p>Price: RP. {{ $item->price }}</p>
+            <span class="badge badge-danger">{{ $item->status }}</span>
+        </div>
+        <a href="/buku/{{ $item->id }}" class="card-body">
+            <div style="width: 100%; height: 300px" class="cover">
+                <img style="width: 100%; height: 100%" src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->itemName }}">
             </div>
-            <!-- Card Body -->
-            <a href="/buku/{{ $item->id }}" class="card-body">
-                <div style="width: 100%; height: 300px" class="cover">
-                    <img style="width: 100%; height: 100%" src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->itemName }}">
-                </div>
+        </a>
+        <div class="card-footer d-flex justify-content-between">
+            <a href="/warehouse/{{ $item->id }}/edit" class="btn btn-warning btn-sm">
+                Edit
             </a>
-            <!-- Card Footer -->
-            <div class="card-footer d-flex justify-content-between">
-                <a href="/warehouse/{{ $item->id }}/edit" class="btn btn-warning btn-sm">
-                    Edit
-                </a>
-                <form action="/warehouse/{{ $item->id }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this item?');">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger btn-sm">
-                        Delete
-                    </button>
-                </form>
-            </div>
+            <form action="/warehouse/{{ $item->id }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn btn-danger btn-sm">
+                    Delete
+                </button>
+            </form>
         </div>
     </div>
-    @endforeach
+</div>
+@endforeach
+
     <div id="dataContainer"></div>
 </div>
 

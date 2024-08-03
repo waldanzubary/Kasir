@@ -24,23 +24,25 @@ class WarehouseController extends Controller
 
 
     public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'itemName' => 'required|string|max:255',
-            'price' => 'required|integer',
-            'stock' => 'required|integer',
-            'image' => 'nullable|image|max:2048',
-        ]);
+{
+    $validated = $request->validate([
+        'itemName' => 'required|string|max:255',
+        'price' => 'required|integer',
+        'stock' => 'required|integer',
+        'image' => 'nullable|image|max:2048',
+    ]);
 
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('images', 'public');
-            $validated['image'] = $imagePath;
-        }
-
-        items::create($validated);
-
-        return redirect('Warehouse');
+    if ($request->hasFile('image')) {
+        $imagePath = $request->file('image')->store('images', 'public');
+        $validated['image'] = $imagePath;
     }
+
+    $item = new Items($validated);
+    $item->setStatus(); // Set status based on stock
+    $item->save();
+
+    return redirect('Warehouse');
+}
 
 
     public function edit($id)
@@ -51,21 +53,22 @@ class WarehouseController extends Controller
 
 public function update(Request $request, $id)
 {
-    $item = items::findOrFail($id);
+    $item = Items::findOrFail($id);
     $item->itemName = $request->input('itemName');
     $item->stock = $request->input('stock');
     $item->price = $request->input('price');
 
-    // Handle image upload if needed
     if ($request->hasFile('image')) {
         $imagePath = $request->file('image')->store('images', 'public');
         $item->image = $imagePath;
     }
 
+    $item->setStatus(); // Update status based on stock
     $item->save();
 
     return redirect('Warehouse');
 }
+
 
 public function destroy($id)
 {

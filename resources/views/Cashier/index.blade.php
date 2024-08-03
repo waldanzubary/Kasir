@@ -7,8 +7,9 @@
 <body>
     <div class="container mt-5">
 
-        <div class="d-flex justify-content-between align-items-end"><h1 class="mb-4">Create Sale | MANUAL</h1>
-            <a href="creates" class="d-sm-inline-block btn btn-sm  shadow-sm" style="background-color: rgba(116, 101, 194, 1); color:white; ">
+        <div class="d-flex justify-content-between align-items-end">
+            <h1 class="mb-4">Create Sale | MANUAL</h1>
+            <a href="creates" class="d-sm-inline-block btn btn-sm shadow-sm" style="background-color: rgba(116, 101, 194, 1); color:white;">
                 <i class="fa fa-book fa-sm text-white-50"></i> Barcode
             </a>
         </div>
@@ -16,6 +17,16 @@
         @if (session('success'))
             <div class="alert alert-success">
                 {{ session('success') }}
+            </div>
+        @endif
+
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
             </div>
         @endif
 
@@ -53,7 +64,9 @@
                         <select id="items[0][item_id]" name="items[0][item_id]" class="form-control" onchange="updatePrice(0)" required>
                             <option value="">Select an item</option>
                             @foreach ($items as $item)
-                                <option value="{{ $item->id }}" data-price="{{ $item->price }}">{{ $item->itemName }}</option>
+                                @if ($item->isInStock())
+                                    <option value="{{ $item->id }}" data-price="{{ $item->price }}" data-stock="{{ $item->stock }}">{{ $item->itemName }}</option>
+                                @endif
                             @endforeach
                         </select>
                     </div>
@@ -121,7 +134,9 @@
                     <select id="items[${itemCount}][item_id]" name="items[${itemCount}][item_id]" class="form-control" onchange="updatePrice(${itemCount})" required>
                         <option value="">Select an item</option>
                         @foreach ($items as $item)
-                            <option value="{{ $item->id }}" data-price="{{ $item->price }}">{{ $item->itemName }}</option>
+                            @if ($item->isInStock())
+                                <option value="{{ $item->id }}" data-price="{{ $item->price }}" data-stock="{{ $item->stock }}">{{ $item->itemName }}</option>
+                            @endif
                         @endforeach
                     </select>
                 </div>
@@ -155,7 +170,16 @@
 
             const selectedItem = itemSelect.options[itemSelect.selectedIndex];
             const pricePerItem = selectedItem ? selectedItem.getAttribute('data-price') : 0;
+            const stock = selectedItem ? selectedItem.getAttribute('data-stock') : 0;
             const quantity = quantityInput.value;
+
+            if (quantity > stock) {
+                alert(`Insufficient stock for ${selectedItem.text}. Only ${stock} items available.`);
+                quantityInput.value = stock; // Set quantity to maximum available
+                priceInput.value = (pricePerItem * stock).toFixed(2);
+                updateTotalPrice();
+                return;
+            }
 
             const totalItemPrice = pricePerItem * quantity;
             priceInput.value = totalItemPrice.toFixed(2);

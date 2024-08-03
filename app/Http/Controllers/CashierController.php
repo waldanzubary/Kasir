@@ -41,23 +41,26 @@ class CashierController extends Controller
             'payment' => $request->payment,
         ]);
 
-
         $totalPrice = 0;
 
-        // Create sales items
+        // Create sales items and update stock
         foreach ($request->items as $itemData) {
             $item = Items::find($itemData['item_id']);
-            $price = $item->price;
             $quantity = $itemData['quantity'];
 
-            SalesItem::create([
-                'sale_id' => $sale->id,
-                'item_id' => $itemData['item_id'],
-                'quantity' => $quantity,
-                'price' => $price,
-            ]);
+            if ($item->reduceStock($quantity)) {
+                $price = $item->price;
+                SalesItem::create([
+                    'sale_id' => $sale->id,
+                    'item_id' => $itemData['item_id'],
+                    'quantity' => $quantity,
+                    'price' => $price,
+                ]);
 
-            $totalPrice += $price * $quantity;
+                $totalPrice += $price * $quantity;
+            } else {
+                return redirect()->back()->withErrors(['message' => 'Not enough stock for item: ' . $item->itemName]);
+            }
         }
 
         // Update total price

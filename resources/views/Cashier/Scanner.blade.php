@@ -7,12 +7,12 @@
 </head>
 <body>
     <div class="container mt-5">
-        <div class="d-flex justify-content-between align-items-end"><h1 class="mb-4">Create Sale | BARCODE</h1>
-            <a href="create" class="d-sm-inline-block btn btn-sm  shadow-sm" style="background-color: rgba(116, 101, 194, 1); color:white; ">
+        <div class="d-flex justify-content-between align-items-end">
+            <h1 class="mb-4">Create Sale | BARCODE</h1>
+            <a href="{{ route('sales.create') }}" class="d-sm-inline-block btn btn-sm shadow-sm" style="background-color: rgba(116, 101, 194, 1); color:white;">
                 <i class="fa fa-book fa-sm text-white-50"></i> Manual
             </a>
         </div>
-
 
         @if (session('success'))
             <div class="alert alert-success">
@@ -20,7 +20,7 @@
             </div>
         @endif
 
-        <form id="saleForm" action="{{ route('sales.store') }}" method="POST">
+        <form id="saleForm" action="{{ route('sales.stores') }}" method="POST">
             @csrf
             <div class="form-group">
                 <label for="sale_date">Sale Date:</label>
@@ -60,7 +60,6 @@
                 <input type="text" id="total_price" name="total_price" class="form-control" readonly>
             </div>
 
-            <!-- Hidden input to track confirmation -->
             <input type="hidden" id="isConfirmed" name="isConfirmed" value="false">
 
             <button type="button" class="btn btn-primary" onclick="confirmSale()">Submit Sale</button>
@@ -108,7 +107,7 @@
                     success: function(response) {
                         if (response.status === 'success') {
                             addItem(response.item);
-                            $('#barcode_input').val(''); // Clear the input field
+                            $('#barcode_input').val('');
                         } else {
                             alert(response.message);
                         }
@@ -130,50 +129,64 @@
                         <input type="text" class="form-control" value="${item.itemName}" readonly>
                     </div>
                     <div class="form-group col-md-3">
-                        <input type="number" name="items[${itemCount}][quantity]" class="form-control" value="1" min="1" onchange="updatePrice(${itemCount}, ${item.price})" required>
+                        <input type="number" name="items[${itemCount}][quantity]" class="form-control" value="1" min="1" max="${item.stock}" oninput="updateItemStock(${itemCount}, ${item.stock})">
                     </div>
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-3">
                         <input type="text" name="items[${itemCount}][price]" class="form-control" value="${item.price}" readonly>
                     </div>
-                    <div class="form-group col-md-1">
+                    <div class="form-group col-md-2">
                         <button type="button" class="btn btn-danger" onclick="removeItem('${itemId}')">Remove</button>
                     </div>
                 </div>
             `;
             container.append(itemDiv);
-            updateTotalPrice();
             itemCount++;
-        }
-
-        function removeItem(itemId) {
-            $(`#${itemId}`).remove();
             updateTotalPrice();
         }
 
-        function updatePrice(index, pricePerItem) {
-            const quantity = $(`input[name="items[${index}][quantity]"]`).val();
-            const totalItemPrice = pricePerItem * quantity;
-            $(`input[name="items[${index}][price]"]`).val(totalItemPrice.toFixed(2));
+        function updateItemStock(index, stock) {
+            const quantityInput = $(`input[name="items[${index}][quantity]"]`);
+            const quantity = quantityInput.val();
+            if (quantity > stock) {
+                alert('Quantity exceeds available stock!');
+                quantityInput.val(stock); // Set quantity to max stock value
+            }
+            updateTotalPrice();
+        }
+
+        function removeItem(id) {
+            $(`#${id}`).remove();
             updateTotalPrice();
         }
 
         function updateTotalPrice() {
-            let totalPrice = 0;
-            $('input[name$="[price]"]').each(function() {
-                totalPrice += parseFloat($(this).val()) || 0;
+            let total = 0;
+            $('#items-container .item').each(function() {
+                const quantity = $(this).find('input[name$="[quantity]"]').val();
+                const price = $(this).find('input[name$="[price]"]').val();
+                total += quantity * price;
             });
-            $('#total_price').val(totalPrice.toFixed(2));
+            $('#total_price').val(total);
         }
 
         function confirmSale() {
-            const totalPrice = document.getElementById('total_price').value;
-            const isConfirmed = confirm(`Are you sure you want to submit this sale with a total price of $${totalPrice}?`);
+            const form = $('#saleForm');
+            const items = form.find('.item');
+            let valid = true;
 
-            if (isConfirmed) {
-                // Set the hidden input's value to true
-                document.getElementById('isConfirmed').value = "true";
-                // Submit the form
-                document.getElementById('saleForm').submit();
+            items.each(function() {
+                const quantity = $(this).find('input[name$="[quantity]"]').val();
+                const maxStock = $(this).find('input[name$="[quantity]"]').attr('max');
+                if (parseInt(quantity) > parseInt(maxStock)) {
+                    valid = false;
+                    alert('One or more items have quantities exceeding available stock.');
+                    return false; // break the loop
+                }
+            });
+
+            if (valid) {
+                $('#isConfirmed').val('true');
+                form.submit();
             }
         }
     </script>
