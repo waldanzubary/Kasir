@@ -38,8 +38,8 @@ Route::post('/sales/stores', [SalesController::class, 'store'])->name('sales.sto
 Route::post('/sales/barcode', [ScannerController::class, 'processBarcode'])->name('sales.barcode');
 
 //transaction
-Route::get('/Transaction', [TransactionController::class, 'transaction'])->name('transaction.index');
-Route::get('/Transaction/{id}', [TransactionController::class, 'show'])->name('sales.show');
+Route::get('/transaction', [TransactionController::class, 'transaction'])->name('transaction.index');
+Route::get('/transaction/{id}', [TransactionController::class, 'show'])->name('sales.show');
 
 
 
