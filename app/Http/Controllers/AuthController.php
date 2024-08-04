@@ -82,11 +82,11 @@ class AuthController extends Controller
                 }
 
                 if(Auth::user()->role == 'Cashier') {
-                    return redirect('/Cashier');
+                    return redirect('/sales/create');
                 }
 
                 if(Auth::user()->role == 'User') {
-                    return redirect('/Transaction');
+                    return redirect('/transaction');
                 }
 
 
@@ -102,5 +102,5 @@ class AuthController extends Controller
     }
 
 
-    
+
 }

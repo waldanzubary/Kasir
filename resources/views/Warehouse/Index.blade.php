@@ -1,74 +1,43 @@
-@extends('Layout.Layout')
+@extends('Layout.content')
 
 @section('content')
 <!-- Begin Page Content -->
-<style>
-    .fav {
-        width: 20px;
-        height: 20px;
-    }
-
-    .fav input {
-        display: none;
-    }
-
-    .fav label {
-        width: 100%;
-        height: 100%;
-        display: block;
-        background-image: url('/sb-my-admin/img/heart.png');
-        background-size: cover;
-    }
-
-    .fav input:checked + label {
-        background-image: url('/sb-my-admin/img/heartFill.png');
-    }
-</style>
-
 <!-- Page Heading -->
-<div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">WareHouse</h1>
+<div class="flex align-items-center justify-end mb-4">
 
-    <div class="d-sm-flex align-items-center justify-content-between">
-        <a href="Warehouse/create" class="d-none d-sm-inline-block btn btn-sm ml-3 shadow-sm" style="background-color: rgba(116, 101, 194, 1); color:white">
-            <i class="fa fa-book fa-sm text-white-50"></i> Create Item
-        </a>
-    </div>
+    <a href="Warehouse/create" class="btn btn-primary ">
+        <i class="fa fa-book fa-sm"></i> Create Item
+    </a>
 </div>
 
 <!-- Content Row -->
-<div class="row">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
     @foreach ($Item as $item)
-<div class="col-xl-3">
-    <div class="card shadow mb-4">
-        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-            <h6 class="m-0 font-weight-bold text-primary">{{ $item->itemName }}</h6>
-            <p>Stock: {{ $item->stock }}</p>
-            <p>Price: RP. {{ $item->price }}</p>
-            <span class="badge badge-danger">{{ $item->status }}</span>
-        </div>
-        <a href="/buku/{{ $item->id }}" class="card-body">
-            <div style="width: 100%; height: 300px" class="cover">
-                <img style="width: 100%; height: 100%" src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->itemName }}">
+    <div class="card  bg-base-300  shadow-lg rounded-lg overflow-hidden ">
+        <figure>
+            <img src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->itemName }}" class="object-cover w-full h-48 rounded-t-lg">
+        </figure>
+        <div class="card-body p-4">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-semibold">{{ $item->itemName }}</h2>
+                <span id="status-{{ $item->id }}" class="badge badge-status">{{ $item->status }}</span>
             </div>
-        </a>
-        <div class="card-footer d-flex justify-content-between">
-            <a href="/warehouse/{{ $item->id }}/edit" class="btn btn-warning btn-sm">
-                Edit
-            </a>
-            <form action="/warehouse/{{ $item->id }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this item?');">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="btn btn-danger btn-sm">
-                    Delete
-                </button>
-            </form>
+
+
+            <p class="text-gray-400">Stock: <span id="stock-{{ $item->id }}" class="font-bold">{{ $item->stock }}</span></p>
+            <p class="text-gray-400">Price: Rp. {{ $item->price }}</p>
+
+            <div class="card-actions flex justify-end gap-2 mt-4">
+                <a href="/warehouse/{{ $item->id }}/edit" class="btn btn-warning btn-sm text-gray-900">Edit</a>
+                <form action="/warehouse/{{ $item->id }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-error btn-sm text-gray-100">Delete</button>
+                </form>
+            </div>
         </div>
     </div>
-</div>
-@endforeach
-
-    <div id="dataContainer"></div>
+    @endforeach
 </div>
 
 <!-- End of Page Wrapper -->
@@ -79,23 +48,31 @@
 </a>
 
 <!-- Logout Modal-->
-<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-primary" href="login.html">Logout</a>
-            </div>
+<div class="modal">
+    <div class="modal-box">
+        <h2 class="text-lg font-bold">Ready to Leave?</h2>
+        <p>Select "Logout" below if you are ready to end your current session.</p>
+        <div class="modal-action">
+            <button class="btn" data-dismiss="modal">Cancel</button>
+            <a class="btn btn-primary" href="login.html">Logout</a>
         </div>
     </div>
 </div>
+
+<!-- JavaScript for Dynamic Badge Color -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.badge-status').forEach(function (badge) {
+            if (badge.textContent.trim() === 'outStock') {
+                badge.classList.add('bg-red-500', 'text-white');
+                badge.classList.remove('bg-green-500');
+            } else {
+                badge.classList.add('bg-green-500', 'text-white');
+                badge.classList.remove('bg-red-500');
+            }
+        });
+    });
+</script>
 
 <!-- Bootstrap core JavaScript-->
 <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>

@@ -1,37 +1,60 @@
-@extends('Layout.Layout')
+@extends('Layout.content')
 
 @section('content')
-<div class="container">
-    <h1>Edit Item</h1>
+<!-- Begin Page Content -->
+<!-- Content Row -->
+<div class="container mx-auto p-6">
+    <div class="flex justify-center">
+        <div class="w-full max-w-lg">
+            <div class="card bg-base-200 shadow-lg border border-base-300 rounded-lg">
+                <div class="card-header text-xl font-semibold p-4 border-b border-base-300">Edit Item</div>
+                <div class="card-body p-6">
+                    <form action="{{ route('warehouse.update', $item->id) }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        @method('PUT')
 
-    <form action="{{ route('warehouse.update', $item->id) }}" method="POST" enctype="multipart/form-data">
-        @csrf
-        @method('PUT')
+                        <!-- Item Name -->
+                        <div class="form-control mb-5">
+                            <label for="itemName" class="label">
+                                <span class="label-text font-medium">Item Name</span>
+                            </label>
+                            <input type="text" id="itemName" name="itemName" class="input input-bordered" value="{{ $item->itemName }}" required>
+                        </div>
 
-        <div class="form-group">
-            <label for="itemName">Item Name</label>
-            <input type="text" class="form-control" id="itemName" name="itemName" value="{{ $item->itemName }}" required>
+                        <!-- Stock -->
+                        <div class="form-control mb-5">
+                            <label for="stock" class="label">
+                                <span class="label-text font-medium">Stock</span>
+                            </label>
+                            <input type="number" id="stock" name="stock" class="input input-bordered" value="{{ $item->stock }}" required>
+                        </div>
+
+                        <!-- Price -->
+                        <div class="form-control mb-5">
+                            <label for="price" class="label">
+                                <span class="label-text font-medium">Price</span>
+                            </label>
+                            <input type="text" id="price" name="price" class="input input-bordered" value="{{ $item->price }}" required>
+                        </div>
+
+                        <!-- Image -->
+                        <div class="form-control mb-5">
+                            <label for="image" class="label">
+                                <span class="label-text font-medium">Image</span>
+                            </label>
+                            <input type="file" id="image" name="image" class="file-input file-input-bordered">
+                            @if ($item->image)
+                                <img src="{{ asset('storage/' . $item->image) }}" alt="Current Image" class="mt-4 w-24 h-auto border border-base-300 rounded-md">
+                            @endif
+                        </div>
+
+                        <div class="flex justify-end">
+                            <button type="submit" class="btn btn-primary">Update Item</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-
-        <div class="form-group">
-            <label for="stock">Stock</label>
-            <input type="number" class="form-control" id="stock" name="stock" value="{{ $item->stock }}" required>
-        </div>
-
-        <div class="form-group">
-            <label for="price">Price</label>
-            <input type="text" class="form-control" id="price" name="price" value="{{ $item->price }}" required>
-        </div>
-
-        <div class="form-group">
-            <label for="image">Image</label>
-            <input type="file" class="form-control-file" id="image" name="image">
-            @if ($item->image)
-                <img src="{{ asset('storage/' . $item->image) }}" alt="Current Image" style="width: 100px; height: auto; margin-top: 10px;">
-            @endif
-        </div>
-
-        <button type="submit" class="btn btn-primary">Update Item</button>
-    </form>
+    </div>
 </div>
 @endsection
