@@ -34,7 +34,7 @@ Route::delete('/warehouse/{id}', [WarehouseController::class, 'destroy'])->name(
 Route::get('/sales/create', [CashierController::class, 'create'])->name('sales.create');
 Route::post('/sales', [CashierController::class, 'store'])->name('sales.store');
 
-Route::get('/sales/creates', [SalesController::class, 'create'])->name('sales.create');
+Route::get('/sales/creates', [SalesController::class, 'create'])->name('sales.creates');
 Route::post('/sales/stores', [SalesController::class, 'store'])->name('sales.stores');
 Route::post('/sales/barcode', [SalesController::class, 'barcode'])->name('sales.barcode');
 

@@ -18,13 +18,14 @@ class TransactionController extends Controller
     }
 
     public function show($id)
-{
-    // Fetch the sale record by id
-    $sale = Sale::with('user', 'salesItems')->findOrFail($id);
+    {
+        // Fetch the sale record by id, including related user and salesItems
+        $sale = Sale::with('user', 'salesItems.item')->findOrFail($id);
 
-    // Return the detail view with sale data
-    return view('Transaction.detail', compact('sale'));
-}
+        // Return the detail view with the sale data
+        return view('Transaction.detail', compact('sale'));
+    }
+
 
 }
 
