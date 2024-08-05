@@ -1,35 +1,42 @@
+@extends('Layout.content')
+
+@section('title', 'Sales Transactions')
+
+@section('content')
+
 <!DOCTYPE html>
 <html>
 <head>
     <title>Create Sale</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daisyui@2.26.1/dist/full.css">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
-<body>
-    <div class="container mt-5">
-        <div class="d-flex justify-content-between align-items-end">
-            <h1 class="mb-4">Create Sale | BARCODE</h1>
-            <a href="{{ route('sales.create') }}" class="d-sm-inline-block btn btn-sm shadow-sm" style="background-color: rgba(116, 101, 194, 1); color:white;">
-                <i class="fa fa-book fa-sm text-white-50"></i> Manual
+<body class="">
+    <div class="container mx-auto mt-8 p-4 bg-base-100 rounded-lg shadow-lg">
+        <div class="flex justify-between items-end mb-4">
+            <h1 class="text-2xl font-bold mb-4">Create Sale | BARCODE</h1>
+            <a href="{{ route('sales.create') }}" class="btn btn-primary">
+                <i class="fa fa-book"></i> Manual
             </a>
         </div>
 
         @if (session('success'))
-            <div class="alert alert-success">
+            <div class="alert alert-success mb-4">
                 {{ session('success') }}
             </div>
         @endif
 
-        <form id="saleForm" action="{{ route('sales.stores') }}" method="POST">
+        <form id="saleForm" action="{{ route('sales.stores') }}" method="POST" class="space-y-4">
             @csrf
-            <div class="form-group">
-                <label for="sale_date">Sale Date:</label>
-                <input type="date" id="sale_date" name="sale_date" class="form-control" required>
+            <div class="form-control">
+                <label for="sale_date" class="label">Sale Date:</label>
+                <input type="date" id="sale_date" name="sale_date" class="input input-bordered" required>
             </div>
 
-            <div class="form-group">
-                <label for="buyer_id">Buyer:</label>
-                <select id="buyer_id" name="buyer_id" class="form-control">
+            <div class="form-control">
+                <label for="buyer_id" class="label">Buyer:</label>
+                <select id="buyer_id" name="buyer_id" class="select select-bordered">
                     <option value="">Select a buyer (optional)</option>
                     @foreach ($buyers as $buyer)
                         <option value="{{ $buyer->id }}">{{ $buyer->username }}</option>
@@ -37,27 +44,27 @@
                 </select>
             </div>
 
-            <div class="form-group">
-                <label for="payment">Payment Method:</label>
-                <select id="payment" name="payment" class="form-control" required>
+            <div class="form-control">
+                <label for="payment" class="label">Payment Method:</label>
+                <select id="payment" name="payment" class="select select-bordered" required>
                     <option value="Cash">Cash</option>
                     <option value="E-Wallet">E-Wallet</option>
                     <option value="Bank">Bank</option>
                 </select>
             </div>
 
-            <div class="form-group">
-                <label for="barcode_input">Scan Barcode:</label>
-                <input type="text" id="barcode_input" name="barcode" class="form-control" placeholder="Scan barcode here">
+            <div class="form-control">
+                <label for="barcode_input" class="label">Scan Barcode:</label>
+                <input type="text" id="barcode_input" name="barcode" class="input input-bordered" placeholder="Scan barcode here">
             </div>
 
             <div id="items-container">
                 <!-- Dynamic Items Will be Added Here -->
             </div>
 
-            <div class="form-group">
-                <label for="total_price">Total Price:</label>
-                <input type="text" id="total_price" name="total_price" class="form-control" readonly>
+            <div class="form-control">
+                <label for="total_price" class="label">Total Price:</label>
+                <input type="text" id="total_price" name="total_price" class="input input-bordered" readonly>
             </div>
 
             <input type="hidden" id="isConfirmed" name="isConfirmed" value="false">
@@ -65,9 +72,9 @@
             <button type="button" class="btn btn-primary" onclick="confirmSale()">Submit Sale</button>
         </form>
 
-        <h2 class="mt-5">Sales Data</h2>
+        <h2 class="text-xl font-bold mt-5">Sales Data</h2>
 
-        <table class="table table-bordered mt-3">
+        <table class="table table-zebra mt-3 w-full">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -123,19 +130,21 @@
             const container = $('#items-container');
             const itemId = `item-${itemCount}`;
             const itemDiv = `
-                <div class="item form-row mt-1" id="${itemId}">
-                    <div class="form-group col-md-4">
-                        <input type="hidden" name="items[${itemCount}][item_id]" value="${item.id}">
-                        <input type="text" class="form-control" value="${item.itemName}" readonly>
-                    </div>
-                    <div class="form-group col-md-3">
-                        <input type="number" name="items[${itemCount}][quantity]" class="form-control" value="1" min="1" max="${item.stock}" oninput="updateItemStock(${itemCount}, ${item.stock})">
-                    </div>
-                    <div class="form-group col-md-3">
-                        <input type="text" name="items[${itemCount}][price]" class="form-control" value="${item.price}" readonly>
-                    </div>
-                    <div class="form-group col-md-2">
-                        <button type="button" class="btn btn-danger" onclick="removeItem('${itemId}')">Remove</button>
+                <div class="item form-control  mt-2 " id="${itemId}">
+                    <div class="grid grid-cols-4 gap-4">
+                        <div>
+                            <input type="hidden" name="items[${itemCount}][item_id]" value="${item.id}">
+                            <input type="text" class="input input-bordered w-full" value="${item.itemName}" readonly>
+                        </div>
+                        <div>
+                            <input type="number" name="items[${itemCount}][quantity]" class="input input-bordered w-full" value="1" min="1" max="${item.stock}" oninput="updateItemStock(${itemCount}, ${item.stock})">
+                        </div>
+                        <div>
+                            <input type="text" name="items[${itemCount}][price]" class="input input-bordered w-full" value="${item.price}" readonly>
+                        </div>
+                        <div class="flex items-center ">
+                            <button type="button" class="btn btn-error" onclick="removeItem('${itemId}')">Remove</button>
+                        </div>
                     </div>
                 </div>
             `;
@@ -190,5 +199,6 @@
             }
         }
     </script>
+    @endsection
 </body>
 </html>

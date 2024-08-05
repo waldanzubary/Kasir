@@ -1,16 +1,22 @@
+@extends('Layout.content')
+
+@section('title', 'Sales Transactions')
+
+@section('content')
 <!DOCTYPE html>
 <html>
 <head>
     <title>Create Sale</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@latest/dist/full.css" rel="stylesheet">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
-<body>
-    <div class="container mt-5">
+<body class="">
+    <div class="container mx-auto mt-8 p-4 bg-base-100 rounded-lg shadow-lg">
 
-        <div class="d-flex justify-content-between align-items-end">
-            <h1 class="mb-4">Create Sale | MANUAL</h1>
-            <a href="creates" class="d-sm-inline-block btn btn-sm shadow-sm" style="background-color: rgba(116, 101, 194, 1); color:white;">
-                <i class="fa fa-book fa-sm text-white-50"></i> Barcode
+        <div class="flex justify-between items-center mb-4">
+            <h1 class="text-3xl font-bold">Create Sale | MANUAL</h1>
+            <a href="creates" class="btn btn-primary">
+                <i class="fa fa-barcode"></i> Barcode
             </a>
         </div>
 
@@ -21,7 +27,7 @@
         @endif
 
         @if ($errors->any())
-            <div class="alert alert-danger">
+            <div class="alert alert-error">
                 <ul>
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
@@ -33,14 +39,18 @@
         <form action="{{ route('sales.store') }}" method="POST">
             @csrf
 
-            <div class="form-group">
-                <label for="sale_date">Sale Date:</label>
-                <input type="date" id="sale_date" name="sale_date" class="form-control" required>
+            <div class="form-control mb-4">
+                <label for="sale_date" class="label">
+                    <span class="label-text">Sale Date:</span>
+                </label>
+                <input type="date" id="sale_date" name="sale_date" class="input input-bordered" required>
             </div>
 
-            <div class="form-group">
-                <label for="buyer_id">Buyer:</label>
-                <select id="buyer_id" name="buyer_id" class="form-control">
+            <div class="form-control mb-4">
+                <label for="buyer_id" class="label">
+                    <span class="label-text">Buyer:</span>
+                </label>
+                <select id="buyer_id" name="buyer_id" class="select select-bordered">
                     <option value="">Select a buyer</option>
                     @foreach ($buyers as $buyer)
                         <option value="{{ $buyer->id }}">{{ $buyer->username }}</option>
@@ -48,9 +58,11 @@
                 </select>
             </div>
 
-            <div class="form-group">
-                <label for="payment">Payment Method:</label>
-                <select id="payment" name="payment" class="form-control" required>
+            <div class="form-control mb-4">
+                <label for="payment" class="label">
+                    <span class="label-text">Payment Method:</span>
+                </label>
+                <select id="payment" name="payment" class="select select-bordered" required>
                     <option value="Cash">Cash</option>
                     <option value="E-Wallet">E-Wallet</option>
                     <option value="Bank">Bank</option>
@@ -58,47 +70,62 @@
             </div>
 
             <div id="items-container">
-                <div class="item form-row" id="item-0">
-                    <div class="form-group col-md-4">
-                        <label for="items[0][item_id]">Item:</label>
-                        <select id="items[0][item_id]" name="items[0][item_id]" class="form-control" onchange="updatePrice(0)" required>
-                            <option value="">Select an item</option>
-                            @foreach ($items as $item)
-                                @if ($item->isInStock())
-                                    <option value="{{ $item->id }}" data-price="{{ $item->price }}" data-stock="{{ $item->stock }}">{{ $item->itemName }}</option>
-                                @endif
-                            @endforeach
-                        </select>
-                    </div>
+                <div class="item form-control mb-4" id="item-0">
+                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-4">
+                        <div class="form-control">
+                            <label for="items[0][item_id]" class="label">
+                                <span class="label-text">Item:</span>
+                            </label>
+                            <select id="items[0][item_id]" name="items[0][item_id]" class="select select-bordered" onchange="updatePrice(0)" required>
+                                <option value="">Select an item</option>
+                                @foreach ($items as $item)
+                                    @if ($item->isInStock())
+                                        <option value="{{ $item->id }}" data-price="{{ $item->price }}" data-stock="{{ $item->stock }}">{{ $item->itemName }}</option>
+                                    @endif
+                                @endforeach
+                            </select>
+                        </div>
 
-                    <div class="form-group col-md-3">
-                        <label for="items[0][quantity]">Quantity:</label>
-                        <input type="number" id="items[0][quantity]" name="items[0][quantity]" class="form-control" min="1" value="1" onchange="updatePrice(0)" required>
-                    </div>
+                        <div class="form-control">
+                            <label for="items[0][quantity]" class="label">
+                                <span class="label-text">Quantity:</span>
+                            </label>
+                            <input type="number" id="items[0][quantity]" name="items[0][quantity]" class="input input-bordered" min="1" value="1" onchange="updatePrice(0)" required>
+                        </div>
 
-                    <div class="form-group col-md-4">
-                        <label for="items[0][price]">Price:</label>
-                        <input type="text" id="items[0][price]" name="items[0][price]" class="form-control" readonly>
-                    </div>
+                        <div class="form-control">
+                            <label for="items[0][price]" class="label">
+                                <span class="label-text">Price:</span>
+                            </label>
+                            <input type="text" id="items[0][price]" name="items[0][price]" class="input input-bordered" readonly>
+                        </div>
 
-                    <div class="form-group col-md-1 mt-2">
-                        <button type="button" class="btn btn-danger mt-4" onclick="removeItem('item-0')">Remove</button>
+                        <div class="">
+                            <label for="items[0][delegte]" class="label">
+                                <span class="label-text">Action :</span>
+                            </label>
+                            <button type="button" class="btn btn-error" onclick="removeItem('item-0')">Remove</button>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="form-group">
-                <label for="total_price">Total Price:</label>
-                <input type="text" id="total_price" name="total_price" class="form-control" readonly>
+            <div class="form-control mb-4">
+                <label for="total_price" class="label">
+                    <span class="label-text">Total Price:</span>
+                </label>
+                <input type="text" id="total_price" name="total_price" class="input input-bordered" readonly>
             </div>
 
-            <button type="button" class="btn btn-secondary" onclick="addItem()">Add More Items</button>
-            <button type="submit" class="btn btn-primary">Submit Sale</button>
+            <div class="flex gap-4">
+                <button type="button" class="btn btn-secondary" onclick="addItem()">Add More Items</button>
+                <button type="submit" class="btn btn-primary">Submit Sale</button>
+            </div>
         </form>
 
-        <h2 class="mt-5">Sales Data</h2>
+        <h2 class="text-2xl font-bold mt-8">Sales Data</h2>
 
-        <table class="table table-bordered mt-3">
+        <table class="table w-full mt-4">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -127,30 +154,35 @@
             const container = document.getElementById('items-container');
             const itemDiv = document.createElement('div');
             const itemId = `item-${itemCount}`;
-            itemDiv.classList.add('item', 'form-row', 'mt-1');
+            itemDiv.classList.add('item', 'form-control', 'mb-4');
             itemDiv.setAttribute('id', itemId);
             itemDiv.innerHTML = `
-                <div class="form-group col-md-4">
-                    <select id="items[${itemCount}][item_id]" name="items[${itemCount}][item_id]" class="form-control" onchange="updatePrice(${itemCount})" required>
-                        <option value="">Select an item</option>
-                        @foreach ($items as $item)
-                            @if ($item->isInStock())
-                                <option value="{{ $item->id }}" data-price="{{ $item->price }}" data-stock="{{ $item->stock }}">{{ $item->itemName }}</option>
-                            @endif
-                        @endforeach
-                    </select>
-                </div>
+                <div class="grid grid-cols-1 gap-4 sm:grid-cols-4">
+                    <div class="form-control">
+                        <select id="items[${itemCount}][item_id]" name="items[${itemCount}][item_id]" class="select select-bordered" onchange="updatePrice(${itemCount})" required>
+                            <option value="">Select an item</option>
+                            @foreach ($items as $item)
+                                @if ($item->isInStock())
+                                    <option value="{{ $item->id }}" data-price="{{ $item->price }}" data-stock="{{ $item->stock }}">{{ $item->itemName }}</option>
+                                @endif
+                            @endforeach
+                        </select>
+                    </div>
 
-                <div class="form-group col-md-3">
-                    <input type="number" id="items[${itemCount}][quantity]" name="items[${itemCount}][quantity]" class="form-control" min="1" value="1" onchange="updatePrice(${itemCount})" required>
-                </div>
+                    <div class="form-control">
 
-                <div class="form-group col-md-4">
-                    <input type="text" id="items[${itemCount}][price]" name="items[${itemCount}][price]" class="form-control" readonly>
-                </div>
+                        <input type="number" id="items[${itemCount}][quantity]" name="items[${itemCount}][quantity]" class="input input-bordered" min="1" value="1" onchange="updatePrice(${itemCount})" required>
+                    </div>
 
-                <div class="form-group col-md-1">
-                    <button type="button" class="btn btn-danger" onclick="removeItem('${itemId}')">Remove</button>
+                    <div class="form-control">
+
+                        <input type="text" id="items[${itemCount}][price]" name="items[${itemCount}][price]" class="input input-bordered" readonly>
+                    </div>
+
+                    <div class=" ">
+                        
+                        <button type="button" class="btn btn-error" onclick="removeItem('${itemId}')">Remove</button>
+                    </div>
                 </div>
             `;
             container.appendChild(itemDiv);
@@ -198,5 +230,6 @@
             document.getElementById('total_price').value = totalPrice.toFixed(2);
         }
     </script>
+    @endsection
 </body>
 </html>

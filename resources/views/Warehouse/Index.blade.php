@@ -15,7 +15,7 @@
     @foreach ($Item as $item)
     <div class="card  bg-base-300  shadow-lg rounded-lg overflow-hidden ">
         <figure>
-            <img src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->itemName }}" class="object-cover w-full h-48 rounded-t-lg">
+            <img src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->itemName }}" class="object-cover w-full h-48  rounded-t-lg">
         </figure>
         <div class="card-body p-4">
             <div class="flex justify-between items-center mb-4">
