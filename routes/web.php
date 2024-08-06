@@ -4,10 +4,11 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\SalesController;
+use App\Http\Controllers\StaffController;
+use App\Http\Controllers\TotalController;
 use App\Http\Controllers\CashierController;
 use App\Http\Controllers\ScannerController;
 use App\Http\Controllers\ItemScanController;
-use App\Http\Controllers\StaffController;
 use App\Http\Controllers\WarehouseController;
 use App\Http\Controllers\TransactionController;
 
@@ -49,3 +50,4 @@ Route::get('staff', [StaffController::class, 'transactions'])->name('transaction
 
 
 
+Route::get('/latest-sale', [TotalController::class, 'latest'])->name('sales.latest');
