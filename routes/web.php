@@ -9,8 +9,10 @@ use App\Http\Controllers\TotalController;
 use App\Http\Controllers\CashierController;
 use App\Http\Controllers\ScannerController;
 use App\Http\Controllers\ItemScanController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\WarehouseController;
 use App\Http\Controllers\TransactionController;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 Route::get('/', function () {
     return view('welcome');
@@ -51,3 +53,18 @@ Route::get('staff', [StaffController::class, 'transactions'])->name('transaction
 
 
 Route::get('/latest-sale', [TotalController::class, 'latest'])->name('sales.latest');
+
+
+
+
+
+//admin
+Route::get('/dashboard', [DashboardController::class, 'dashboard']);
+
+Route::get('/manage', [DashboardController::class, 'manageaccount'])->name('accounts.index')
+;
+Route::get('accounts/edit/{id}', [DashboardController::class, 'edit'])->name('accounts.edit');
+Route::put('accounts/update/{id}', [DashboardController::class, 'update'])->name('accounts.update');
+Route::delete('accounts/destroy/{id}', [DashboardController::class, 'destroy'])->name('accounts.destroy');
+
+
