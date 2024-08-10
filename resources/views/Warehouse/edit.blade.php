@@ -1,8 +1,7 @@
 @extends('Layout.content')
 
 @section('content')
-<!-- Begin Page Content -->
-<!-- Content Row -->
+
 <div class="container mx-auto p-6">
     <div class="flex justify-center">
         <div class="w-full max-w-lg">
