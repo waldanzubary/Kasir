@@ -21,13 +21,13 @@
             <!-- Sidebar -->
             <div class="w-64 bg-base-200 min-h-screen shadow-lg">
                 <div class="p-6">
-                    <h1 class="text-white text-2xl font-bold">Dashboard</h1>
+                    <h1 class=" text-2xl font-bold">Dashboard</h1>
                     <nav class="mt-6">
-                        <a href="/dashboard" class="block text-gray-300 hover:bg-gray-700 hover:text-white p-3 rounded">Home</a>
-                        <a href="/manage" class="block text-gray-300 hover:bg-gray-700 hover:text-white p-3 rounded">Account Manage</a>
-                        <a href="/Warehouse" class="block text-gray-300 hover:bg-gray-700 hover:text-white p-3 rounded">Warehouse</a>
-                        <a href="/sales/creates" class="block text-gray-300 hover:bg-gray-700 hover:text-white p-3 rounded">Cashier</a>
-                        <a href="/transaction" class="block text-gray-300 hover:bg-gray-700 hover:text-white p-3 rounded">Transaction (user)</a>
+                        <a href="/dashboard" class="block hover:bg-gray-700 hover:text-white p-3 rounded">Home</a>
+                        <a href="/manage" class="block  hover:bg-gray-700 hover:text-white p-3 rounded">Account Manage</a>
+                        <a href="/Warehouse" class="block  hover:bg-gray-700 hover:text-white p-3 rounded">Warehouse</a>
+                        <a href="/sales/creates" class="block  hover:bg-gray-700 hover:text-white p-3 rounded">Cashier</a>
+                        <a href="/transaction" class="block  hover:bg-gray-700 hover:text-white p-3 rounded">Transaction (user)</a>
                     </nav>
                 </div>
             </div>

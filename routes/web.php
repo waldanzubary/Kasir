@@ -43,6 +43,9 @@ Route::post('/sales/stores', [SalesController::class, 'store'])->name('sales.sto
 Route::post('/sales/barcode', [SalesController::class, 'barcode'])->name('sales.barcode')->middleware('OnlyCashier');
 
 
+
+
+
 //transaction
 Route::get('/transaction', [TransactionController::class, 'transaction'])->name('transaction.index');
 Route::get('/transaction/{id}', [TransactionController::class, 'show'])->name('sales.show');
@@ -66,5 +69,7 @@ Route::get('/manage', [DashboardController::class, 'manageaccount'])->name('acco
 Route::get('accounts/edit/{id}', [DashboardController::class, 'edit'])->name('accounts.edit');
 Route::put('accounts/update/{id}', [DashboardController::class, 'update'])->name('accounts.update');
 Route::delete('accounts/destroy/{id}', [DashboardController::class, 'destroy'])->name('accounts.destroy');
+
+
 
 
