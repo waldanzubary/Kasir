@@ -260,6 +260,7 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             updateTotalPrice();
+            toggleCashFields()
         });
     </script>
 </body>
