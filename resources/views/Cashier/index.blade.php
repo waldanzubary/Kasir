@@ -62,14 +62,16 @@
                 <label for="payment" class="label">
                     <span class="label-text">Payment Method:</span>
                 </label>
-                <select id="payment" name="payment" class="select select-bordered" required>
+                <select id="payment" name="payment" class="select select-bordered" required onchange="toggleCashFields()">
                     <option value="Cash">Cash</option>
                     <option value="E-Wallet">E-Wallet</option>
                     <option value="Bank">Bank</option>
                 </select>
             </div>
 
+
             <div id="items-container">
+                <!-- Existing item inputs go here -->
                 <div class="item form-control mb-4" id="item-0">
                     <div class="grid grid-cols-1 gap-4 sm:grid-cols-4">
                         <div class="form-control">
@@ -101,7 +103,7 @@
                         </div>
 
                         <div class="">
-                            <label for="items[0][delegte]" class="label">
+                            <label for="items[0][delegate]" class="label">
                                 <span class="label-text">Action :</span>
                             </label>
                             <button type="button" class="btn btn-error" onclick="removeItem('item-0')">Remove</button>
@@ -117,11 +119,32 @@
                 <input type="text" id="total_price" name="total_price" class="input input-bordered" readonly>
             </div>
 
+            <!-- Cash Fields -->
+            <div id="cash-fields" class="hidden">
+                <div class="form-control mb-4">
+                    <label for="cash_amount" class="label">
+                        <span class="label-text">Nominal Cash:</span>
+                    </label>
+                    <input type="number" id="cash_amount" name="cash_amount" class="input input-bordered" min="0" onchange="calculateChange()">
+                </div>
+
+                <div class="form-control mb-4">
+                    <label for="change_amount" class="label">
+                        <span class="label-text">Change:</span>
+                    </label>
+                    <input type="text" id="change_amount" name="change_amount" class="input input-bordered" readonly>
+                </div>
+            </div>
+            <!-- End of Cash Fields -->
+
+
             <div class="flex gap-4">
                 <button type="button" class="btn btn-secondary" onclick="addItem()">Add More Items</button>
                 <button type="submit" class="btn btn-primary">Submit Sale</button>
             </div>
         </form>
+
+
 
         <h2 class="text-2xl font-bold mt-8">Sales Data</h2>
 
@@ -170,17 +193,14 @@
                     </div>
 
                     <div class="form-control">
-
                         <input type="number" id="items[${itemCount}][quantity]" name="items[${itemCount}][quantity]" class="input input-bordered" min="1" value="1" onchange="updatePrice(${itemCount})" required>
                     </div>
 
                     <div class="form-control">
-
                         <input type="text" id="items[${itemCount}][price]" name="items[${itemCount}][price]" class="input input-bordered" readonly>
                     </div>
 
                     <div class=" ">
-                        
                         <button type="button" class="btn btn-error" onclick="removeItem('${itemId}')">Remove</button>
                     </div>
                 </div>
@@ -201,35 +221,47 @@
             const priceInput = document.getElementById(`items[${index}][price]`);
 
             const selectedItem = itemSelect.options[itemSelect.selectedIndex];
-            const pricePerItem = selectedItem ? selectedItem.getAttribute('data-price') : 0;
-            const stock = selectedItem ? selectedItem.getAttribute('data-stock') : 0;
-            const quantity = quantityInput.value;
+            const price = parseFloat(selectedItem.getAttribute('data-price')) || 0;
+            const quantity = parseInt(quantityInput.value) || 1;
 
-            if (quantity > stock) {
-                alert(`Insufficient stock for ${selectedItem.text}. Only ${stock} items available.`);
-                quantityInput.value = stock; // Set quantity to maximum available
-                priceInput.value = (pricePerItem * stock).toFixed(2);
-                updateTotalPrice();
-                return;
-            }
-
-            const totalItemPrice = pricePerItem * quantity;
-            priceInput.value = totalItemPrice.toFixed(2);
+            const totalPrice = price * quantity;
+            priceInput.value = totalPrice.toFixed(2);
 
             updateTotalPrice();
         }
 
         function updateTotalPrice() {
             let totalPrice = 0;
-
-            const priceInputs = document.querySelectorAll(`#items-container .item input[id^="items"][id$="[price]"]`);
-            priceInputs.forEach(priceInput => {
-                totalPrice += parseFloat(priceInput.value) || 0;
+            document.querySelectorAll('.item').forEach(item => {
+                const price = parseFloat(item.querySelector('[id$="\\[price\\]"]').value) || 0;
+                totalPrice += price;
             });
-
             document.getElementById('total_price').value = totalPrice.toFixed(2);
+            calculateChange();
         }
+
+        function toggleCashFields() {
+            const paymentMethod = document.getElementById('payment').value;
+            const cashFields = document.getElementById('cash-fields');
+
+            if (paymentMethod === 'Cash') {
+                cashFields.classList.remove('hidden');
+            } else {
+                cashFields.classList.add('hidden');
+            }
+        }
+
+        function calculateChange() {
+            const cashAmount = parseFloat(document.getElementById('cash_amount').value) || 0;
+            const totalPrice = parseFloat(document.getElementById('total_price').value) || 0;
+            const changeAmount = cashAmount - totalPrice;
+            document.getElementById('change_amount').value = changeAmount.toFixed(2);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateTotalPrice();
+        });
     </script>
-    @endsection
 </body>
 </html>
+@endsection
