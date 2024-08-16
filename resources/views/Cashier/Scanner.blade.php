@@ -44,9 +44,11 @@
                 </select>
             </div>
 
-            <div class="form-control">
-                <label for="payment" class="label">Payment Method:</label>
-                <select id="payment" name="payment" class="select select-bordered" required>
+            <div class="form-control mb-4">
+                <label for="payment" class="label">
+                    <span class="label-text">Payment Method:</span>
+                </label>
+                <select id="payment" name="payment" class="select select-bordered" required onchange="toggleCashFields()">
                     <option value="Cash">Cash</option>
                     <option value="E-Wallet">E-Wallet</option>
                     <option value="Bank">Bank</option>
@@ -66,6 +68,24 @@
                 <label for="total_price" class="label">Total Price:</label>
                 <input type="text" id="total_price" name="total_price" class="input input-bordered" readonly>
             </div>
+
+            <!-- Cash Fields -->
+            <div id="cash-fields" class="hidden">
+                <div class="form-control mb-4">
+                    <label for="cash_amount" class="label">
+                        <span class="label-text">Nominal Cash:</span>
+                    </label>
+                    <input type="number" id="cash_amount" name="cash_amount" class="input input-bordered" min="0" onchange="calculateChange()">
+                </div>
+
+                <div class="form-control mb-4">
+                    <label for="change_amount" class="label">
+                        <span class="label-text">Change:</span>
+                    </label>
+                    <input type="text" id="change_amount" name="change_amount" class="input input-bordered" readonly>
+                </div>
+            </div>
+            <!-- End of Cash Fields -->
 
             <input type="hidden" id="isConfirmed" name="isConfirmed" value="false">
 
@@ -130,7 +150,7 @@
             const container = $('#items-container');
             const itemId = `item-${itemCount}`;
             const itemDiv = `
-                <div class="item form-control  mt-2 " id="${itemId}">
+                <div class="item form-control mt-2" id="${itemId}">
                     <div class="grid grid-cols-4 gap-4">
                         <div>
                             <input type="hidden" name="items[${itemCount}][item_id]" value="${item.id}">
@@ -142,7 +162,7 @@
                         <div>
                             <input type="text" name="items[${itemCount}][price]" class="input input-bordered w-full" value="${item.price}" readonly>
                         </div>
-                        <div class="flex items-center ">
+                        <div class="flex items-center">
                             <button type="button" class="btn btn-error" onclick="removeItem('${itemId}')">Remove</button>
                         </div>
                     </div>
@@ -178,6 +198,24 @@
             $('#total_price').val(total);
         }
 
+        function toggleCashFields() {
+            const paymentMethod = document.getElementById('payment').value;
+            const cashFields = document.getElementById('cash-fields');
+
+            if (paymentMethod === 'Cash') {
+                cashFields.classList.remove('hidden');
+            } else {
+                cashFields.classList.add('hidden');
+            }
+        }
+
+        function calculateChange() {
+            const cashAmount = parseFloat(document.getElementById('cash_amount').value) || 0;
+            const totalPrice = parseFloat(document.getElementById('total_price').value) || 0;
+            const changeAmount = cashAmount - totalPrice;
+            document.getElementById('change_amount').value = changeAmount.toFixed(2);
+        }
+
         function confirmSale() {
             const form = $('#saleForm');
             const items = form.find('.item');
@@ -198,7 +236,13 @@
                 form.submit();
             }
         }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            toggleCashFields();  // Ensure cash fields are toggled based on the default selection
+            updateTotalPrice();  // Calculate total price on page load
+        });
     </script>
-    @endsection
 </body>
 </html>
+
+@endsection
