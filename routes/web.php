@@ -15,7 +15,7 @@ use App\Http\Controllers\TransactionController;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 Route::get('/', function () {
-    return view('Authorization.login');
+    return view('welcome');
 });
 
 //Auth

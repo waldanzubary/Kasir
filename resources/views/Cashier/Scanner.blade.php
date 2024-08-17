@@ -3,41 +3,52 @@
 @section('title', 'Sales Transactions')
 
 @section('content')
-
 <!DOCTYPE html>
 <html>
 <head>
     <title>Create Sale</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daisyui@2.26.1/dist/full.css">
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@latest/dist/full.css" rel="stylesheet">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <body class="">
     <div class="container mx-auto mt-8 p-4 bg-base-100 rounded-lg shadow-lg">
-        <div class="flex justify-between items-end mb-4">
-            <h1 class="text-2xl font-bold mb-4">Create Sale | BARCODE</h1>
-            <a href="{{ route('sales.create') }}" class="btn btn-primary">
-                <i class="fa fa-book"></i> Manual
-            </a>
+
+        <div class="flex justify-between items-center mb-4">
+            <h1 class="text-3xl font-bold">Create Sale</h1>
         </div>
 
         @if (session('success'))
-            <div class="alert alert-success mb-4">
+            <div class="alert alert-success">
                 {{ session('success') }}
             </div>
         @endif
 
-        <form id="saleForm" action="{{ route('sales.stores') }}" method="POST" class="space-y-4">
+        @if ($errors->any())
+            <div class="alert alert-error">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        <form id="saleForm" action="{{ route('sales.store') }}" method="POST">
             @csrf
-            <div class="form-control">
-                <label for="sale_date" class="label">Sale Date:</label>
+
+            <div class="form-control mb-4">
+                <label for="sale_date" class="label">
+                    <span class="label-text">Sale Date:</span>
+                </label>
                 <input type="date" id="sale_date" name="sale_date" class="input input-bordered" required>
             </div>
 
-            <div class="form-control">
-                <label for="buyer_id" class="label">Buyer:</label>
+            <div class="form-control mb-4">
+                <label for="buyer_id" class="label">
+                    <span class="label-text">Buyer:</span>
+                </label>
                 <select id="buyer_id" name="buyer_id" class="select select-bordered">
-                    <option value="">Select a buyer (optional)</option>
+                    <option value="">Select a buyer</option>
                     @foreach ($buyers as $buyer)
                         <option value="{{ $buyer->id }}">{{ $buyer->username }}</option>
                     @endforeach
@@ -55,17 +66,59 @@
                 </select>
             </div>
 
-            <div class="form-control">
-                <label for="barcode_input" class="label">Scan Barcode:</label>
+            <div class="form-control mb-4">
+                <label for="barcode_input" class="label">
+                    <span class="label-text">Scan Barcode:</span>
+                </label>
                 <input type="text" id="barcode_input" name="barcode" class="input input-bordered" placeholder="Scan barcode here">
             </div>
 
             <div id="items-container">
-                <!-- Dynamic Items Will be Added Here -->
+                <!-- Existing item inputs go here -->
+                <div class="item form-control mb-4" id="item-0">
+                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-4">
+                        <div class="form-control">
+                            <label for="items[0][item_id]" class="label">
+                                <span class="label-text">Item:</span>
+                            </label>
+                            <select id="items[0][item_id]" name="items[0][item_id]" class="select select-bordered" onchange="updatePrice(0)" required>
+                                <option value="">Select an item</option>
+                                @foreach ($items as $item)
+                                    @if ($item->isInStock())
+                                        <option value="{{ $item->id }}" data-price="{{ $item->price }}" data-stock="{{ $item->stock }}">{{ $item->itemName }}</option>
+                                    @endif
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="form-control">
+                            <label for="items[0][quantity]" class="label">
+                                <span class="label-text">Quantity:</span>
+                            </label>
+                            <input type="number" id="items[0][quantity]" name="items[0][quantity]" class="input input-bordered" min="1" value="1" onchange="updatePrice(0)" required>
+                        </div>
+
+                        <div class="form-control">
+                            <label for="items[0][price]" class="label">
+                                <span class="label-text">Price:</span>
+                            </label>
+                            <input type="text" id="items[0][price]" name="items[0][price]" class="input input-bordered" readonly>
+                        </div>
+
+                        <div class="">
+                            <label for="items[0][delegate]" class="label">
+                                <span class="label-text">Action :</span>
+                            </label>
+                            <button type="button" class="btn btn-error" onclick="removeItem('item-0')">Remove</button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div class="form-control">
-                <label for="total_price" class="label">Total Price:</label>
+            <div class="form-control mb-4">
+                <label for="total_price" class="label">
+                    <span class="label-text">Total Price:</span>
+                </label>
                 <input type="text" id="total_price" name="total_price" class="input input-bordered" readonly>
             </div>
 
@@ -87,14 +140,15 @@
             </div>
             <!-- End of Cash Fields -->
 
-            <input type="hidden" id="isConfirmed" name="isConfirmed" value="false">
-
-            <button type="button" class="btn btn-primary" onclick="confirmSale()">Submit Sale</button>
+            <div class="flex gap-4">
+                <button type="button" class="btn btn-secondary" onclick="addItem()">Add More Items</button>
+                <button type="submit" class="btn btn-primary">Submit Sale</button>
+            </div>
         </form>
 
-        <h2 class="text-xl font-bold mt-5">Sales Data</h2>
+        <h2 class="text-2xl font-bold mt-8">Sales Data</h2>
 
-        <table class="table table-zebra mt-3 w-full">
+        <table class="table w-full mt-4">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -118,7 +172,7 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
-        let itemCount = 0;
+        let itemCount = 1;
 
         $(document).ready(function() {
             $('#barcode_input').on('change', function() {
@@ -133,7 +187,7 @@
                     },
                     success: function(response) {
                         if (response.status === 'success') {
-                            addItem(response.item);
+                            addItemFromBarcode(response.item);
                             $('#barcode_input').val('');
                         } else {
                             alert(response.message);
@@ -146,56 +200,99 @@
             });
         });
 
-        function addItem(item) {
-            const container = $('#items-container');
+        function addItem() {
+            const container = document.getElementById('items-container');
+            const itemDiv = document.createElement('div');
             const itemId = `item-${itemCount}`;
-            const itemDiv = `
-                <div class="item form-control mt-2" id="${itemId}">
-                    <div class="grid grid-cols-4 gap-4">
-                        <div>
-                            <input type="hidden" name="items[${itemCount}][item_id]" value="${item.id}">
-                            <input type="text" class="input input-bordered w-full" value="${item.itemName}" readonly>
-                        </div>
-                        <div>
-                            <input type="number" name="items[${itemCount}][quantity]" class="input input-bordered w-full" value="1" min="1" max="${item.stock}" oninput="updateItemStock(${itemCount}, ${item.stock})">
-                        </div>
-                        <div>
-                            <input type="text" name="items[${itemCount}][price]" class="input input-bordered w-full" value="${item.price}" readonly>
-                        </div>
-                        <div class="flex items-center">
-                            <button type="button" class="btn btn-error" onclick="removeItem('${itemId}')">Remove</button>
-                        </div>
+            itemDiv.classList.add('item', 'form-control', 'mb-4');
+            itemDiv.setAttribute('id', itemId);
+            itemDiv.innerHTML = `
+                <div class="grid grid-cols-1 gap-4 sm:grid-cols-4">
+                    <div class="form-control">
+                        <select id="items[${itemCount}][item_id]" name="items[${itemCount}][item_id]" class="select select-bordered" onchange="updatePrice(${itemCount})" required>
+                            <option value="">Select an item</option>
+                            @foreach ($items as $item)
+                                @if ($item->isInStock())
+                                    <option value="{{ $item->id }}" data-price="{{ $item->price }}" data-stock="{{ $item->stock }}">{{ $item->itemName }}</option>
+                                @endif
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="form-control">
+                        <input type="number" id="items[${itemCount}][quantity]" name="items[${itemCount}][quantity]" class="input input-bordered" min="1" value="1" onchange="updatePrice(${itemCount})" required>
+                    </div>
+
+                    <div class="form-control">
+                        <input type="text" id="items[${itemCount}][price]" name="items[${itemCount}][price]" class="input input-bordered" readonly>
+                    </div>
+
+                    <div class=" ">
+                        <button type="button" class="btn btn-error" onclick="removeItem('${itemId}')">Remove</button>
                     </div>
                 </div>
             `;
-            container.append(itemDiv);
+            container.appendChild(itemDiv);
+            itemCount++;
+        }
+
+        function addItemFromBarcode(item) {
+            const container = document.getElementById('items-container');
+            const itemId = `item-${itemCount}`;
+            const itemDiv = document.createElement('div');
+            itemDiv.classList.add('item', 'form-control', 'mb-4');
+            itemDiv.setAttribute('id', itemId);
+            itemDiv.innerHTML = `
+                <div class="grid grid-cols-1 gap-4 sm:grid-cols-4">
+                    <div class="form-control">
+                        <input type="hidden" name="items[${itemCount}][item_id]" value="${item.id}">
+                        <input type="text" class="input input-bordered w-full" value="${item.itemName}" readonly>
+                    </div>
+                    <div class="form-control">
+                        <input type="number" name="items[${itemCount}][quantity]" class="input input-bordered w-full" value="1" min="1" max="${item.stock}" onchange="updatePrice(${itemCount})">
+                    </div>
+                    <div class="form-control">
+                        <input type="text" name="items[${itemCount}][price]" class="input input-bordered w-full" value="${item.price}" readonly>
+                    </div>
+                    <div class="flex items-center">
+                        <button type="button" class="btn btn-error" onclick="removeItem('${itemId}')">Remove</button>
+                    </div>
+                </div>
+            `;
+            container.appendChild(itemDiv);
             itemCount++;
             updateTotalPrice();
         }
 
-        function updateItemStock(index, stock) {
-            const quantityInput = $(`input[name="items[${index}][quantity]"]`);
-            const quantity = quantityInput.val();
-            if (quantity > stock) {
-                alert('Quantity exceeds available stock!');
-                quantityInput.val(stock); // Set quantity to max stock value
-            }
+        function removeItem(itemId) {
+            const itemDiv = document.getElementById(itemId);
+            itemDiv.remove();
             updateTotalPrice();
         }
 
-        function removeItem(id) {
-            $(`#${id}`).remove();
+        function updatePrice(index) {
+            const itemSelect = document.getElementById(`items[${index}][item_id]`);
+            const quantityInput = document.getElementById(`items[${index}][quantity]`);
+            const priceInput = document.getElementById(`items[${index}][price]`);
+
+            const selectedItem = itemSelect.options[itemSelect.selectedIndex];
+            const price = parseFloat(selectedItem.getAttribute('data-price')) || 0;
+            const quantity = parseInt(quantityInput.value) || 1;
+
+            const totalPrice = price * quantity;
+            priceInput.value = totalPrice.toFixed(2);
+
             updateTotalPrice();
         }
 
         function updateTotalPrice() {
-            let total = 0;
-            $('#items-container .item').each(function() {
-                const quantity = $(this).find('input[name$="[quantity]"]').val();
-                const price = $(this).find('input[name$="[price]"]').val();
-                total += quantity * price;
+            let totalPrice = 0;
+            document.querySelectorAll('.item').forEach(item => {
+                const price = parseFloat(item.querySelector('[id$="\\[price\\]"]').value) || 0;
+                totalPrice += price;
             });
-            $('#total_price').val(total);
+            document.getElementById('total_price').value = totalPrice.toFixed(2);
+            calculateChange();
         }
 
         function toggleCashFields() {
@@ -216,33 +313,11 @@
             document.getElementById('change_amount').value = changeAmount.toFixed(2);
         }
 
-        function confirmSale() {
-            const form = $('#saleForm');
-            const items = form.find('.item');
-            let valid = true;
-
-            items.each(function() {
-                const quantity = $(this).find('input[name$="[quantity]"]').val();
-                const maxStock = $(this).find('input[name$="[quantity]"]').attr('max');
-                if (parseInt(quantity) > parseInt(maxStock)) {
-                    valid = false;
-                    alert('One or more items have quantities exceeding available stock.');
-                    return false; // break the loop
-                }
-            });
-
-            if (valid) {
-                $('#isConfirmed').val('true');
-                form.submit();
-            }
-        }
-
         document.addEventListener('DOMContentLoaded', () => {
-            toggleCashFields();  // Ensure cash fields are toggled based on the default selection
-            updateTotalPrice();  // Calculate total price on page load
+            updateTotalPrice();
+            toggleCashFields();
         });
     </script>
 </body>
 </html>
-
 @endsection

@@ -4,122 +4,67 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Login</title>
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <title>Register</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@latest/dist/full.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-   <style>
-        /* .main {
-            height: 100vh;
-        }
-
-        .register-box {
-            width: 500px;
-            padding: 30px;
-        }
-
-        form div {
-            margin: 15px;
-        } */
-        .divider:after,
-.divider:before {
-content: "";
-flex: 1;
-height: 1px;
-background: #eee;
-}
-    </style>
-
-    {{-- <div class="main d-flex flex-column justify-content-center align-items-center"> --}}
-
-
-        {{-- <div class="register-box">
-            <form action="" method="post">
-                @csrf
-                <div>
-                    <label class="form-label" for="username">Username</label>
-                    <input class="form-control" type="text" name="username" id="username" required>
-                </div>
-                <div>
-                    <label class="form-label" for="password">Password</label>
-                    <input class="form-control" type="password" name="password" id="password" required>
-                </div>
-
-                <div>
-                    <label class="form-label" for="phone">phone</label>
-                    <input class="form-control" type="text" name="phone" id="phone" required>
-                </div>
-
-                <div>
-                    <button class="btn btn-primary form-control" type="submit">Register</button>
-                </div>
-            </form>
-            <a href="/login">login</a>
+<body class="bg-base-100 flex flex-col min-h-screen">
+    <!-- Navbar -->
+    <div class="navbar bg-base-100">
+        <div class="flex-1">
+            <a class="btn btn-ghost normal-case text-xl">STARBHAK Mart</a>
         </div>
-    </div> --}}
-    <section class="vh-100">
-        <div class="container py-5 h-100">
-          <div class="row d-flex align-items-center justify-content-center h-100">
-            <div class="col-md-8 col-lg-7 col-xl-6">
-              <img src="{{asset ( 'sb-my-admin/img/color.png' )}}"
-                class="img-fluid" alt="Phone image">
-            </div>
-            <div class="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
+    </div>
+
+    <!-- Register Form -->
+    <div class="flex-grow flex items-center justify-center">
+        <div class="card w-96 bg-base-200 shadow-xl">
+            <div class="card-body">
+                <h2 class="card-title mb-4">Register</h2>
                 <form action="" method="post">
-                @csrf
-                @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-
-        @endif
-        @if (session('status'))
-        <div class="alert alert-success">
-            {{ session('message') }}
-        </div>
-        @endif
-                <h2 class="mb-3">Register</h2>
-                <!-- Email input -->
-
-                <div data-mdb-input-init class="form-outline mb-4">
-                    <input type="email" id="email" name="email" class="form-control form-control-lg" required/>
-                    <label class="form-label" for="form1Example23">Email</label>
-                  </div>
-
-                <div data-mdb-input-init class="form-outline mb-4">
-                  <input type="text" id="username" name="username" class="form-control form-control-lg" required/>
-                  <label class="form-label" for="form1Example13">Username</label>
+                    @csrf
+                    @if ($errors->any())
+                        <div class="alert alert-error">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                    @if (session('status'))
+                        <div class="alert alert-success">
+                            {{ session('message') }}
+                        </div>
+                    @endif
+                    <div class="form-control">
+                        <label class="label" for="email">
+                            <span class="label-text">Email</span>
+                        </label>
+                        <input type="email" id="email" name="email" class="input input-bordered" required/>
+                    </div>
+                    <div class="form-control mt-4">
+                        <label class="label" for="username">
+                            <span class="label-text">Username</span>
+                        </label>
+                        <input type="text" id="username" name="username" class="input input-bordered" required/>
+                    </div>
+                    <div class="form-control mt-4">
+                        <label class="label" for="password">
+                            <span class="label-text">Password</span>
+                        </label>
+                        <input type="password" id="password" name="password" class="input input-bordered" required/>
+                    </div>
+                    <div class="form-control mt-6">
+                        <button type="submit" class="btn btn-primary">Register</button>
+                    </div>
+                </form>
+                <div class="text-center mt-4">
+                    <span>Already have an account?</span>
+                    <a href="/login" class="link link-primary">Log in</a>
                 </div>
-
-
-                <!-- Password input -->
-                <div data-mdb-input-init class="form-outline mb-4">
-                  <input type="password" id="password" name="password" class="form-control form-control-lg" required/>
-                  <label class="form-label" for="form1Example23">Password</label>
-                </div>
-
-
-
-
-                <button type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-lg btn-block form-control">Sign in</button>
-                <div class="d-flex  align-items-center mb-4 mt-3">
-                    <b>Sudah punya akun?
-                    <a href="/login"> Login</a>
-                </b>
-                  </div>
-
-
-              </form>
             </div>
-          </div>
         </div>
-      </section>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    </div>
 </body>
 </html>
