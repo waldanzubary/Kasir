@@ -29,7 +29,7 @@
             @if($item->barcode)
             <div class="mt-4">
                 <p class="text-gray-400 mb-2">Barcode:</p>
-                <img src="{{ asset('storage/' . $item->barcode) }}" alt="Barcode" class="w-full">
+                <img src="{{ asset('storage/' . $item->barcode) }}" alt="Barcode" class="w-24">
             </div>
             @endif
 
@@ -45,6 +45,7 @@
     </div>
     @endforeach
 </div>
+
 
 <!-- End of Page Wrapper -->
 
