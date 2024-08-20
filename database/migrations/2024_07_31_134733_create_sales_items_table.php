@@ -19,6 +19,7 @@ return new class extends Migration
             $table->decimal('price', 10, 2); // Menyimpan harga per item
             $table->timestamps();
         });
+
     }
 
     /** 

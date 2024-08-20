@@ -12,10 +12,10 @@
 
 <!-- Content Row -->
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-    @foreach ($Item as $item)
-    <div class="card  bg-base-300  shadow-lg rounded-lg overflow-hidden ">
+    @foreach ($items as $item)
+    <div class="card bg-base-300 shadow-lg rounded-lg overflow-hidden">
         <figure>
-            <img src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->itemName }}" class="object-cover w-full h-48  rounded-t-lg">
+            <img src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->itemName }}" class="object-cover w-full h-48 rounded-t-lg">
         </figure>
         <div class="card-body p-4">
             <div class="flex justify-between items-center mb-4">
@@ -23,9 +23,15 @@
                 <span id="status-{{ $item->id }}" class="badge badge-status">{{ $item->status }}</span>
             </div>
 
-
             <p class="text-gray-400">Stock: <span id="stock-{{ $item->id }}" class="font-bold">{{ $item->stock }}</span></p>
             <p class="text-gray-400">Price: Rp. {{ $item->price }}</p>
+
+            @if($item->barcode)
+            <div class="mt-4">
+                <p class="text-gray-400 mb-2">Barcode:</p>
+                <img src="{{ asset('storage/' . $item->barcode) }}" alt="Barcode" class="w-full">
+            </div>
+            @endif
 
             <div class="card-actions flex justify-end gap-2 mt-4">
                 <a href="/warehouse/{{ $item->id }}/edit" class="btn btn-warning btn-sm text-gray-900">Edit</a>

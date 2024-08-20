@@ -16,6 +16,7 @@ class items extends Model
         'price',
         'stock',
         'image',
+        'barcode',
         'status',
 
     ];

@@ -6,8 +6,12 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "guzzlehttp/guzzle": "^7.9",
         "laravel/framework": "^11.9",
-        "laravel/tinker": "^2.9"
+        "laravel/tinker": "^2.9",
+        "milon/barcode": "^11.0",
+        "picqer/php-barcode-generator": "^2.4",
+        "tecnickcom/tc-lib-barcode": "^1.15"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
