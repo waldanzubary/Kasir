@@ -22,36 +22,39 @@ class WarehouseController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'itemName' => 'required|string|max:255',
-            'price' => 'required|integer',
-            'stock' => 'required|integer',
-            'image' => 'nullable|image|max:2048',
-        ]);
+{
+    $validated = $request->validate([
+        'itemName' => 'required|string|max:255',
+        'price' => 'required|integer',
+        'stock' => 'required|integer',
+        'image' => 'nullable|image|max:2048',
+    ]);
 
-        $barcodeData = uniqid();
+    // Create item first to get the ID
+    $item = new Items($validated);
+    $item->setStatus();
+    $item->save();
 
-        $barcodeUrl = "https://barcodeapi.org/api/128/{$barcodeData}";
-        $response = Http::get($barcodeUrl);
+    // Generate barcode using the item's ID
+    $barcodeData = str_pad($item->id, 8, '0', STR_PAD_LEFT); // Pad the ID to ensure it's 8 digits
+    $barcodeUrl = "https://barcodeapi.org/api/128/{$barcodeData}";
+    $response = Http::get($barcodeUrl);
 
-        if ($response->successful()) {
-            $barcodeImagePath = 'barcodes/' . $barcodeData . '.png';
-            Storage::disk('public')->put($barcodeImagePath, $response->body());
-            $validated['barcode'] = $barcodeImagePath;
-        }
-
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('images', 'public');
-            $validated['image'] = $imagePath;
-        }
-
-        $item = new Items($validated);
-        $item->setStatus();
-        $item->save();
-
-        return redirect('Warehouse');
+    if ($response->successful()) {
+        $barcodeImagePath = 'barcodes/' . $barcodeData . '.png';
+        Storage::disk('public')->put($barcodeImagePath, $response->body());
+        $item->barcode = $barcodeImagePath;
     }
+
+    if ($request->hasFile('image')) {
+        $imagePath = $request->file('image')->store('images', 'public');
+        $item->image = $imagePath;
+    }
+
+    $item->save();
+
+    return redirect('Warehouse');
+}
 
     public function edit($id)
     {
@@ -69,6 +72,19 @@ class WarehouseController extends Controller
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('images', 'public');
             $item->image = $imagePath;
+        }
+
+        // Regenerate barcode if it doesn't exist
+        if (!$item->barcode) {
+            $barcodeData = str_pad($item->id, 8, '0', STR_PAD_LEFT);
+            $barcodeUrl = "https://barcodeapi.org/api/128/{$barcodeData}";
+            $response = Http::get($barcodeUrl);
+
+            if ($response->successful()) {
+                $barcodeImagePath = 'barcodes/' . $barcodeData . '.png';
+                Storage::disk('public')->put($barcodeImagePath, $response->body());
+                $item->barcode = $barcodeImagePath;
+            }
         }
 
         $item->setStatus(); 
