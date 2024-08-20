@@ -36,7 +36,7 @@ class WarehouseController extends Controller
     $item->save();
 
     // Generate barcode using the item's ID
-    $barcodeData = str_pad($item->id, 8, '0', STR_PAD_LEFT); // Pad the ID to ensure it's 8 digits
+    $barcodeData = $item->id;
     $barcodeUrl = "https://barcodeapi.org/api/128/{$barcodeData}";
     $response = Http::get($barcodeUrl);
 
@@ -63,35 +63,35 @@ class WarehouseController extends Controller
     }
 
     public function update(Request $request, $id)
-    {
-        $item = Items::findOrFail($id);
-        $item->itemName = $request->input('itemName');
-        $item->stock = $request->input('stock');
-        $item->price = $request->input('price');
+{
+    $item = Items::findOrFail($id);
+    $item->itemName = $request->input('itemName');
+    $item->stock = $request->input('stock');
+    $item->price = $request->input('price');
 
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('images', 'public');
-            $item->image = $imagePath;
-        }
-
-        // Regenerate barcode if it doesn't exist
-        if (!$item->barcode) {
-            $barcodeData = str_pad($item->id, 8, '0', STR_PAD_LEFT);
-            $barcodeUrl = "https://barcodeapi.org/api/128/{$barcodeData}";
-            $response = Http::get($barcodeUrl);
-
-            if ($response->successful()) {
-                $barcodeImagePath = 'barcodes/' . $barcodeData . '.png';
-                Storage::disk('public')->put($barcodeImagePath, $response->body());
-                $item->barcode = $barcodeImagePath;
-            }
-        }
-
-        $item->setStatus(); 
-        $item->save();
-
-        return redirect('Warehouse');
+    if ($request->hasFile('image')) {
+        $imagePath = $request->file('image')->store('images', 'public');
+        $item->image = $imagePath;
     }
+
+    // Regenerate barcode if it doesn't exist
+    if (!$item->barcode) {
+        $barcodeData = $item->id;
+        $barcodeUrl = "https://barcodeapi.org/api/128/{$barcodeData}";
+        $response = Http::get($barcodeUrl);
+
+        if ($response->successful()) {
+            $barcodeImagePath = 'barcodes/' . $barcodeData . '.png';
+            Storage::disk('public')->put($barcodeImagePath, $response->body());
+            $item->barcode = $barcodeImagePath;
+        }
+    }
+
+    $item->setStatus(); 
+    $item->save();
+
+    return redirect('Warehouse');
+}
 
 
     public function destroy($id)
