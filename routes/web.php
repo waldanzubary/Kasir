@@ -34,6 +34,9 @@ Route::get('/warehouse/{id}/edit', [WarehouseController::class, 'edit'])->name('
 Route::put('/warehouse/{id}', [WarehouseController::class, 'update'])->name('warehouse.update')->middleware('OnlyStaff');
 Route::delete('/warehouse/{id}', [WarehouseController::class, 'destroy'])->name('warehouse.destroy')->middleware('OnlyStaff');
 
+Route::get('/warehouse/{id}/download-barcode', [WarehouseController::class, 'downloadBarcode'])->name('warehouse.downloadBarcode');
+
+
 //cashier
 Route::get('/sales/create', [CashierController::class, 'create'])->name('sales.create')->middleware('OnlyCashier');
 Route::post('/sales', [CashierController::class, 'store'])->name('sales.store')->middleware('OnlyCashier');

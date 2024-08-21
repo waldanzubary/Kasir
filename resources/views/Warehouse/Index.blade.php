@@ -27,11 +27,14 @@
             <p class="text-gray-400">Price: Rp. {{ $item->price }}</p>
 
             @if($item->barcode)
-            <div class="mt-4">
-                <p class="text-gray-400 mb-2">Barcode:</p>
-                <img src="{{ asset('storage/' . $item->barcode) }}" alt="Barcode" class="w-24">
-            </div>
-            @endif
+<div class="mt-4">
+    <p class="text-gray-400 mb-2">Barcode:</p>
+    <img src="{{ asset('storage/' . $item->barcode) }}" alt="Barcode" class="w-24">
+    <a href="{{ route('warehouse.downloadBarcode', $item->id) }}" class="btn btn-info btn-sm mt-2">
+        Download Barcode
+    </a>
+</div>
+@endif
 
             <div class="card-actions flex justify-end gap-2 mt-4">
                 <a href="/warehouse/{{ $item->id }}/edit" class="btn btn-warning btn-sm text-gray-900">Edit</a>

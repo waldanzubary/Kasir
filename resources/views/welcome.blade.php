@@ -32,10 +32,11 @@
 
     <!-- Centered Welcome Message -->
     <div class="flex-grow flex items-center justify-center">
-        <div class="text-center">
+        <div class="text-start">
             <h1 class="text-5xl font-bold mb-4">Welcome to STARBHAK Mart!</h1>
             <p class="text-xl mb-6">Manage your store here!</p>
         </div>
+       
     </div>
 </body>
 </html>

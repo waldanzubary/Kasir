@@ -14,7 +14,7 @@ class WarehouseController extends Controller
         $items = Items::all();
         return view('Warehouse.index', compact('items'));
     }
-    
+
     public function CreateIndex()
 
     {
@@ -84,7 +84,7 @@ class WarehouseController extends Controller
             }
         }
 
-        $item->setStatus(); 
+        $item->setStatus();
         $item->save();
 
         return redirect('Warehouse');
@@ -98,5 +98,22 @@ class WarehouseController extends Controller
 
         return redirect('Warehouse');
     }
+
+
+    public function downloadBarcode($id)
+{
+    $item = items::findOrFail($id);
+
+    if ($item->barcode) {
+        $barcodePath = storage_path('app/public/' . $item->barcode);
+        if (file_exists($barcodePath)) {
+            return response()->download($barcodePath);
+        } else {
+            return redirect()->back()->with('error', 'Barcode file not found.');
+        }
+    } else {
+        return redirect()->back()->with('error', 'No barcode available for this item.');
+    }
+}
 
 }
