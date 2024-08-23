@@ -33,7 +33,13 @@ class AuthController extends Controller
     $validated = $request->validate([
         'email' => 'required|unique:users|max:255|email',
         'username' => 'required|max:255',
-        'password' => 'required|max:255', // Hilangkan aturan peng-hash-an
+        'password' => 'required|max:255',
+        'city' => 'required',
+        'address' => 'required',
+        'phone' => 'required',
+        'shop_name' => 'required',
+        'zip_code' => 'required',
+
 
     ]);
 
@@ -41,12 +47,19 @@ class AuthController extends Controller
     $userData = [
         'email' => $request->email,
         'username' => $request->username,
-        'password' => $request->password, // Tetapkan password tanpa peng-hash-an
+        'password' => $request->password,
+        'city' => $request->city,
+        'address' => $request->address,
+        'phone' => $request->phone,
+        'shop_name' => $request->shop_name,
+        'zip_code' => $request->zip_code,
 
     ];
 
     // Buat user baru tanpa melakukan peng-hash-an pada password
     $user = User::create($userData);
+    Session::flash('status', 'success');
+    Session::flash('message', 'Hubungi admin untuk melakukan pembayaran dan pengaktifan akun');
 
     // Flash message dan redirect
 

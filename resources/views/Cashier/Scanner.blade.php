@@ -1,178 +1,120 @@
-@extends('Layout.user_dashboard')
+@extends('Layout.content')
 
 @section('title', 'Sales Transactions')
 
 @section('content')
+
 <!DOCTYPE html>
 <html>
 <head>
     <title>Create Sale</title>
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@latest/dist/full.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daisyui@2.26.1/dist/full.css">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <body class="">
-    <div class="container mx-auto mt-8 p-4 bg-base-100 rounded-lg shadow-lg">
-
-        <div class="flex justify-between items-center mb-4">
-            <h1 class="text-3xl font-bold">Create Sale</h1>
-        </div>
-
-        @if (session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-        @endif
-
-        @if ($errors->any())
-            <div class="alert alert-error">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-
-        <form id="saleForm" action="{{ route('sales.store') }}" method="POST">
-            @csrf
-
+    <form id="saleForm" action="{{ route('sales.stores') }}" method="POST" class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 p-8">
+        @csrf
+        <!-- Main Content -->
+        <main class="flex-1 bg-white p-6 rounded-lg shadow-md">
             <div class="form-control mb-4">
-                <label for="sale_date" class="label">
-                    <span class="label-text">Sale Date:</span>
-                </label>
-                <input type="date" id="sale_date" name="sale_date" class="input input-bordered" required>
+                <label for="barcode_input" class="label font-semibold text-gray-700">Scan Barcode:</label>
+                <input type="text" id="barcode_input" name="barcode" class="input input-bordered w-full" placeholder="Scan barcode here">
             </div>
 
-            <div class="form-control mb-4">
-                <label for="buyer_id" class="label">
-                    <span class="label-text">Buyer:</span>
-                </label>
-                <select id="buyer_id" name="buyer_id" class="select select-bordered">
-                    <option value="">Select a buyer</option>
-                    @foreach ($buyers as $buyer)
-                        <option value="{{ $buyer->id }}">{{ $buyer->username }}</option>
-                    @endforeach
-                </select>
-            </div>
-
-            <div class="form-control mb-4">
-                <label for="payment" class="label">
-                    <span class="label-text">Payment Method:</span>
-                </label>
-                <select id="payment" name="payment" class="select select-bordered" required onchange="toggleCashFields()">
-                    <option value="Cash">Cash</option>
-                    <option value="E-Wallet">E-Wallet</option>
-                    <option value="Bank">Bank</option>
-                </select>
-            </div>
-
-            <div class="form-control mb-4">
-                <label for="barcode_input" class="label">
-                    <span class="label-text">Scan Barcode:</span>
-                </label>
-                <input type="text" id="barcode_input" name="barcode" class="input input-bordered" placeholder="Scan barcode here">
-            </div>
-
-            <div id="items-container">
-                <!-- Existing item inputs go here -->
-                <div class="item form-control mb-4" id="item-0">
-                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-4">
-                        <div class="form-control">
-                            <label for="items[0][item_id]" class="label">
-                                <span class="label-text">Item:</span>
-                            </label>
-                            <select id="items[0][item_id]" name="items[0][item_id]" class="select select-bordered" onchange="updatePrice(0)" required>
-                                <option value="">Select an item</option>
-                                @foreach ($items as $item)
-                                    @if ($item->user_id == auth()->id() && $item->isInStock())
-                                        <option value="{{ $item->id }}" data-price="{{ $item->price }}" data-stock="{{ $item->stock }}">{{ $item->itemName }}</option>
-                                    @endif
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <div class="form-control">
-                            <label for="items[0][quantity]" class="label">
-                                <span class="label-text">Quantity:</span>
-                            </label>
-                            <input type="number" id="items[0][quantity]" name="items[0][quantity]" class="input input-bordered" min="1" value="1" onchange="updatePrice(0)" required>
-                        </div>
-
-                        <div class="form-control">
-                            <label for="items[0][price]" class="label">
-                                <span class="label-text">Price:</span>
-                            </label>
-                            <input type="text" id="items[0][price]" name="items[0][price]" class="input input-bordered" readonly>
-                        </div>
-
-                        <div class="">
-                            <label for="items[0][delegate]" class="label">
-                                <span class="label-text">Action :</span>
-                            </label>
-                            <button type="button" class="btn btn-error" onclick="removeItem('item-0')">Remove</button>
-                        </div>
-                    </div>
+            <div class="container mx-auto mt-8 bg-white p-4 rounded-lg shadow-md">
+                <div class="flex justify-between items-end mb-4">
+                    <h1 class="text-2xl font-bold text-gray-800">Create Sale | BARCODE</h1>
+                    <a href="{{ route('sales.create') }}" class="btn btn-primary">
+                        <i class="fa fa-book"></i> Manual
+                    </a>
                 </div>
+
+                @if (session('success'))
+                    <div class="alert alert-success mb-4">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
+                <input type="hidden" id="isConfirmed" name="isConfirmed" value="false">
+
+                <h2 class="text-xl font-bold mt-5 text-gray-800">Sales Data</h2>
+
+                <!-- Placeholder for dynamically added items -->
+
+            </div>
+        </main>
+
+        <!-- Sidebar -->
+        <aside class="w-full lg:w-1/4 bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-xl font-bold mb-4 text-gray-800">Items Container</h2>
+            <hr class="my-4">
+            <div id="items-container" class="mt-4 h-[50vh]"></div>
+
+            <div class="form-control mt-4">
+                <input type="date" id="sale_date" name="sale_date" class="input input-bordered w-full hidden" value="{{ now()->toDateString() }}" required>
             </div>
 
+            <div class="flex justify-between items-center mt-4">
+                <p class="text-gray-700 font-semibold">Total Price :</p>
+                <input type="text" id="total_price" name="total_price" class="outline-none bg-transparent text-right font-semibold text-gray-800" readonly>
+            </div>
+            <hr class="my-4">
+
             <div class="form-control mb-4">
-                <label for="total_price" class="label">
-                    <span class="label-text">Total Price:</span>
-                </label>
-                <input type="text" id="total_price" name="total_price" class="input input-bordered" readonly>
+                <label class="block text-sm font-medium text-gray-700">Payment Method:</label>
+                <div class="flex space-x-4">
+                    <button type="button" class="btn btn-outline" data-value="Cash" onclick="selectPaymentMethod('Cash', this)">Cash</button>
+                    <button type="button" class="btn btn-outline" data-value="E-Wallet" onclick="selectPaymentMethod('E-Wallet', this)">E-Wallet</button>
+                    <button type="button" class="btn btn-outline" data-value="Bank" onclick="selectPaymentMethod('Bank', this)">Bank</button>
+                </div>
+                <input type="hidden" id="payment" name="payment" required>
             </div>
 
             <!-- Cash Fields -->
             <div id="cash-fields" class="hidden">
                 <div class="form-control mb-4">
-                    <label for="cash_amount" class="label">
-                        <span class="label-text">Nominal Cash:</span>
-                    </label>
-                    <input type="number" id="cash_amount" name="cash_amount" class="input input-bordered" min="0" onchange="calculateChange()">
+                    <label for="cash_amount" class="label font-semibold text-gray-700">Nominal Cash:</label>
+                    <input type="number" id="cash_amount" class="input input-bordered w-full" min="0" onchange="calculateChange()">
                 </div>
-
                 <div class="form-control mb-4">
-                    <label for="change_amount" class="label">
-                        <span class="label-text">Change:</span>
-                    </label>
-                    <input type="text" id="change_amount" name="change_amount" class="input input-bordered" readonly>
+                    <label for="change_amount" class="label font-semibold text-gray-700">Change:</label>
+                    <input type="text" id="change_amount" class="input input-bordered w-full" readonly>
                 </div>
             </div>
-            <!-- End of Cash Fields -->
 
-            <div class="flex gap-4">
-                <button type="button" class="btn btn-secondary" onclick="addItem()">Add More Items</button>
-                <button type="submit" class="btn btn-primary">Submit Sale</button>
+            <button type="button" class="btn btn-primary w-full mt-4" onclick="toggleModal()">Submit Sale</button>
+        </aside>
+    </form>
+
+    <!-- Modal for Confirmation -->
+    <div id="modal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
+        <div class="bg-white p-6 rounded-lg shadow-lg w-11/12 max-w-lg">
+            <h3 class="text-lg font-bold mb-4">Confirm Sale</h3>
+            <div class="mb-4 flex justify-between items-center">
+                <p class="font-semibold">Total Price:</p>
+                <input type="text" id="modal_total_price" class="outline-none bg-transparent readonly text-right font-semibold">
             </div>
-        </form>
-
-        <h2 class="text-2xl font-bold mt-8">Sales Data</h2>
-
-        <table class="table w-full mt-4">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Sale Date</th>
-                    <th>Total Price</th>
-                    <th>User</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($sales as $sale)
-                    <tr>
-                        <td>{{ $sale->id }}</td>
-                        <td>{{ $sale->sale_date }}</td>
-                        <td>{{ $sale->total_price }}</td>
-                        <td>{{ $sale->user->username }}</td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
+            <div class="mb-4">
+                <label for="modal_payment_method" class="label font-semibold">Payment Method:</label>
+                <input type="text" id="modal_payment_method" class="outline-none bg-transparent readonly text-right font-semibold">
+            </div>
+            <div class="mb-4 hidden" id="modal_cash_fields">
+                <label for="modal_cash_amount" class="label font-semibold">Nominal Cash:</label>
+                <input type="number" id="modal_cash_amount" class="input input-bordered w-full" min="0" readonly>
+                <label for="modal_change_amount" class="label font-semibold">Change:</label>
+                <input type="text" id="modal_change_amount" class="input input-bordered w-full" readonly>
+            </div>
+            <div class="flex justify-end">
+                <button class="bg-blue-500 text-white p-2 rounded-md" onclick="submitSale()">Confirm</button>
+                <button class="bg-gray-500 text-white p-2 rounded-md ml-2" onclick="toggleModal()">Cancel</button>
+            </div>
+        </div>
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
-        let itemCount = 1;
+        let itemCount = 0;
 
         $(document).ready(function() {
             $('#barcode_input').on('change', function() {
@@ -187,13 +129,8 @@
                     },
                     success: function(response) {
                         if (response.status === 'success') {
-                            // Only add item if it belongs to the authenticated user
-                            if (response.item.user_id == {{ auth()->id() }}) {
-                                addItemFromBarcode(response.item);
-                                $('#barcode_input').val('');
-                            } else {
-                                alert('Bukan punyamu!');
-                            }
+                            addItem(response.item);
+                            $('#barcode_input').val('');
                         } else {
                             alert(response.message);
                         }
@@ -205,99 +142,124 @@
             });
         });
 
-        function addItem() {
-            const container = document.getElementById('items-container');
-            const itemDiv = document.createElement('div');
-            const itemId = `item-${itemCount}`;
-            itemDiv.classList.add('item', 'form-control', 'mb-4');
-            itemDiv.setAttribute('id', itemId);
-            itemDiv.innerHTML = `
-                <div class="grid grid-cols-1 gap-4 sm:grid-cols-4">
-                    <div class="form-control">
-                        <select id="items[${itemCount}][item_id]" name="items[${itemCount}][item_id]" class="select select-bordered" onchange="updatePrice(${itemCount})" required>
-                            <option value="">Select an item</option>
-                            @foreach ($items as $item)
-                                @if ($item->user_id == auth()->id() && $item->isInStock())
-                                    <option value="{{ $item->id }}" data-price="{{ $item->price }}" data-stock="{{ $item->stock }}">{{ $item->itemName }}</option>
-                                @endif
-                            @endforeach
-                        </select>
-                    </div>
+        function addItem(item) {
+            const container = $('#items-container');
+            const sidebarContainer = $('#items-container-sidebar');
+            let existingItem = $(`#item-${item.id}`);
 
-                    <div class="form-control">
-                        <input type="number" id="items[${itemCount}][quantity]" name="items[${itemCount}][quantity]" class="input input-bordered" min="1" value="1" onchange="updatePrice(${itemCount})" required>
-                    </div>
-
-                    <div class="form-control">
-                        <input type="text" id="items[${itemCount}][price]" name="items[${itemCount}][price]" class="input input-bordered" readonly>
-                    </div>
-
-                    <div>
-                        <button type="button" class="btn btn-error" onclick="removeItem('${itemId}')">Remove</button>
-                    </div>
-                </div>
-            `;
-            container.appendChild(itemDiv);
-            itemCount++;
-        }
-
-        function removeItem(itemId) {
-            const item = document.getElementById(itemId);
-            item.parentNode.removeChild(item);
-        }
-
-        function updatePrice(index) {
-            const itemSelect = document.getElementById(`items[${index}][item_id]`);
-            const priceInput = document.getElementById(`items[${index}][price]`);
-            const quantityInput = document.getElementById(`items[${index}][quantity]`);
-
-            const selectedOption = itemSelect.options[itemSelect.selectedIndex];
-            const price = selectedOption.getAttribute('data-price');
-
-            if (price) {
-                priceInput.value = price * quantityInput.value;
+            if (existingItem.length) {
+                // Item already exists, just update the quantity
+                let quantityInput = existingItem.find('input[name$="[quantity]"]');
+                let newQuantity = parseInt(quantityInput.val()) + 1;
+                quantityInput.val(newQuantity);
+                updateItemStock(item.id, item.stock);
             } else {
-                priceInput.value = '';
-            }
+                // Add new item
+                const itemId = `item-${item.id}`;
+                const itemDiv = `
+                    <div class="item mt-2 bg-gray-100 p-4 rounded-lg shadow-sm flex items-center" id="${itemId}">
+                        <div class="flex items-center w-full">
+                            <!-- Image Section -->
+                            <div class="flex-shrink-0">
+                                <img src="/storage/${item.image}" alt="${item.itemName}" class="w-16 h-16 rounded-md object-cover">
+                            </div>
 
-            calculateTotal();
+                            <!-- Item Details Section -->
+                            <div class="flex-1 ml-4">
+                                <div class="flex items-center mb-2">
+                                    <!-- Quantity Buttons -->
+                                    <button type="button" class="px-2 py-1 border border-gray-300 bg-gray-200 rounded-l-md" onclick="changeQuantity(${item.id}, -1)">
+                                        <i class="fa fa-minus text-gray-600">-</i>
+                                    </button>
+                                    <input type="text" id="quantity-display-${item.id}" name="items[${itemCount}][quantity]" class="bg-transparent w-16 px-2 py-1 text-center border-none outline-none font-semibold flex items-center justify-center" value="1" min="1" max="${item.stock}" readonly>
+                                    <button type="button" class="px-2 py-1 border border-gray-300 bg-gray-200 rounded-r-md" onclick="changeQuantity(${item.id}, 1)">
+                                        <i class="fa fa-plus text-gray-600">+</i>
+                                    </button>
+                                </div>
+
+                                <p class="font-semibold text-lg">${item.itemName}</p>
+                                <p class="text-gray-600">Price: $${item.price}</p>
+                                <input type="hidden" name="items[${itemCount}][item_id]" value="${item.id}">
+                                <input type="hidden" name="items[${itemCount}][price]" value="${item.price}">
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.append(itemDiv);
+                sidebarContainer.append(itemDiv);
+                itemCount++;
+            }
+            calculateTotalPrice();
         }
 
-        function calculateTotal() {
-            let totalPrice = 0;
-            for (let i = 0; i < itemCount; i++) {
-                const priceInput = document.getElementById(`items[${i}][price]`);
-                if (priceInput && priceInput.value) {
-                    totalPrice += parseFloat(priceInput.value);
-                }
+        function changeQuantity(itemId, delta) {
+            let quantityInput = $(`#item-${itemId}`).find('input[name$="[quantity]"]');
+            let currentQuantity = parseInt(quantityInput.val());
+            let newQuantity = currentQuantity + delta;
+            let maxQuantity = parseInt(quantityInput.attr('max'));
+
+            if (newQuantity >= 1 && newQuantity <= maxQuantity) {
+                quantityInput.val(newQuantity);
+                updateItemStock(itemId, newQuantity);
+                calculateTotalPrice();
             }
-            document.getElementById('total_price').value = totalPrice.toFixed(2);
+        }
+
+        function updateItemStock(itemId, quantity) {
+            let itemStock = parseInt($(`#item-${itemId}`).find('input[name$="[quantity]"]').attr('max'));
+            let remainingStock = itemStock - quantity;
+            $(`#item-${itemId}`).find('input[name$="[quantity]"]').attr('max', remainingStock);
+        }
+
+        function calculateTotalPrice() {
+            let totalPrice = 0;
+            $('#items-container').find('.item').each(function() {
+                let price = parseFloat($(this).find('input[name$="[price]"]').val());
+                let quantity = parseInt($(this).find('input[name$="[quantity]"]').val());
+                totalPrice += price * quantity;
+            });
+            $('#total_price').val(totalPrice.toFixed(2));
+            $('#modal_total_price').val(totalPrice.toFixed(2));
+        }
+
+        function selectPaymentMethod(value, button) {
+            $('#payment').val(value);
+            $('#modal_payment_method').val(value);
+            if (value === 'Cash') {
+                $('#cash-fields').removeClass('hidden');
+                $('#modal_cash_fields').removeClass('hidden');
+            } else {
+                $('#cash-fields').addClass('hidden');
+                $('#modal_cash_fields').addClass('hidden');
+            }
         }
 
         function calculateChange() {
-            const totalPrice = parseFloat(document.getElementById('total_price').value);
-            const cashAmount = parseFloat(document.getElementById('cash_amount').value);
-
-            if (cashAmount && totalPrice) {
-                document.getElementById('change_amount').value = (cashAmount - totalPrice).toFixed(2);
-            } else {
-                document.getElementById('change_amount').value = '';
-            }
+            let totalPrice = parseFloat($('#total_price').val());
+            let cashAmount = parseFloat($('#cash_amount').val());
+            let change = cashAmount - totalPrice;
+            $('#change_amount').val(change.toFixed(2));
         }
 
-        function toggleCashFields() {
-            const paymentMethod = document.getElementById('payment').value;
-            const cashFields = document.getElementById('cash-fields');
+        function toggleModal() {
+    let paymentMethod = $('#payment').val();
 
-            if (paymentMethod === 'Cash') {
-                cashFields.classList.remove('hidden');
-            } else {
-                cashFields.classList.add('hidden');
-                document.getElementById('cash_amount').value = '';
-                document.getElementById('change_amount').value = '';
-            }
+    if (!paymentMethod) {
+        alert('Please select a payment method before submitting.');
+        return;
+    }
+
+    $('#modal').toggleClass('hidden');
+}
+
+
+        function submitSale() {
+            $('#isConfirmed').val('true');
+            $('#modal').addClass('hidden');
+            $('#saleForm').submit();
         }
     </script>
 </body>
 </html>
+
 @endsection

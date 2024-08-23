@@ -55,6 +55,43 @@
                         </label>
                         <input type="password" id="password" name="password" class="input input-bordered" required/>
                     </div>
+
+                    <div class="form-control mt-4">
+                        <label class="label" for="phone">
+                            <span class="label-text">Phone</span>
+                        </label>
+                        <input type="text" id="phone" name="phone" class="input input-bordered" required/>
+                    </div>
+
+                    <div class="form-control mt-4">
+                        <label class="label" for="city">
+                            <span class="label-text">city</span>
+                        </label>
+                        <input type="text" id="city" name="city" class="input input-bordered" required/>
+                    </div>
+
+                    <div class="form-control mt-4">
+                        <label class="label" for="address">
+                            <span class="label-text">address</span>
+                        </label>
+                        <textarea type="text" id="address" name="address" class="input input-bordered" required> </textarea>
+
+                    </div>
+
+                    <div class="form-control mt-4">
+                        <label class="label" for="zip_code">
+                            <span class="label-text">zip code</span>
+                        </label>
+                        <input type="text" id="zip_code" name="zip_code" class="input input-bordered" required/>
+                    </div>
+
+                    <div class="form-control mt-4">
+                        <label class="label" for="password">
+                            <span class="label-text">shop name</span>
+                        </label>
+                        <input type="text" id="shop_name" name="shop_name" class="input input-bordered" required/>
+                    </div>
+
                     <div class="form-control mt-6">
                         <button type="submit" class="btn btn-primary">Register</button>
                     </div>
