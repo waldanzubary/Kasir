@@ -17,12 +17,7 @@ class OnlyCashier
     public function handle(Request $request, Closure $next): Response
     {
 
-        if (Auth::user()->role == "Admin") {
-
-            return $next($request);
-        }
-
-        if(Auth::user()->role == "Cashier") {
+        if(Auth::user()->role == "User") {
             return $next($request);
 
         }

@@ -18,15 +18,9 @@ class OnlyStaff
     {
 
 
-        if (Auth::user()->role == "Admin") {
+        if (Auth::user()->role == "User") {
 
             return $next($request);
-        }
-
-
-        if(Auth::user()->role == "Warehouse Staff") {
-            return $next($request);
-
         }
 
         return redirect('transaction');

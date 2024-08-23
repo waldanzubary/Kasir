@@ -18,7 +18,7 @@ class items extends Model
         'image',
         'barcode',
         'status',
-
+        'user_id'
     ];
 
     public function setStatus()

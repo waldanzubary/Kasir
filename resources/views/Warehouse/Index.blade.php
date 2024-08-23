@@ -1,4 +1,4 @@
-@extends('Layout.content')
+@extends('Layout.user_dashboard')
 
 @section('content')
 <!-- Begin Page Content -->

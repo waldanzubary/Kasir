@@ -1,4 +1,4 @@
-@extends('Layout.content')
+@extends('Layout.user_dashboard')
 
 @section('title', 'Sales Transactions')
 
@@ -84,7 +84,7 @@
                             <select id="items[0][item_id]" name="items[0][item_id]" class="select select-bordered" onchange="updatePrice(0)" required>
                                 <option value="">Select an item</option>
                                 @foreach ($items as $item)
-                                    @if ($item->isInStock())
+                                    @if ($item->user_id == auth()->id() && $item->isInStock())
                                         <option value="{{ $item->id }}" data-price="{{ $item->price }}" data-stock="{{ $item->stock }}">{{ $item->itemName }}</option>
                                     @endif
                                 @endforeach
@@ -187,8 +187,13 @@
                     },
                     success: function(response) {
                         if (response.status === 'success') {
-                            addItemFromBarcode(response.item);
-                            $('#barcode_input').val('');
+                            // Only add item if it belongs to the authenticated user
+                            if (response.item.user_id == {{ auth()->id() }}) {
+                                addItemFromBarcode(response.item);
+                                $('#barcode_input').val('');
+                            } else {
+                                alert('Bukan punyamu!');
+                            }
                         } else {
                             alert(response.message);
                         }
@@ -212,7 +217,7 @@
                         <select id="items[${itemCount}][item_id]" name="items[${itemCount}][item_id]" class="select select-bordered" onchange="updatePrice(${itemCount})" required>
                             <option value="">Select an item</option>
                             @foreach ($items as $item)
-                                @if ($item->isInStock())
+                                @if ($item->user_id == auth()->id() && $item->isInStock())
                                     <option value="{{ $item->id }}" data-price="{{ $item->price }}" data-stock="{{ $item->stock }}">{{ $item->itemName }}</option>
                                 @endif
                             @endforeach
@@ -227,72 +232,57 @@
                         <input type="text" id="items[${itemCount}][price]" name="items[${itemCount}][price]" class="input input-bordered" readonly>
                     </div>
 
-                    <div class=" ">
+                    <div>
                         <button type="button" class="btn btn-error" onclick="removeItem('${itemId}')">Remove</button>
                     </div>
                 </div>
             `;
             container.appendChild(itemDiv);
             itemCount++;
-        }
-
-        function addItemFromBarcode(item) {
-            const container = document.getElementById('items-container');
-            const itemId = `item-${itemCount}`;
-            const itemDiv = document.createElement('div');
-            itemDiv.classList.add('item', 'form-control', 'mb-4');
-            itemDiv.setAttribute('id', itemId);
-            itemDiv.innerHTML = `
-                <div class="grid grid-cols-1 gap-4 sm:grid-cols-4">
-                    <div class="form-control">
-                        <input type="hidden" name="items[${itemCount}][item_id]" value="${item.id}">
-                        <input type="text" class="input input-bordered w-full" value="${item.itemName}" readonly>
-                    </div>
-                    <div class="form-control">
-                        <input type="number" name="items[${itemCount}][quantity]" class="input input-bordered w-full" value="1" min="1" max="${item.stock}" onchange="updatePrice(${itemCount})">
-                    </div>
-                    <div class="form-control">
-                        <input type="text" name="items[${itemCount}][price]" class="input input-bordered w-full" value="${item.price}" readonly>
-                    </div>
-                    <div class="flex items-center">
-                        <button type="button" class="btn btn-error" onclick="removeItem('${itemId}')">Remove</button>
-                    </div>
-                </div>
-            `;
-            container.appendChild(itemDiv);
-            itemCount++;
-            updateTotalPrice();
         }
 
         function removeItem(itemId) {
-            const itemDiv = document.getElementById(itemId);
-            itemDiv.remove();
-            updateTotalPrice();
+            const item = document.getElementById(itemId);
+            item.parentNode.removeChild(item);
         }
 
         function updatePrice(index) {
             const itemSelect = document.getElementById(`items[${index}][item_id]`);
-            const quantityInput = document.getElementById(`items[${index}][quantity]`);
             const priceInput = document.getElementById(`items[${index}][price]`);
+            const quantityInput = document.getElementById(`items[${index}][quantity]`);
 
-            const selectedItem = itemSelect.options[itemSelect.selectedIndex];
-            const price = parseFloat(selectedItem.getAttribute('data-price')) || 0;
-            const quantity = parseInt(quantityInput.value) || 1;
+            const selectedOption = itemSelect.options[itemSelect.selectedIndex];
+            const price = selectedOption.getAttribute('data-price');
 
-            const totalPrice = price * quantity;
-            priceInput.value = totalPrice.toFixed(2);
+            if (price) {
+                priceInput.value = price * quantityInput.value;
+            } else {
+                priceInput.value = '';
+            }
 
-            updateTotalPrice();
+            calculateTotal();
         }
 
-        function updateTotalPrice() {
+        function calculateTotal() {
             let totalPrice = 0;
-            document.querySelectorAll('.item').forEach(item => {
-                const price = parseFloat(item.querySelector('[id$="\\[price\\]"]').value) || 0;
-                totalPrice += price;
-            });
+            for (let i = 0; i < itemCount; i++) {
+                const priceInput = document.getElementById(`items[${i}][price]`);
+                if (priceInput && priceInput.value) {
+                    totalPrice += parseFloat(priceInput.value);
+                }
+            }
             document.getElementById('total_price').value = totalPrice.toFixed(2);
-            calculateChange();
+        }
+
+        function calculateChange() {
+            const totalPrice = parseFloat(document.getElementById('total_price').value);
+            const cashAmount = parseFloat(document.getElementById('cash_amount').value);
+
+            if (cashAmount && totalPrice) {
+                document.getElementById('change_amount').value = (cashAmount - totalPrice).toFixed(2);
+            } else {
+                document.getElementById('change_amount').value = '';
+            }
         }
 
         function toggleCashFields() {
@@ -303,20 +293,10 @@
                 cashFields.classList.remove('hidden');
             } else {
                 cashFields.classList.add('hidden');
+                document.getElementById('cash_amount').value = '';
+                document.getElementById('change_amount').value = '';
             }
         }
-
-        function calculateChange() {
-            const cashAmount = parseFloat(document.getElementById('cash_amount').value) || 0;
-            const totalPrice = parseFloat(document.getElementById('total_price').value) || 0;
-            const changeAmount = cashAmount - totalPrice;
-            document.getElementById('change_amount').value = changeAmount.toFixed(2);
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            updateTotalPrice();
-            toggleCashFields();
-        });
     </script>
 </body>
 </html>

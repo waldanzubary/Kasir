@@ -45,14 +45,9 @@ Route::get('/sales/creates', [SalesController::class, 'create'])->name('sales.cr
 Route::post('/sales/stores', [SalesController::class, 'store'])->name('sales.stores')->middleware('OnlyCashier');
 Route::post('/sales/barcode', [SalesController::class, 'barcode'])->name('sales.barcode')->middleware('OnlyCashier');
 
-
-
-
-
 //transaction
 Route::get('/transaction', [TransactionController::class, 'transaction'])->name('transaction.index');
 Route::get('/transaction/{id}', [TransactionController::class, 'show'])->name('sales.show');
-
 
 Route::get('staff', [StaffController::class, 'transactions'])->name('transaction.indexs');
 
