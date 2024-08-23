@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daisyui@2.26.1/dist/full.css">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
-<body class="">
+<body>
     <form id="saleForm" action="{{ route('sales.stores') }}" method="POST" class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 p-8">
         @csrf
         <!-- Main Content -->
@@ -23,13 +23,6 @@
             </div>
 
             <div class="container mx-auto mt-8 bg-white p-4 rounded-lg shadow-md">
-                <div class="flex justify-between items-end mb-4">
-                    <h1 class="text-2xl font-bold text-gray-800">Create Sale | BARCODE</h1>
-                    <a href="{{ route('sales.create') }}" class="btn btn-primary">
-                        <i class="fa fa-book"></i> Manual
-                    </a>
-                </div>
-
                 @if (session('success'))
                     <div class="alert alert-success mb-4">
                         {{ session('success') }}
@@ -38,10 +31,22 @@
 
                 <input type="hidden" id="isConfirmed" name="isConfirmed" value="false">
 
-                <h2 class="text-xl font-bold mt-5 text-gray-800">Sales Data</h2>
+                <h2 class="text-xl font-bold mt-5 text-gray-800">List item</h2>
+                @foreach ($items as $item)
+                <button type="button" class="w-fit shadow-lg rounded-lg overflow-hidden" onclick="addItem({{ json_encode($item) }})">
+                    <figure>
+                        <img src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->itemName }}" class="object-cover w-36 h-36 rounded-t-lg">
+                    </figure>
+                    <div class="card-body p-4">
+                        <div class="flex justify-between items-center">
+                            <h2 class="text-xl font-bold">{{ $item->itemName }}</h2>
+                        </div>
+                        <p class="text-gray-400">Rp.{{ $item->price }}</p>
+                    </div>
+                </button>
+                @endforeach
 
                 <!-- Placeholder for dynamically added items -->
-
             </div>
         </main>
 
@@ -49,7 +54,7 @@
         <aside class="w-full lg:w-1/4 bg-white p-6 rounded-lg shadow-md">
             <h2 class="text-xl font-bold mb-4 text-gray-800">Items Container</h2>
             <hr class="my-4">
-            <div id="items-container" class="mt-4 h-[50vh]"></div>
+            <div id="items-container" class="mt-4 h-[50vh] overflow-y-auto"></div>
 
             <div class="form-control mt-4">
                 <input type="date" id="sale_date" name="sale_date" class="input input-bordered w-full hidden" value="{{ now()->toDateString() }}" required>
@@ -143,88 +148,98 @@
         });
 
         function addItem(item) {
-            const container = $('#items-container');
-            const sidebarContainer = $('#items-container-sidebar');
-            let existingItem = $(`#item-${item.id}`);
+    const container = $('#items-container');
+    let existingItem = $(`#item-${item.id}`);
 
-            if (existingItem.length) {
-                // Item already exists, just update the quantity
-                let quantityInput = existingItem.find('input[name$="[quantity]"]');
-                let newQuantity = parseInt(quantityInput.val()) + 1;
-                quantityInput.val(newQuantity);
-                updateItemStock(item.id, item.stock);
-            } else {
-                // Add new item
-                const itemId = `item-${item.id}`;
-                const itemDiv = `
-                    <div class="item mt-2 bg-gray-100 p-4 rounded-lg shadow-sm flex items-center" id="${itemId}">
-                        <div class="flex items-center w-full">
-                            <!-- Image Section -->
-                            <div class="flex-shrink-0">
-                                <img src="/storage/${item.image}" alt="${item.itemName}" class="w-16 h-16 rounded-md object-cover">
-                            </div>
-
-                            <!-- Item Details Section -->
-                            <div class="flex-1 ml-4">
-                                <div class="flex items-center mb-2">
-                                    <!-- Quantity Buttons -->
-                                    <button type="button" class="px-2 py-1 border border-gray-300 bg-gray-200 rounded-l-md" onclick="changeQuantity(${item.id}, -1)">
-                                        <i class="fa fa-minus text-gray-600">-</i>
-                                    </button>
-                                    <input type="text" id="quantity-display-${item.id}" name="items[${itemCount}][quantity]" class="bg-transparent w-16 px-2 py-1 text-center border-none outline-none font-semibold flex items-center justify-center" value="1" min="1" max="${item.stock}" readonly>
-                                    <button type="button" class="px-2 py-1 border border-gray-300 bg-gray-200 rounded-r-md" onclick="changeQuantity(${item.id}, 1)">
-                                        <i class="fa fa-plus text-gray-600">+</i>
-                                    </button>
-                                </div>
-
-                                <p class="font-semibold text-lg">${item.itemName}</p>
-                                <p class="text-gray-600">Price: $${item.price}</p>
-                                <input type="hidden" name="items[${itemCount}][item_id]" value="${item.id}">
-                                <input type="hidden" name="items[${itemCount}][price]" value="${item.price}">
-                            </div>
-                        </div>
+    if (existingItem.length) {
+        // Item already exists, just update the quantity
+        let quantityInput = existingItem.find('input[name$="[quantity]"]');
+        let newQuantity = parseInt(quantityInput.val()) + 1;
+        quantityInput.val(newQuantity);
+        updateItemStock(item.id, newQuantity);
+    } else {
+        // Add new item
+        const itemId = `item-${item.id}`;
+        const itemDiv = `
+            <div class="item mt-2 bg-gray-100 p-4 rounded-lg shadow-sm flex items-center" id="${itemId}">
+                <div class="flex items-center w-full">
+                    <!-- Image Section -->
+                    <div class="flex-shrink-0">
+                        <img src="/storage/${item.image}" alt="${item.itemName}" class="w-16 h-16 rounded-md object-cover">
                     </div>
-                `;
-                container.append(itemDiv);
-                sidebarContainer.append(itemDiv);
-                itemCount++;
-            }
-            calculateTotalPrice();
-        }
+
+                    <!-- Item Details Section -->
+                    <div class="flex-1 ml-4">
+                        <div class="flex items-center mb-2">
+                            <!-- Quantity Buttons -->
+                            <button type="button" class="px-2 py-1 border border-gray-300 bg-gray-200 rounded-l-md" onclick="changeQuantity(${item.id}, -1)">
+                                <i class="fa fa-minus text-gray-600">-</i>
+                            </button>
+                            <input type="text" id="quantity-display-${item.id}" name="items[${itemCount}][quantity]" value="1" class="w-12 text-center border-gray-300 border rounded-md">
+                            <button type="button" class="px-2 py-1 border border-gray-300 bg-gray-200 rounded-r-md" onclick="changeQuantity(${item.id}, 1)">
+                                <i class="fa fa-plus text-gray-600">+</i>
+                            </button>
+                        </div>
+                        <p class="font-semibold text-gray-800">${item.itemName}</p>
+                        <p class="text-gray-600">Price: Rp.${item.price}</p> <!-- Ensure this is being set correctly -->
+                    </div>
+
+                    <!-- Hidden Item ID -->
+                    <input type="hidden" name="items[${itemCount}][item_id]" value="${item.id}">
+                    <input type="hidden" name="items[${itemCount}][price]" value="${item.price}"> <!-- Ensure price is included -->
+                </div>
+                <button type="button" class="ml-4 text-red-600" onclick="removeItem(${item.id})">
+                    <i class="fa fa-trash">Remove</i>
+                </button>
+            </div>
+        `;
+
+        container.append(itemDiv);
+        itemCount++;
+    }
+
+    updateTotalPrice();
+}
 
         function changeQuantity(itemId, delta) {
-            let quantityInput = $(`#item-${itemId}`).find('input[name$="[quantity]"]');
-            let currentQuantity = parseInt(quantityInput.val());
-            let newQuantity = currentQuantity + delta;
-            let maxQuantity = parseInt(quantityInput.attr('max'));
+            const itemDiv = $(`#item-${itemId}`);
+            const quantityInput = itemDiv.find('input[name$="[quantity]"]');
+            let newQuantity = parseInt(quantityInput.val()) + delta;
 
-            if (newQuantity >= 1 && newQuantity <= maxQuantity) {
+            if (newQuantity <= 0) {
+                removeItem(itemId);
+            } else {
                 quantityInput.val(newQuantity);
                 updateItemStock(itemId, newQuantity);
-                calculateTotalPrice();
+                updateTotalPrice();
             }
+        }
+
+        function removeItem(itemId) {
+            $(`#item-${itemId}`).remove();
+            updateTotalPrice();
         }
 
         function updateItemStock(itemId, quantity) {
-            let itemStock = parseInt($(`#item-${itemId}`).find('input[name$="[quantity]"]').attr('max'));
-            let remainingStock = itemStock - quantity;
-            $(`#item-${itemId}`).find('input[name$="[quantity]"]').attr('max', remainingStock);
+            // Update stock or make an AJAX call if needed
         }
 
-        function calculateTotalPrice() {
+        function updateTotalPrice() {
             let totalPrice = 0;
-            $('#items-container').find('.item').each(function() {
-                let price = parseFloat($(this).find('input[name$="[price]"]').val());
-                let quantity = parseInt($(this).find('input[name$="[quantity]"]').val());
-                totalPrice += price * quantity;
+
+            $('#items-container .item').each(function() {
+                let quantity = $(this).find('input[name$="[quantity]"]').val();
+                let price = $(this).find('p.text-gray-600').text().replace('Price: Rp.', '').trim();
+                totalPrice += quantity * parseFloat(price);
             });
+
             $('#total_price').val(totalPrice.toFixed(2));
-            $('#modal_total_price').val(totalPrice.toFixed(2));
         }
 
         function selectPaymentMethod(value, button) {
             $('#payment').val(value);
             $('#modal_payment_method').val(value);
+
             if (value === 'Cash') {
                 $('#cash-fields').removeClass('hidden');
                 $('#modal_cash_fields').removeClass('hidden');
@@ -235,31 +250,45 @@
         }
 
         function calculateChange() {
-            let totalPrice = parseFloat($('#total_price').val());
-            let cashAmount = parseFloat($('#cash_amount').val());
+            let cashAmount = parseFloat($('#cash_amount').val()) || 0;
+            let totalPrice = parseFloat($('#total_price').val()) || 0;
             let change = cashAmount - totalPrice;
             $('#change_amount').val(change.toFixed(2));
         }
 
         function toggleModal() {
-    let paymentMethod = $('#payment').val();
+    const paymentMethod = $('#payment').val();
 
+    // Cek apakah metode pembayaran sudah dipilih
     if (!paymentMethod) {
-        alert('Please select a payment method before submitting.');
+        alert('Please select a payment method before proceeding.');
         return;
     }
 
-    $('#modal').toggleClass('hidden');
+    // Jika metode pembayaran sudah dipilih, tampilkan modal
+    const modal = $('#modal');
+    const totalPrice = $('#total_price').val();
+
+    $('#modal_total_price').val(totalPrice);
+    $('#modal_payment_method').val(paymentMethod);
+
+    if (paymentMethod === 'Cash') {
+        $('#modal_cash_amount').val($('#cash_amount').val());
+        $('#modal_change_amount').val($('#change_amount').val());
+    } else {
+        $('#modal_cash_amount').val('');
+        $('#modal_change_amount').val('');
+    }
+
+    modal.toggleClass('hidden');
 }
 
 
         function submitSale() {
             $('#isConfirmed').val('true');
-            $('#modal').addClass('hidden');
             $('#saleForm').submit();
         }
     </script>
 </body>
 </html>
-
 @endsection
