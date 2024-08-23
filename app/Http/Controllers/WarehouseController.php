@@ -1,9 +1,9 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\Items;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 
@@ -11,14 +11,14 @@ class WarehouseController extends Controller
 {
     public function Warehouse()
     {
-        $items = Items::all();
+        // Fetch only items belonging to the authenticated user
+        $items = Items::where('user_id', Auth::id())->get();
         return view('Warehouse.index', compact('items'));
     }
 
     public function CreateIndex()
-
     {
-        return view ('Warehouse.ItemCreate');
+        return view('Warehouse.ItemCreate');
     }
 
     public function store(Request $request)
@@ -30,7 +30,9 @@ class WarehouseController extends Controller
             'image' => 'nullable|image|max:2048',
         ]);
 
+        // Create a new item instance
         $item = new Items($validated);
+        $item->user_id = Auth::id();  // Associate item with the authenticated user
         $item->setStatus();
         $item->save();
 
@@ -56,13 +58,14 @@ class WarehouseController extends Controller
 
     public function edit($id)
     {
-        $item = items::findOrFail($id);
+        // Ensure the user can only edit their own items
+        $item = Items::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
         return view('warehouse.edit', compact('item'));
     }
 
     public function update(Request $request, $id)
     {
-        $item = Items::findOrFail($id);
+        $item = Items::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
         $item->itemName = $request->input('itemName');
         $item->stock = $request->input('stock');
         $item->price = $request->input('price');
@@ -90,30 +93,29 @@ class WarehouseController extends Controller
         return redirect('Warehouse');
     }
 
-
     public function destroy($id)
     {
-        $item = items::findOrFail($id);
+        // Ensure the user can only delete their own items
+        $item = Items::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
         $item->delete();
 
         return redirect('Warehouse');
     }
 
-
     public function downloadBarcode($id)
-{
-    $item = items::findOrFail($id);
+    {
+        // Ensure the user can only download barcodes for their own items
+        $item = Items::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
 
-    if ($item->barcode) {
-        $barcodePath = storage_path('app/public/' . $item->barcode);
-        if (file_exists($barcodePath)) {
-            return response()->download($barcodePath);
+        if ($item->barcode) {
+            $barcodePath = storage_path('app/public/' . $item->barcode);
+            if (file_exists($barcodePath)) {
+                return response()->download($barcodePath);
+            } else {
+                return redirect()->back()->with('error', 'Barcode file not found.');
+            }
         } else {
-            return redirect()->back()->with('error', 'Barcode file not found.');
+            return redirect()->back()->with('error', 'No barcode available for this item.');
         }
-    } else {
-        return redirect()->back()->with('error', 'No barcode available for this item.');
     }
-}
-
 }
