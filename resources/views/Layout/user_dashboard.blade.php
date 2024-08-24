@@ -84,7 +84,7 @@
                 <a href="/sales/creates" class="block hover:bg-gray-700 hover:text-white p-3 rounded">
                     <i class="fa-solid fa-cash-register text-2xl" style="color: #63E6BE;"></i>
                 </a>
-                <a href="/transaction" class="block hover:bg-gray-700 hover:text-white p-3 rounded">
+                <a href="/staff" class="block hover:bg-gray-700 hover:text-white p-3 rounded">
                     <i class="fa-solid fa-chart-line text-2xl" style="color: #FFD43B;"></i>
                 </a>
             </div>
@@ -128,7 +128,11 @@
                     @yield('content')
                 </main>
             </div>
+
+
+
         </div>
+       
     </div>
 
     <!-- JavaScript -->

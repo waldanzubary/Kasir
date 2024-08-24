@@ -76,6 +76,7 @@ class AuthController extends Controller
 
         // Jika pengguna ditemukan dan kata sandi cocok
         if ($user && $credentials['password'] == $user->password) {
+            if ($user->status == 'active') {
             // Jika status pengguna aktif
 
                 // Masukkan pengguna ke dalam sesi
@@ -94,6 +95,12 @@ class AuthController extends Controller
                     return redirect('/transaction');
                 }
 
+            } else {
+                // Jika akun tidak aktif
+                Session::flash('status', 'failed');
+                Session::flash('message', 'Your account is not active');
+            }
+
 
 
         } else {
@@ -106,20 +113,6 @@ class AuthController extends Controller
         return redirect('login');
     }
 
-    public function redirectBasedOnRole()
-    {
-        if (Auth::check()) {
 
-            $role = Auth::user()->role;
-
-            if ($role == 'Admin') {
-                return redirect('/dashboard');
-            } elseif ($role == 'User') {
-                return redirect('/transaction');
-            }
-        }
-
-        return redirect('login');
-    }
 
 }

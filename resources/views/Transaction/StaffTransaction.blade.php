@@ -1,135 +1,229 @@
-@extends('Layout.content')
+@extends('Layout.user_dashboard')
 
 @section('title', 'Sales Transactions')
 
 @section('content')
 
-<style>
-    .stats {
-        display: flex;
-        margin-top: 25px;
-        gap: 20px;
-    }
+<div class="container mx-auto p-6">
+    <div class="flex  flex-col  md:flex-row   gap-6">
+        <!-- Main Content -->
+        <div class="flex-1 w-full lg:w-3/4">
+            <!-- Stats Section -->
+            <div class="rounded-lg  mb-10">
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-8">
+                    <div class="bg-white p-6 rounded-lg shadow-lg w-full">
+                        <div class="flex items-center space-x-4">
+                            <div class="stat-figure text-secondary">
+                                <i class="fa-solid fa-people-carry-box text-2xl" style="color: #63E6BE;"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm font-semibold text-gray-600">Total Transactions</div>
+                                <div class="text-2xl font-bold text-gray-800">{{ $totalTransactions }}</div>
+                            </div>
+                        </div>
+                    </div>
 
-    .cards-container {
-        display: flex;
-        flex-wrap: wrap;
-        margin-top: 25px;
-        justify-content: center;
-        gap: 20px;
+                    <div class="bg-white p-6 rounded-lg shadow-lg w-full">
+                        <div class="flex items-center space-x-4">
+                            <div class="stat-figure text-secondary">
+                                <i class="fa-solid fa-truck-ramp-box text-2xl" style="color: #74C0FC;"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm font-semibold text-gray-600">Total Items</div>
+                                <div class="text-2xl font-bold text-gray-800">{{ $totalItems }}</div>
+                            </div>
+                        </div>
+                    </div>
 
-    }
-
-    .card {
-        transition: transform 0.2s, box-shadow 0.2s;
-        width: 100%;
-        max-width: 300px;
-        border-radius: 8px;
-        overflow: hidden;
-        /* background: #2d3748; */
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-        font-weight: bold;
-    }
-
-    .card:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);
-    }
-
-    .card-header {
-        /* background: #1a202c; */
-        padding: 10px;
-        /* color: #e2e8f0; */
-        font-weight: bold;
-
-    }
-
-    .card-body {
-        padding: 20px;
-    }
-
-    .card-body p {
-        margin: 10px 0;
-    }
-
-    .card-actions {
-        padding: 20px;
-        /* background: #1a202c; */
-        text-align: right;
-    }
-
-    .card-actions a {
-        background-color: #4a5568;
-        color: #e2e8f0;
-        padding: 8px 12px;
-        border-radius: 4px;
-        text-decoration: none;
-        transition: background-color 0.2s;
-    }
-
-    .card-actions a:hover {
-        background-color: #2d3748;
-    }
-
-    .footer {
-        margin-top: 30px;
-    }
-</style>
-
-@csrf
-<div class="stats  stats">
-    <div class="stat">
-        <div class="stat-figure text-secondary">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block h-8 w-8 stroke-current">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
-        </div>
-        <div class="stat-title">Total Transactions</div>
-        <div class="stat-value">{{ $totalTransactions }}</div>
-        <div class="stat-desc">Jan 1st - Feb 1st</div>
-    </div>
-
-    <div class="stat">
-        <div class="stat-figure text-secondary">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block h-8 w-8 stroke-current">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
-            </svg>
-        </div>
-        <div class="stat-title">Total Items</div>
-        <div class="stat-value">{{ $totalItems }}</div>
-    </div>
-
-    <div class="stat">
-        <div class="stat-figure text-secondary">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block h-8 w-8 stroke-current">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path>
-            </svg>
-        </div>
-        <div class="stat-title">Total Gain</div>
-        <div class="stat-value">Rp. {{ $totalSpent }}</div>
-    </div>
-</div>
-
-<div class="cards-container">
-    @if($sales->isEmpty())
-        <p>No transactions found.</p>
-    @else
-        @foreach ($sales as $sale)
-            <div class="card  base-200">
-                <div class="card-header bg-base-300 ">
-                    <h2>Sale Date: {{ $sale->sale_date }}</h2>
-                </div>
-                <div class="card-body">
-                    <p>Cashier: {{ $sale->user->username }}</p>
-                    <p>Payment Method: {{ $sale->payment }}</p>
-                    <p>Total Price: Rp. {{ $sale->total_price }}</p>
-                </div>
-                <div class="card-actions bg-base-200">
-                    <a href="{{ route('sales.show', $sale->id) }}">See more</a>
+                    <div class="bg-white p-6 rounded-lg shadow-lg w-full">
+                        <div class="flex items-center space-x-4">
+                            <div class="stat-figure text-secondary">
+                                <i class="fa-solid fa-coins text-2xl" style="color: #FFD43B;"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm font-semibold text-gray-600">Total Gain</div>
+                                <div class="text-2xl font-bold text-gray-800">Rp. {{ $totalSpent }}</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        @endforeach
-    @endif
+
+            <!-- Chart Section -->
+            <div class="bg-white p-6 rounded-lg shadow-lg mb-8">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Monthly Sales</h2>
+                <div class="relative w-full h-64 md:h-96">
+                    <canvas id="monthlySalesChart"></canvas>
+                </div>
+            </div>
+
+            {{-- sales overview must be here based on responsive --}}
+
+            <!-- Sales Transactions Section -->
+            <div>
+                <div>
+                    @if($sales->isEmpty())
+                        <p class="text-center text-gray-500">No transactions found.</p>
+                    @else
+                    <div class="overflow-x-auto rounded-lg">
+                        <table class="min-w-full bg-white divide-y divide-gray-200 rounded-lg shadow-lg ">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Transaction</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Payment Method</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Price</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                @foreach ($sales as $sale)
+                                    <tr>
+                                        <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#{{ $loop->iteration }}</td>
+                                        <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500">{{ \Carbon\Carbon::parse($sale->sale_date)->format('F Y') }}</td>
+                                        <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500">{{ $sale->payment }}</td>
+                                        <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Rp. {{ $sale->total_price }}</td>
+                                        <td class="px-4 py-4 whitespace-nowrap text-sm font-medium">
+                                            <a href="{{ route('sales.show', $sale->id) }}" class="text-blue-600 hover:text-blue-800">See more</a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+
+                    @endif
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Sidebar -->
+        <div class="w-full lg:w-1/4 bg-white rounded-lg   p-6 lg:sticky lg:top-0">
+            <h2 class="text-lg font-semibold text-gray-800 mb-4">Sales Overview</h2>
+            <div class="relative w-full h-64 flex justify-center">
+                <canvas id="salesOverviewChart"></canvas>
+            </div>
+        </div>
+    </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Monthly Sales Chart
+        const ctxMonthlySales = document.getElementById('monthlySalesChart').getContext('2d');
+        new Chart(ctxMonthlySales, {
+            type: 'bar',
+            data: {
+                labels: @json($months),
+                datasets: [{
+                    label: 'Total Sales',
+                    data: @json($amounts),
+                    backgroundColor: 'rgba(79, 70, 229, 0.5)', // Soft purple
+                    borderColor: '#4f46e5', // Dark purple
+                    borderWidth: 2,
+                    barThickness: 28, // Width of each bar
+                    borderRadius: 8, // Rounded corners
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false // Hide the legend if not needed
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return 'Rp. ' + tooltipItem.raw.toLocaleString(); // Format numbers with currency
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        grid: {
+                            display: false
+                        },
+                        title: {
+                            display: true,
+                            text: 'Month',
+                            color: '#4a5568'
+                        },
+                        ticks: {
+                            color: '#4a5568',
+                            font: {
+                                weight: 'bold'
+                            }
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            borderColor: '#e2e8f0',
+                            borderWidth: 1
+                        },
+                        title: {
+                            display: true,
+                            text: 'Total Sales',
+                            color: '#4a5568'
+                        },
+                        ticks: {
+                            color: '#4a5568',
+                            font: {
+                                weight: 'bold'
+                            },
+                            callback: function(value) {
+                                return 'Rp. ' + value.toLocaleString(); // Format numbers with currency
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Sales Overview Chart
+        const ctxSalesOverview = document.getElementById('salesOverviewChart').getContext('2d');
+        new Chart(ctxSalesOverview, {
+            type: 'pie', // Use 'pie' or 'doughnut' based on your preference
+            data: {
+                labels: @json($overviewLabels),
+                datasets: [{
+                    data: @json($overviewValues),
+                    backgroundColor: [
+                        'rgba(79, 70, 229, 0.5)', // Example colors
+                        'rgba(34, 197, 94, 0.5)',
+                        'rgba(250, 204, 21, 0.5)',
+                        'rgba(239, 68, 68, 0.5)'
+                    ],
+                    borderColor: [
+                        '#4f46e5', // Example border colors
+                        '#16a34a',
+                        '#facc15',
+                        '#ef4444'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return tooltipItem.label + ': ' + tooltipItem.raw.toLocaleString();
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>
 
 @endsection

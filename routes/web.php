@@ -19,7 +19,7 @@ Route::get('/', function () {
 });
 
 //Auth
-Route::get('login', [AuthController::class, 'login'])->name('login')->middleware('guest');
+Route::get('login', [AuthController::class, 'login'])->name('login');
 Route::get('register', [AuthController::class, 'register'])->middleware('guest');
 Route::post('register', [AuthController::class, 'registerProccess'])->middleware('guest');
 Route::post('login', [AuthController::class, 'authenticating'])->middleware('guest');

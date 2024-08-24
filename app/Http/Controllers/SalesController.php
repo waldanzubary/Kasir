@@ -14,7 +14,8 @@ class SalesController extends Controller
 {
     public function create()
     {
-        $items = Items::all(); // Perbaiki penggunaan model
+        $items = Items::where('user_id', auth()->id())->get();
+
         $sales = Sale::with('user')->get();
         $buyers = User::all();
         return view('Cashier.scanner', compact('items', 'sales', 'buyers'));
@@ -68,31 +69,33 @@ class SalesController extends Controller
 
 
 
-    public function barcode(Request $request)
-    {
-        $request->validate([
-            'barcode' => 'required|string'
-        ]);
+public function barcode(Request $request)
+{
+    $request->validate([
+        'barcode' => 'required|string'
+    ]);
 
-        $item = Items::where('id', $request->barcode)->first();
+    $item = Items::where('id', $request->barcode)
+                 ->where('user_id', Auth::id())
+                 ->first();
 
-        if ($item) {
-            if ($item->isInStock()) {
-                return response()->json([
-                    'status' => 'success',
-                    'item' => $item
-                ]);
-            } else {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Item is out of stock'
-                ]);
-            }
+    if ($item) {
+        if ($item->isInStock()) {
+            return response()->json([
+                'status' => 'success',
+                'item' => $item
+            ]);
         } else {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Item not found'
+                'message' => 'Item is out of stock'
             ]);
         }
+    } else {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Item not found'
+        ]);
     }
+}
 }

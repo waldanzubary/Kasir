@@ -16,7 +16,13 @@ return new class extends Migration
             $table->string('username')->unique();
             $table->string('email')->unique();
             $table->string('password');
+            $table->string('city');
+            $table->text('address');
+            $table->string('phone')->unique();
+            $table->string('shop_name')->nullable();
+            $table->string('zip_code')->nullable();
             $table->enum('role', ['Admin', 'User'])->default('User');
+            $table->enum('status' , ['active', 'inactive'])->default('inactive');
             $table->timestamps();
         });
 
