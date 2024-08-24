@@ -13,7 +13,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <body>
-    <form id="saleForm" action="{{ route('sales.stores') }}" method="POST" class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 p-8">
+    <form id="saleForm" action="{{ route('sales.stores') }}" method="POST" class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4">
         @csrf
         <!-- Main Content -->
         <main class="flex-1 bg-white p-6 rounded-lg shadow-md">
@@ -21,8 +21,6 @@
                 <label for="barcode_input" class="label font-semibold text-gray-700">Scan Barcode:</label>
                 <input type="text" id="barcode_input" name="barcode" class="input input-bordered w-full" placeholder="Scan barcode here">
             </div>
-
-            <div class="container mx-auto mt-8 bg-white p-4 rounded-lg shadow-md">
                 @if (session('success'))
                     <div class="alert alert-success mb-4">
                         {{ session('success') }}
@@ -33,7 +31,7 @@
 
                 <h2 class="text-xl font-bold mt-5 text-gray-800">List item</h2>
                 @foreach ($items as $item)
-                <button type="button" class="w-fit shadow-lg rounded-lg overflow-hidden" onclick="addItem({{ json_encode($item) }})">
+                <button type="button" class="w-fit shadow-lg rounded-lg overflow-hidden m-2" onclick="addItem({{ json_encode($item) }})">
                     <figure>
                         <img src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->itemName }}" class="object-cover w-36 h-36 rounded-t-lg">
                     </figure>
@@ -45,9 +43,6 @@
                     </div>
                 </button>
                 @endforeach
-
-                <!-- Placeholder for dynamically added items -->
-            </div>
         </main>
 
         <!-- Sidebar -->
@@ -284,10 +279,22 @@
 }
 
 
-        function submitSale() {
-            $('#isConfirmed').val('true');
-            $('#saleForm').submit();
+function submitSale() {
+    $('#isConfirmed').val('true');
+    $.ajax({
+        url: $('#saleForm').attr('action'),
+        type: 'POST',
+        data: $('#saleForm').serialize(),
+        success: function(response) {
+            // Assuming response includes a URL or you can redirect back to a specific route
+            window.location.href = "{{ route('sales.creates') }}";
+        },
+        error: function(xhr) {
+            alert('An error occurred while processing the sale.');
         }
+    });
+}
+
     </script>
 </body>
 </html>

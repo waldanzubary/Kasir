@@ -1,17 +1,15 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\Sale;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class TransactionController extends Controller
 {
     public function transaction()
     {
-        // Fetch sales related to the logged-in user and eager load the user data
-        $sales = Sale::where('buyer_id', Auth::id())->with('user', 'salesItems.item')->get();
+        // Fetch all sales and eager load the related user and salesItems
+        $sales = Sale::with('user', 'salesItems.item')->get();
 
         // Calculate totals
         $totalTransactions = $sales->count();

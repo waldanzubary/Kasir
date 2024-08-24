@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,32 +11,118 @@
         .mber {
             font-weight: bold;
         }
-        /* footer {
-            margin-top: 25px;
-        } */
+
+        /* Sidebar Styles */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 250px; /* Width of the sidebar */
+            background-color: #f5f5f5;
+            z-index: 50; /* Ensure sidebar is above other content */
+            transition: transform 0.3s ease; /* Transition effect */
+        }
+
+        .sidebar-hidden {
+            transform: translateX(-100%); /* Hide sidebar off-screen */
+        }
+
+        .sidebar-visible {
+            transform: translateX(0); /* Show sidebar */
+        }
+
+        @media (min-width: 1024px) {
+            .sidebar {
+                display: block;
+                transform: translateX(0); /* Sidebar always shown on large screens */
+            }
+        }
+
+        @media (max-width: 1023px) {
+            .mobile-navbar {
+                display: flex;
+            }
+            .sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100%;
+                width: 250px; /* Width of the sidebar */
+                background-color: #f5f5f5;
+                z-index: 50; /* Ensure sidebar is above other content */
+                transform: translateX(-100%); /* Start hidden */
+            }
+            .sidebar-visible {
+                transform: translateX(0); /* Show sidebar */
+            }
+        }
+
+        /* Content Styles */
+        .content {
+            transition: margin-left 0.3s ease; /* Smooth transition for content */
+            margin-left: 250px; /* Adjust margin to match sidebar width by default */
+        }
+
+        @media (max-width: 1023px) {
+            .content {
+                margin-left: 0; /* No margin on mobile screens */
+                padding-left: 1rem; /* Padding to prevent content from touching screen edges */
+            }
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1rem;
+            background-color: #f5f5f5;
+        }
+
+        .navbar-title {
+            flex: 1;
+            text-align: center;
+            font-weight: bold;
+            padding: 0 1rem;
+        }
+
+        .profile-icon {
+            margin-left: 1rem;
+        }
     </style>
 </head>
 <body class="bg-base-100">
-    <div class="flex">
+    <div class="flex flex-col lg:flex-row min-h-screen">
         <!-- Sidebar -->
-        <div class="w-64 bg-base-200 min-h-screen shadow-lg">
+        <div class="sidebar sidebar-hidden lg:sidebar-visible">
             <div class="p-6">
-                <h1 class=" text-2xl font-bold">Dashboard</h1>
+                <h1 class="text-2xl font-bold">Dashboard</h1>
                 <nav class="mt-6">
-                    <a href="/Warehouse" class="block  hover:bg-gray-700 hover:text-white p-3 rounded">Items</a>
-                    <a href="/sales/creates" class="block  hover:bg-gray-700 hover:text-white p-3 rounded">Cashier</a>
-                    <a href="/transaction" class="block  hover:bg-gray-700 hover:text-white p-3 rounded">Transaction</a>
+                    <a href="/Warehouse" class="block hover:bg-gray-700 hover:text-white p-3 rounded">Items</a>
+                    <a href="/sales/creates" class="block hover:bg-gray-700 hover:text-white p-3 rounded">Cashier</a>
+                    <a href="/transaction" class="block hover:bg-gray-700 hover:text-white p-3 rounded">Transaction</a>
                 </nav>
             </div>
         </div>
 
         <!-- Main Content -->
-        <div class="flex-1">
-            <div class="navbar bg-base-100 ">
-                <div class="flex-1">
-                    <a class="btn btn-ghost text-xl mber">Starbhak MART Transaction</a>
+        <div class="flex-1 content">
+            <!-- Navbar -->
+            <div class="navbar mobile-navbar">
+                <div class="flex-none">
+                    <!-- Hamburger Button -->
+                    <button class="btn btn-square btn-ghost" onclick="toggleSidebar()">
+                        <!-- Icon for hamburger menu -->
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
                 </div>
-                <div class="flex-none gap-2">
+                <div class="navbar-title">
+                    <a class="text-xl mber">Transaction</a>
+                </div>
+                <div class="flex-none profile-icon">
                     @if(Auth::check())
                         {{ Auth::user()->username }}
                     @endif
@@ -53,7 +139,8 @@
                 </div>
             </div>
 
-            <div class="p-10">
+            <!-- Main Section -->
+            <div class="p-4 lg:p-10">
                 <main>
                     @yield('content')
                 </main>
@@ -61,41 +148,26 @@
         </div>
     </div>
 
-    <footer class="footer bg-base-300 text-base-content p-10">
-        <nav>
-            <h6 class="footer-title">Services</h6>
-            <a href="https://github.com/waldanzubary" class="link link-hover">Branding</a>
-            <a href="https://github.com/waldanzubary" class="link link-hover">Design</a>
-            <a href="https://github.com/waldanzubary" class="link link-hover">Marketing</a>
-            <a href="https://github.com/waldanzubary" class="link link-hover">Advertisement</a>
-        </nav>
-        <nav>
-            <h6 class="footer-title">Starbhak Mart Corporation</h6>
-            <a href="https://github.com/waldanzubary" class="link link-hover">About us</a>
-            <a href="https://github.com/waldanzubary" class="link link-hover">Contact</a>
-            <a href="https://github.com/waldanzubary" class="link link-hover">Jobs</a>
-            <a href="https://github.com/waldanzubary" class="link link-hover">Press kit</a>
-        </nav>
-        <nav>
-            <h6 class="footer-title">Social</h6>
-            <div class="grid grid-flow-col gap-4">
-                <a href="https://twitter.com/yourprofile">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="fill-current">
-                        <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"></path>
-                    </svg>
-                </a>
-                <a href="https://youtube.com/yourchannel">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="fill-current">
-                        <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"></path>
-                    </svg>
-                </a>
-                <a href="https://facebook.com/yourprofile">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="fill-current">
-                        <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"></path>
-                    </svg>
-                </a>
-            </div>
-        </nav>
-    </footer>
+    <!-- Footer -->
+    
+
+    <!-- JavaScript -->
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const content = document.querySelector('.content');
+
+            if (sidebar) {
+                sidebar.classList.toggle('sidebar-hidden');
+                sidebar.classList.toggle('sidebar-visible');
+                
+                if (sidebar.classList.contains('sidebar-visible')) {
+                    content.classList.add('content-padding');
+                } else {
+                    content.classList.remove('content-padding');
+                }
+            }
+        }
+    </script>
 </body>
 </html>

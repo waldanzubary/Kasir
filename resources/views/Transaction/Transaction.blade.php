@@ -15,60 +15,63 @@
         display: flex;
         flex-wrap: wrap;
         margin-top: 25px;
-        justify-content: center;
+        justify-content: flex-start; /* Align cards to the left */
         gap: 20px;
-
     }
 
     .card {
         transition: transform 0.2s, box-shadow 0.2s;
         width: 100%;
-        max-width: 300px;
-        border-radius: 8px;
+        max-width: 320px;
+        border-radius: 12px;
         overflow: hidden;
-        /* background: #2d3748; */
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+        background: #ffffff;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         font-weight: bold;
+        border: 1px solid #e2e8f0;
     }
 
     .card:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);
+        transform: translateY(-8px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
     }
 
     .card-header {
-        /* background: #1a202c; */
-        padding: 10px;
-        /* color: #e2e8f0; */
+        padding: 12px;
         font-weight: bold;
-
+        background: #f7fafc;
+        border-bottom: 1px solid #e2e8f0;
     }
 
     .card-body {
-        padding: 20px;
+        padding: 16px;
     }
 
     .card-body p {
-        margin: 10px 0;
+        margin: 8px 0;
+        font-size: 14px;
+        color: #4a5568;
     }
 
     .card-actions {
-        padding: 20px;
-        /* background: #1a202c; */
+        padding: 12px;
         text-align: right;
+        border-top: 1px solid #e2e8f0;
+        background: #f7fafc;
     }
 
     .card-actions a {
-        background-color: #4a5568;
-        color: #e2e8f0;
-        padding: 8px 12px;
+        background-color: #3182ce;
+        color: #ffffff;
+        padding: 10px 16px;
         border-radius: 4px;
         text-decoration: none;
         transition: background-color 0.2s;
+        font-weight: bold;
     }
 
     .card-actions a:hover {
-        background-color: #2d3748;
+        background-color: #2b6cb0;
     }
 
     .footer {
@@ -76,8 +79,7 @@
     }
 </style>
 
-@csrf
-<div class="stats  stats">
+<div class="stats">
     <div class="stat">
         <div class="stat-figure text-secondary">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block h-8 w-8 stroke-current">
@@ -106,7 +108,7 @@
             </svg>
         </div>
         <div class="stat-title">Total Gain</div>
-        <div class="stat-value">Rp. {{ $totalSpent }}</div>
+        <div class="stat-value">Rp. {{ number_format($totalSpent, 2, ',', '.') }}</div>
     </div>
 </div>
 
@@ -115,16 +117,16 @@
         <p>No transactions found.</p>
     @else
         @foreach ($sales as $sale)
-            <div class="card  base-200">
-                <div class="card-header bg-base-300 ">
+            <div class="card bg-base-200">
+                <div class="card-header">
                     <h2>Sale Date: {{ $sale->sale_date }}</h2>
                 </div>
                 <div class="card-body">
                     <p>Cashier: {{ $sale->user->username }}</p>
                     <p>Payment Method: {{ $sale->payment }}</p>
-                    <p>Total Price: Rp. {{ $sale->total_price }}</p>
+                    <p>Total Price: Rp. {{ number_format($sale->total_price, 2, ',', '.') }}</p>
                 </div>
-                <div class="card-actions bg-base-200">
+                <div class="card-actions">
                     <a href="{{ route('sales.show', $sale->id) }}">See more</a>
                 </div>
             </div>
