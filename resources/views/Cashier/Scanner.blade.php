@@ -16,9 +16,9 @@
     <form id="saleForm" action="{{ route('sales.stores') }}" method="POST" class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4">
         @csrf
         <!-- Main Content -->
-        <main class="flex-1 bg-white p-6 rounded-lg shadow-md">
-            <div class="form-control mb-4">
-                <label for="barcode_input" class="label font-semibold text-gray-700">Scan Barcode:</label>
+        <main class="flex-1   ">
+            <div class="form-control ">
+
                 <input type="text" id="barcode_input" name="barcode" class="input input-bordered w-full" placeholder="Scan barcode here">
             </div>
                 @if (session('success'))
@@ -29,20 +29,33 @@
 
                 <input type="hidden" id="isConfirmed" name="isConfirmed" value="false">
 
-                <h2 class="text-xl font-bold mt-5 text-gray-800">List item</h2>
+                <div class="flex justify-center">
+                <h2 class="text-xl font-bold mt-2 text-gray-800">OR</h2>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-5 gap-2">
                 @foreach ($items as $item)
-                <button type="button" class="w-fit shadow-lg rounded-lg overflow-hidden m-2" onclick="addItem({{ json_encode($item) }})">
-                    <figure>
-                        <img src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->itemName }}" class="object-cover w-36 h-36 rounded-t-lg">
-                    </figure>
-                    <div class="card-body p-4">
-                        <div class="flex justify-between items-center">
-                            <h2 class="text-xl font-bold">{{ $item->itemName }}</h2>
+                    <button type="button" class="shadow-lg rounded-lg bg-white w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg overflow-hidden m-2" onclick="addItem({{ json_encode($item) }})">
+                        <figure>
+                            <img src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->itemName }}" class="object-cover w-full h-44 p-1 rounded-lg">
+                        </figure>
+                        <div class="card-body p-4">
+                            <div class="flex flex-col h-12">
+                                <p class="text-sm text-black font-semibold text-left break-words">
+                                    {{ $item->itemName }}
+                                </p>
+                                <p class="text-xs text-neutral-400 font-semibold text-left break-words">
+                                    Rp.{{ $item->price }}
+                                </p>
+                            </div>
                         </div>
-                        <p class="text-gray-400">Rp.{{ $item->price }}</p>
-                    </div>
-                </button>
+                    </button>
                 @endforeach
+            </div>
+
+
+
+
+
         </main>
 
         <!-- Sidebar -->
@@ -61,12 +74,12 @@
             </div>
             <hr class="my-4">
 
-            <div class="form-control mb-4">
-                <label class="block text-sm font-medium text-gray-700">Payment Method:</label>
-                <div class="flex space-x-4">
-                    <button type="button" class="btn btn-outline" data-value="Cash" onclick="selectPaymentMethod('Cash', this)">Cash</button>
-                    <button type="button" class="btn btn-outline" data-value="E-Wallet" onclick="selectPaymentMethod('E-Wallet', this)">E-Wallet</button>
-                    <button type="button" class="btn btn-outline" data-value="Bank" onclick="selectPaymentMethod('Bank', this)">Bank</button>
+            <div class="form-control mb-4 ">
+                <label class="block text-sm font-medium text-gray-700 mb-3">Payment Method:</label>
+                <div class="flex grid grid-cols-3 gap-3">
+                    <button type="button" class="btn   w-17 h-14" data-value="Cash" onclick="selectPaymentMethod('Cash', this)"> <div class="flex flex-col"><i class="fa-solid fa-money-bill-1-wave  text-xl" style="color: #63E6BE; "></i> <p class="text-xs">Cash</p></div></button>
+                    <button type="button" class="btn  w-17 h-14" data-value="E-Wallet" onclick="selectPaymentMethod('E-Wallet', this)"><div class="flex flex-col"><i class="fa-solid fa-wallet text-xl" style="color: #74C0FC;"></i><p class="text-xs">E-Wallet</p></div></button>
+                    <button type="button" class="btn  w-17 h-14" data-value="Bank" onclick="selectPaymentMethod('Bank', this)"><div class="flex flex-col"><i class="fa-solid fa-landmark text-xl" style="color: #FFD43B;"></i> <p class="text-xs">Bank</p></div></button>
                 </div>
                 <input type="hidden" id="payment" name="payment" required>
             </div>
@@ -83,7 +96,7 @@
                 </div>
             </div>
 
-            <button type="button" class="btn btn-primary w-full mt-4" onclick="toggleModal()">Submit Sale</button>
+            <button type="button" class=" btn w-full mt-4 text-white" style="background-color: #74C0FC " onclick="toggleModal()">Submit Sale</button>
         </aside>
     </form>
 
@@ -156,37 +169,35 @@
         // Add new item
         const itemId = `item-${item.id}`;
         const itemDiv = `
-            <div class="item mt-2 bg-gray-100 p-4 rounded-lg shadow-sm flex items-center" id="${itemId}">
-                <div class="flex items-center w-full">
-                    <!-- Image Section -->
-                    <div class="flex-shrink-0">
-                        <img src="/storage/${item.image}" alt="${item.itemName}" class="w-16 h-16 rounded-md object-cover">
-                    </div>
+           <div class="item mt-4 p-4 bg-gray-100 rounded-lg shadow-lg" id="${itemId}">
+    <div class="flex items-start space-x-4 w-full">
+        <!-- Image Section -->
+        <img src="/storage/${item.image}" alt="${item.itemName}" class="w-24 h-24 rounded-md object-cover shadow-md">
 
-                    <!-- Item Details Section -->
-                    <div class="flex-1 ml-4">
-                        <div class="flex items-center mb-2">
-                            <!-- Quantity Buttons -->
-                            <button type="button" class="px-2 py-1 border border-gray-300 bg-gray-200 rounded-l-md" onclick="changeQuantity(${item.id}, -1)">
-                                <i class="fa fa-minus text-gray-600">-</i>
-                            </button>
-                            <input type="text" id="quantity-display-${item.id}" name="items[${itemCount}][quantity]" value="1" class="w-12 text-center border-gray-300 border rounded-md">
-                            <button type="button" class="px-2 py-1 border border-gray-300 bg-gray-200 rounded-r-md" onclick="changeQuantity(${item.id}, 1)">
-                                <i class="fa fa-plus text-gray-600">+</i>
-                            </button>
-                        </div>
-                        <p class="font-semibold text-gray-800">${item.itemName}</p>
-                        <p class="text-gray-600">Price: Rp.${item.price}</p> <!-- Ensure this is being set correctly -->
-                    </div>
+        <!-- Item Details Section -->
+        <div class="flex-1">
 
-                    <!-- Hidden Item ID -->
-                    <input type="hidden" name="items[${itemCount}][item_id]" value="${item.id}">
-                    <input type="hidden" name="items[${itemCount}][price]" value="${item.price}"> <!-- Ensure price is included -->
-                </div>
-                <button type="button" class="ml-4 text-red-600" onclick="removeItem(${item.id})">
-                    <i class="fa fa-trash">Remove</i>
+            <p class="font-semibold text-gray-800 text-sm">${item.itemName}</p>
+            <p class="text-gray-600 mt-1 mb-2 text-sm">Rp.${item.price}</p>
+
+            <div class="flex items-center mb-4 ">
+                <!-- Quantity Buttons -->
+                <button type="button" class="  rounded-lg  " onclick="changeQuantity(${item.id}, -1)">
+                    <i class="text-lg text--rose-600 font-bold">-</i>
+                </button>
+                <input type="text" id="quantity-display-${item.id}" name="items[${itemCount}][quantity]" value="1" class="w-16 bg-transparent text-center  outline-none">
+                <button type="button" class=" " onclick="changeQuantity(${item.id}, 1)">
+                    <i class="text-lg text-green-600 font-bold">+</i>
                 </button>
             </div>
+        </div>
+    </div>
+
+    <!-- Hidden Item ID -->
+    <input type="hidden" name="items[${itemCount}][item_id]" value="${item.id}">
+    <input type="hidden" name="items[${itemCount}][price]" value="${item.price}">
+</div>
+
         `;
 
         container.append(itemDiv);
@@ -224,7 +235,7 @@
 
             $('#items-container .item').each(function() {
                 let quantity = $(this).find('input[name$="[quantity]"]').val();
-                let price = $(this).find('p.text-gray-600').text().replace('Price: Rp.', '').trim();
+                let price = $(this).find('p.text-gray-600').text().replace('Rp.', '').trim();
                 totalPrice += quantity * parseFloat(price);
             });
 

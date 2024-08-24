@@ -7,6 +7,9 @@
     <title>@yield('title') Kasiru</title>
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
     <style>
         .mber {
             font-weight: bold;
@@ -18,56 +21,35 @@
             top: 0;
             left: 0;
             height: 100%;
-            width: 250px; /* Width of the sidebar */
             background-color: #f5f5f5;
-            z-index: 50; /* Ensure sidebar is above other content */
-            transition: transform 0.3s ease; /* Transition effect */
+            z-index: 50;
+            transition: transform 0.3s ease;
+            width: 64px; /* Set smaller width for the sidebar */
         }
 
         .sidebar-hidden {
-            transform: translateX(-100%); /* Hide sidebar off-screen */
+            transform: translateX(-100%);
         }
 
         .sidebar-visible {
-            transform: translateX(0); /* Show sidebar */
+            transform: translateX(0);
         }
 
         @media (min-width: 1024px) {
             .sidebar {
-                display: block;
                 transform: translateX(0); /* Sidebar always shown on large screens */
-            }
-        }
-
-        @media (max-width: 1023px) {
-            .mobile-navbar {
-                display: flex;
-            }
-            .sidebar {
-                position: fixed;
-                top: 0;
-                left: 0;
-                height: 100%;
-                width: 250px; /* Width of the sidebar */
-                background-color: #f5f5f5;
-                z-index: 50; /* Ensure sidebar is above other content */
-                transform: translateX(-100%); /* Start hidden */
-            }
-            .sidebar-visible {
-                transform: translateX(0); /* Show sidebar */
             }
         }
 
         /* Content Styles */
         .content {
-            transition: margin-left 0.3s ease; /* Smooth transition for content */
-            margin-left: 250px; /* Adjust margin to match sidebar width by default */
+            transition: margin-left 0.3s ease;
+            margin-left: 64px; /* Adjust margin to match sidebar width by default */
         }
 
         @media (max-width: 1023px) {
             .content {
                 margin-left: 0; /* No margin on mobile screens */
-                padding-left: 1rem; /* Padding to prevent content from touching screen edges */
             }
         }
 
@@ -84,7 +66,6 @@
             flex: 1;
             text-align: center;
             font-weight: bold;
-            padding: 0 1rem;
         }
 
         .profile-icon {
@@ -92,28 +73,30 @@
         }
     </style>
 </head>
-<body class="bg-base-100">
+<body class="bg-slate-100">
     <div class="flex flex-col lg:flex-row min-h-screen">
         <!-- Sidebar -->
-        <div class="sidebar sidebar-hidden lg:sidebar-visible">
-            <div class="p-6">
-                <h1 class="text-2xl font-bold">Dashboard</h1>
-                <nav class="mt-6">
-                    <a href="/Warehouse" class="block hover:bg-gray-700 hover:text-white p-3 rounded">Items</a>
-                    <a href="/sales/creates" class="block hover:bg-gray-700 hover:text-white p-3 rounded">Cashier</a>
-                    <a href="/transaction" class="block hover:bg-gray-700 hover:text-white p-3 rounded">Transaction</a>
-                </nav>
+        <div class="sidebar sidebar-hidden bg-white lg:sidebar-visible flex flex-col items-center pt-8">
+            <div class="flex flex-col space-y-6">
+                <a href="/Warehouse" class="block hover:bg-gray-700 hover:text-white p-3 rounded">
+                    <i class="fa-solid fa-boxes-stacked text-2xl" style="color: #74C0FC;"></i>
+                </a>
+                <a href="/sales/creates" class="block hover:bg-gray-700 hover:text-white p-3 rounded">
+                    <i class="fa-solid fa-cash-register text-2xl" style="color: #63E6BE;"></i>
+                </a>
+                <a href="/transaction" class="block hover:bg-gray-700 hover:text-white p-3 rounded">
+                    <i class="fa-solid fa-chart-line text-2xl" style="color: #FFD43B;"></i>
+                </a>
             </div>
         </div>
 
         <!-- Main Content -->
         <div class="flex-1 content">
             <!-- Navbar -->
-            <div class="navbar mobile-navbar">
+            <div class="navbar">
                 <div class="flex-none">
                     <!-- Hamburger Button -->
-                    <button class="btn btn-square btn-ghost" onclick="toggleSidebar()">
-                        <!-- Icon for hamburger menu -->
+                    <button class="btn btn-square btn-ghost sm:hidden block" onclick="toggleSidebar()">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                         </svg>
@@ -140,7 +123,7 @@
             </div>
 
             <!-- Main Section -->
-            <div class="p-4 lg:p-10">
+            <div class="">
                 <main>
                     @yield('content')
                 </main>
@@ -148,25 +131,12 @@
         </div>
     </div>
 
-    <!-- Footer -->
-    
-
     <!-- JavaScript -->
     <script>
         function toggleSidebar() {
             const sidebar = document.querySelector('.sidebar');
-            const content = document.querySelector('.content');
-
-            if (sidebar) {
-                sidebar.classList.toggle('sidebar-hidden');
-                sidebar.classList.toggle('sidebar-visible');
-                
-                if (sidebar.classList.contains('sidebar-visible')) {
-                    content.classList.add('content-padding');
-                } else {
-                    content.classList.remove('content-padding');
-                }
-            }
+            sidebar.classList.toggle('sidebar-hidden');
+            sidebar.classList.toggle('sidebar-visible');
         }
     </script>
 </body>
