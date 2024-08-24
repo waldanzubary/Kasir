@@ -24,7 +24,7 @@ Route::get('register', [AuthController::class, 'register'])->middleware('guest')
 Route::post('register', [AuthController::class, 'registerProccess'])->middleware('guest');
 Route::post('login', [AuthController::class, 'authenticating'])->middleware('guest');
 Route::get('logout', [AuthController::class, 'logout'])->name('logout');
-
+Route::get('/redirect-dashboard', [AuthController::class, 'redirectBasedOnRole'])->name('redirect.dashboard');
 
 //Warehouse
 Route::get('Warehouse', [WarehouseController::class, 'Warehouse'])->middleware('auth')->middleware('OnlyStaff');

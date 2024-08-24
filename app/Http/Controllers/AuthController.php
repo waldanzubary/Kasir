@@ -106,6 +106,20 @@ class AuthController extends Controller
         return redirect('login');
     }
 
+    public function redirectBasedOnRole()
+    {
+        if (Auth::check()) {
 
+            $role = Auth::user()->role;
+
+            if ($role == 'Admin') {
+                return redirect('/dashboard');
+            } elseif ($role == 'User') {
+                return redirect('/transaction');
+            }
+        }
+
+        return redirect('login');
+    }
 
 }

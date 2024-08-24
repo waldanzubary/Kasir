@@ -18,7 +18,7 @@
             @if (Route::has('login'))
                 <ul class="menu menu-horizontal px-1">
                     @auth
-                        <li><a href="{{ url('/dashboard') }}" class="btn btn-primary">Dashboard</a></li>
+                        <li><a href="{{ route('redirect.dashboard') }}" class="btn btn-primary">Dashboard</a></li>
                     @else
                         <li><a href="{{ route('login') }}" class="btn btn-primary">Log in</a></li>
                         @if (Route::has('register'))
