@@ -93,7 +93,7 @@
         <!-- Main Content -->
         <div class="flex-1 content">
             <!-- Navbar -->
-            <div class="navbar">
+            <div class="navbar ">
                 <div class="flex-none">
                     <!-- Hamburger Button -->
                     <button class="btn btn-square btn-ghost sm:hidden block" onclick="toggleSidebar()">
@@ -105,7 +105,7 @@
                 <div class="navbar-title">
                     <a class="text-xl mber">Transaction</a>
                 </div>
-                <div class="flex-none profile-icon">
+                <div class="flex-none profile-icon gap-2    ">
                     @if(Auth::check())
                         {{ Auth::user()->username }}
                     @endif
@@ -132,7 +132,7 @@
 
 
         </div>
-       
+
     </div>
 
     <!-- JavaScript -->
