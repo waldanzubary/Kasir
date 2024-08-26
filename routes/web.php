@@ -14,6 +14,7 @@ use App\Http\Controllers\WarehouseController;
 use App\Http\Controllers\TransactionController;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -25,6 +26,8 @@ Route::post('register', [AuthController::class, 'registerProccess'])->middleware
 Route::post('login', [AuthController::class, 'authenticating'])->middleware('guest');
 Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/redirect-dashboard', [AuthController::class, 'redirectBasedOnRole'])->name('redirect.dashboard');
+
+Route::get('/sent-email', [AuthController::class, 'sendEmail']);
 
 //Warehouse
 Route::get('Warehouse', [WarehouseController::class, 'Warehouse'])->middleware('auth')->middleware('OnlyStaff');

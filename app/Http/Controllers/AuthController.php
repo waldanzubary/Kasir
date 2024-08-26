@@ -6,9 +6,20 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\WelcomeMail;
 
 class AuthController extends Controller
 {
+
+    public function sendEmail()
+    {
+        $email = new WelcomeMail();
+        Mail::to('anggerrestu10@gmail.com')->send($email);
+
+        return 'Email sent!';
+    }
+
     public function login()
     {
         return view('Authorization/login');
@@ -113,6 +124,20 @@ class AuthController extends Controller
         return redirect('login');
     }
 
+    public function redirectBasedOnRole()
+    {
+        if (Auth::check()) {
 
+            $role = Auth::user()->role;
+
+            if ($role == 'Admin') {
+                return redirect('/dashboard');
+            } elseif ($role == 'User') {
+                return redirect('/transaction');
+            }
+        }
+
+        return redirect('login');
+    }
 
 }
