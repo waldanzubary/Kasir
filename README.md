@@ -1,4 +1,4 @@
-##.env pake ini aja
+## .env pake ini aja
 
 MAIL_MAILER=smtp
 
