@@ -55,7 +55,8 @@ Route::post('/sales/barcode', [SalesController::class, 'barcode'])->name('sales.
 Route::get('/transaction', [TransactionController::class, 'transaction'])->name('transaction.index');
 Route::get('/transaction/{id}', [TransactionController::class, 'show'])->name('sales.show');
 
-Route::get('staff', [StaffController::class, 'transactions'])->name('transaction.indexs');
+Route::get('staff', [StaffController::class, 'transactions'])->name('sales.transactions');
+Route::get('/transactions/export-pdf', [StaffController::class, 'exportPdf'])->name('sales.exportPDF');
 
 
 

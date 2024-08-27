@@ -5,11 +5,29 @@
 @section('content')
 
 <div class="container mx-auto p-6">
-    <div class="flex  flex-col  md:flex-row   gap-6">
+     <!-- Filter Form -->
+     <div class="bg-white p-6 rounded-lg shadow-lg mb-8">
+        <form action="{{ route('sales.transactions') }}" method="GET" class="flex flex-col md:flex-row gap-4">
+            <div class="flex-1">
+                <label for="start_date" class="block text-sm font-medium text-gray-700">Start Date</label>
+                <input type="date" id="start_date" name="start_date" value="{{ request('start_date') }}" class="mt-1 block w-full border border-gray-300 p-2 rounded-lg shadow-sm">
+            </div>
+            <div class="flex-1">
+                <label for="end_date" class="block text-sm font-medium text-gray-700">End Date</label>
+                <input type="date" id="end_date" name="end_date" value="{{ request('end_date') }}" class="mt-1 block w-full border border-gray-300 rounded-lg  p-2 shadow-sm">
+            </div>
+            <div class="flex items-end">
+                <button type="submit" class="btn btn-primary">Filter</button>
+            </div>
+        </form>
+    </div>
+    <div class="flex flex-col md:flex-row gap-6">
         <!-- Main Content -->
+
+
         <div class="flex-1 w-full lg:w-3/4">
             <!-- Stats Section -->
-            <div class="rounded-lg  mb-10">
+            <div class="rounded-lg mb-10">
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-8">
                     <div class="bg-white p-6 rounded-lg shadow-lg w-full">
                         <div class="flex items-center space-x-4">
@@ -57,16 +75,23 @@
                 </div>
             </div>
 
-            {{-- sales overview must be here based on responsive --}}
+
 
             <!-- Sales Transactions Section -->
             <div>
+                <div class="flex items-center justify-between mb-4">
+                    @if($sales->isEmpty())
+                        <p class="text-center text-gray-500">No transactions found.</p>
+                    @else
+                        <a href="{{ route('sales.exportPDF', ['start_date' => request('start_date'), 'end_date' => request('end_date')]) }}" class="btn btn-primary">Export as PDF</a>
+                    @endif
+                </div>
                 <div>
                     @if($sales->isEmpty())
                         <p class="text-center text-gray-500">No transactions found.</p>
                     @else
                     <div class="overflow-x-auto rounded-lg">
-                        <table class="min-w-full bg-white divide-y divide-gray-200 rounded-lg shadow-lg ">
+                        <table class="min-w-full bg-white divide-y divide-gray-200 rounded-lg shadow-lg">
                             <thead class="bg-gray-50">
                                 <tr>
                                     <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Transaction</th>
@@ -91,14 +116,13 @@
                             </tbody>
                         </table>
                     </div>
-
                     @endif
                 </div>
             </div>
         </div>
 
         <!-- Right Sidebar -->
-        <div class="w-full lg:w-1/4 bg-white rounded-lg   p-6 lg:sticky lg:top-0">
+        <div class="w-full lg:w-1/4 bg-white rounded-lg p-6 lg:sticky lg:top-0">
             <h2 class="text-lg font-semibold text-gray-800 mb-4">Sales Overview</h2>
             <div class="relative w-full h-64 flex justify-center">
                 <canvas id="salesOverviewChart"></canvas>
@@ -187,36 +211,28 @@
         // Sales Overview Chart
         const ctxSalesOverview = document.getElementById('salesOverviewChart').getContext('2d');
         new Chart(ctxSalesOverview, {
-            type: 'pie', // Use 'pie' or 'doughnut' based on your preference
+            type: 'doughnut',
             data: {
                 labels: @json($overviewLabels),
                 datasets: [{
+                    label: 'Sales Overview',
                     data: @json($overviewValues),
-                    backgroundColor: [
-                        'rgba(79, 70, 229, 0.5)', // Example colors
-                        'rgba(34, 197, 94, 0.5)',
-                        'rgba(250, 204, 21, 0.5)',
-                        'rgba(239, 68, 68, 0.5)'
-                    ],
-                    borderColor: [
-                        '#4f46e5', // Example border colors
-                        '#16a34a',
-                        '#facc15',
-                        '#ef4444'
-                    ],
+                    backgroundColor: ['#4f46e5', '#10b981', '#f59e0b'], // Example colors
+                    borderColor: '#ffffff',
                     borderWidth: 1
                 }]
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: false,
                 plugins: {
                     legend: {
-                        position: 'top',
+                        position: 'bottom'
                     },
                     tooltip: {
                         callbacks: {
                             label: function(tooltipItem) {
-                                return tooltipItem.label + ': ' + tooltipItem.raw.toLocaleString();
+                                return tooltipItem.label + ': Rp. ' + tooltipItem.raw.toLocaleString();
                             }
                         }
                     }
