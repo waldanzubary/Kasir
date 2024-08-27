@@ -7,7 +7,7 @@
 <div class="container mx-auto p-6">
      <!-- Filter Form -->
      <div class="bg-white p-6 rounded-lg shadow-lg mb-8">
-        <form action="{{ route('sales.transactions') }}" method="GET" class="flex flex-col md:flex-row gap-4">
+        <form action="{{ route('sales.transactions') }}" method="GET" class="flex flex-col md:flex-row gap-4 mb-2">
             <div class="flex-1">
                 <label for="start_date" class="block text-sm font-medium text-gray-700">Start Date</label>
                 <input type="date" id="start_date" name="start_date" value="{{ request('start_date') }}" class="mt-1 block w-full border border-gray-300 p-2 rounded-lg shadow-sm">
@@ -16,7 +16,7 @@
                 <label for="end_date" class="block text-sm font-medium text-gray-700">End Date</label>
                 <input type="date" id="end_date" name="end_date" value="{{ request('end_date') }}" class="mt-1 block w-full border border-gray-300 rounded-lg  p-2 shadow-sm">
             </div>
-            <div class="flex items-end">
+            <div class="flex items-end ">
                 <button type="submit" class="btn btn-primary">Filter</button>
             </div>
         </form>
