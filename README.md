@@ -1,11 +1,19 @@
 ##.env pake ini aja
+
 MAIL_MAILER=smtp
+
 MAIL_HOST=smtp.gmail.com
+
 MAIL_PORT=465
+
 MAIL_USERNAME="mirzazubaridjunaid@gmail.com"
+
 MAIL_PASSWORD="yqsjzaispztobmax"
+
 MAIL_ENCRYPTION=null
+
 MAIL_FROM_ADDRESS="mirzazubaridjunaid@gmail.com"
+
 MAIN_FROM_NAME="${APP_NAME}"
 
 
