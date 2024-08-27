@@ -187,11 +187,7 @@
                             borderColor: '#e2e8f0',
                             borderWidth: 1
                         },
-                        title: {
-                            display: true,
-                            text: 'Total Sales',
-                            color: '#4a5568'
-                        },
+
                         ticks: {
                             color: '#4a5568',
                             font: {
@@ -209,28 +205,36 @@
         // Sales Overview Chart
         const ctxSalesOverview = document.getElementById('salesOverviewChart').getContext('2d');
         new Chart(ctxSalesOverview, {
-            type: 'doughnut',
+            type: 'pie', // Use 'pie' or 'doughnut' based on your preference
             data: {
-                labels: @json($overviewLabels),
+                labels: @json($paymentMethodLabels),
                 datasets: [{
-                    label: 'Sales Overview',
-                    data: @json($overviewValues),
-                    backgroundColor: ['#4f46e5', '#10b981', '#f59e0b'], // Example colors
-                    borderColor: '#ffffff',
+                    data: @json($paymentMethodCounts),
+                    backgroundColor: [
+                        'rgba(79, 70, 229, 0.5)', // Example colors
+                        'rgba(34, 197, 94, 0.5)',
+                        'rgba(250, 204, 21, 0.5)',
+                        'rgba(239, 68, 68, 0.5)'
+                    ],
+                    borderColor: [
+                        '#4f46e5', // Example border colors
+                        '#16a34a',
+                        '#facc15',
+                        '#ef4444'
+                    ],
                     borderWidth: 1
                 }]
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: false,
                 plugins: {
                     legend: {
-                        position: 'bottom'
+                        position: 'top',
                     },
                     tooltip: {
                         callbacks: {
                             label: function(tooltipItem) {
-                                return tooltipItem.label + ': Rp. ' + tooltipItem.raw.toLocaleString();
+                                return tooltipItem.label + ': ' + tooltipItem.raw.toLocaleString();
                             }
                         }
                     }
