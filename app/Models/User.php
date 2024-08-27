@@ -26,6 +26,7 @@ class User extends Authenticatable
         'phone',
         'shop_name',
         'zip_code',
+        'active_Date',
     ];
 
     /**

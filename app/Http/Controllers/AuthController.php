@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\WelcomeMail;
+use App\Mail\PaymentMail;
 
 class AuthController extends Controller
 {
@@ -56,27 +57,76 @@ class AuthController extends Controller
         $userData = [
             'email' => $request->email,
             'username' => $request->username,
-            'password' => bcrypt($request->password),  // Hash the password
+            'password' => $request->password,  // Hash the password
             'city' => $request->city,
             'address' => $request->address,
             'phone' => $request->phone,
             'shop_name' => $request->shop_name,
             'zip_code' => $request->zip_code,
+            'status' => 'inactive',  // Default status
         ];
 
         // Create a new user
         $user = User::create($userData);
+
+        // Automatically log the user in
+        Auth::login($user);
 
         // Send a welcome email
         $email = new WelcomeMail();  // Assumes WelcomeMail is set up to be a Mailable class
         Mail::to($user->email)->send($email);  // Send email to the registered email address
 
         Session::flash('status', 'success');
-        Session::flash('message', 'Please check your email for further instructions.');
+        Session::flash('message', 'Please select the duration for your active date.');
 
-        // Flash message and redirect
-        return redirect('login');
+        // Redirect to active date selection page
+        return redirect('select-active-date');
     }
+
+    public function selectActiveDate()
+    {
+        return view('Authorization/select-active-date');
+    }
+
+    public function selectActiveDateNoTrial()
+    {
+        return view('Authorization/select-active-date-no-trial');
+    }
+
+    public function setActiveDate(Request $request)
+    {
+        $user = Auth::user();
+
+        if ($request->has('duration')) {
+            $duration = $request->input('duration');
+
+            switch ($duration) {
+                case '5_days':
+                    $user->active_date = now()->addDays(5);
+                    break;
+                case '1_month':
+                    $user->active_date = now()->addMonth();
+                    break;
+                case '1_year':
+                    $user->active_date = now()->addYear();
+                    break;
+                default:
+                    return redirect()->back()->withErrors(['Invalid duration selected']);
+            }
+
+            $user->status = 'active';  // Update status to active
+            $user->save();
+
+            // Send confirmation email
+            $email = new PaymentMail($user); // Assuming WelcomeMail is the mailable class for confirmation emails
+            Mail::to($user->email)->send($email); // Send email to the user's registered email address
+
+            return redirect('/staff')->with('status', 'Your account is now active and a confirmation email has been sent.');
+        }
+
+        return redirect()->back()->withErrors(['Please select a duration']);
+    }
+
 
 
     public function authenticating(Request $request)
@@ -89,33 +139,25 @@ class AuthController extends Controller
 
         // Jika pengguna ditemukan dan kata sandi cocok
         if ($user && $credentials['password'] == $user->password) {
+            
+            // Masukkan pengguna ke dalam sesi
+            Auth::login($user);
+            $request->session()->regenerate();
+            
+            // Cek status pengguna
             if ($user->status == 'active') {
-            // Jika status pengguna aktif
-
-                // Masukkan pengguna ke dalam sesi
-                Auth::login($user);
-
-                // Bersihkan pesan sesi
-                Session::forget(['status', 'message']);
-
-
-                $request->session()->regenerate();
-                if(Auth::user()->role == 'Admin') {
+                // Jika status pengguna aktif, redirect berdasarkan role
+                if (Auth::user()->role == 'Admin') {
                     return redirect('/dashboard');
+                } elseif (Auth::user()->role == 'User') {
+                    return redirect('/staff');
                 }
-
-                if(Auth::user()->role == 'User') {
-                    return redirect('/transaction');
-                }
-
             } else {
-                // Jika akun tidak aktif
-                Session::flash('status', 'failed');
-                Session::flash('message', 'Your account is not active');
+                // Jika akun tidak aktif, redirect ke halaman pilih durasi active date
+                return redirect()->route('selectActiveDateNoTrial')
+                    ->with('status', 'inactive')
+                    ->with('message', 'Your account is not active. Please select the duration for your active date.');
             }
-
-
-
         } else {
             // Jika autentikasi gagal
             Session::flash('status', 'failed');
@@ -125,6 +167,7 @@ class AuthController extends Controller
         // Redirect ke halaman login
         return redirect('login');
     }
+
 
     public function redirectBasedOnRole()
     {
