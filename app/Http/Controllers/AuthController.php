@@ -40,42 +40,44 @@ class AuthController extends Controller
 
     public function registerProccess(Request $request)
     {
-       // Validasi request
-    $validated = $request->validate([
-        'email' => 'required|unique:users|max:255|email',
-        'username' => 'required|max:255',
-        'password' => 'required|max:255',
-        'city' => 'required',
-        'address' => 'required',
-        'phone' => 'required',
-        'shop_name' => 'required',
-        'zip_code' => 'required',
+        // Validate request
+        $validated = $request->validate([
+            'email' => 'required|unique:users|max:255|email',
+            'username' => 'required|max:255',
+            'password' => 'required|max:255',
+            'city' => 'required',
+            'address' => 'required',
+            'phone' => 'required',
+            'shop_name' => 'required',
+            'zip_code' => 'required',
+        ]);
 
+        // Save data into an array, hash the password
+        $userData = [
+            'email' => $request->email,
+            'username' => $request->username,
+            'password' => bcrypt($request->password),  // Hash the password
+            'city' => $request->city,
+            'address' => $request->address,
+            'phone' => $request->phone,
+            'shop_name' => $request->shop_name,
+            'zip_code' => $request->zip_code,
+        ];
 
-    ]);
+        // Create a new user
+        $user = User::create($userData);
 
-    // Simpan data ke dalam array
-    $userData = [
-        'email' => $request->email,
-        'username' => $request->username,
-        'password' => $request->password,
-        'city' => $request->city,
-        'address' => $request->address,
-        'phone' => $request->phone,
-        'shop_name' => $request->shop_name,
-        'zip_code' => $request->zip_code,
+        // Send a welcome email
+        $email = new WelcomeMail();  // Assumes WelcomeMail is set up to be a Mailable class
+        Mail::to($user->email)->send($email);  // Send email to the registered email address
 
-    ];
+        Session::flash('status', 'success');
+        Session::flash('message', 'Please check your email for further instructions.');
 
-    // Buat user baru tanpa melakukan peng-hash-an pada password
-    $user = User::create($userData);
-    Session::flash('status', 'success');
-    Session::flash('message', 'Hubungi admin untuk melakukan pembayaran dan pengaktifan akun');
-
-    // Flash message dan redirect
-
-    return redirect('login');
+        // Flash message and redirect
+        return redirect('login');
     }
+
 
     public function authenticating(Request $request)
     {

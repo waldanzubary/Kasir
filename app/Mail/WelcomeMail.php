@@ -30,7 +30,7 @@ class WelcomeMail extends Mailable
      */
     public function build()
     {
-        return $this->subject('Kontol lo')
+        return $this->subject('Welcome to STORE WEB!')
                     ->view('emails.welcome');
     }
 }
