@@ -83,13 +83,11 @@
                     @if($sales->isEmpty())
                         <p class="text-center text-gray-500">No transactions found.</p>
                     @else
-                        <a href="{{ route('sales.exportPDF', ['start_date' => request('start_date'), 'end_date' => request('end_date')]) }}" class="btn btn-primary">Export as PDF</a>
+                        <a href="{{ route('sales.exportPDF', ['start_date' => request('start_date'), 'end_date' => request('end_date')]) }}" class="btn bg-rose-500 text-white">Export as PDF</a>
                     @endif
                 </div>
                 <div>
-                    @if($sales->isEmpty())
-                        <p class="text-center text-gray-500">No transactions found.</p>
-                    @else
+
                     <div class="overflow-x-auto rounded-lg">
                         <table class="min-w-full bg-white divide-y divide-gray-200 rounded-lg shadow-lg">
                             <thead class="bg-gray-50">
@@ -116,7 +114,7 @@
                             </tbody>
                         </table>
                     </div>
-                    @endif
+
                 </div>
             </div>
         </div>
