@@ -78,18 +78,13 @@
         <!-- Sidebar -->
         <div class="sidebar sidebar-hidden bg-white lg:sidebar-visible flex flex-col items-center pt-8 h-full">
             <div class="flex flex-col space-y-6">
-                <a href="/Warehouse" class="block hover:bg-gray-700 hover:text-white p-3 rounded flex items-center justify-center">
-                    <i class="fa-solid fa-boxes-stacked text-2xl" style="color: #74C0FC;"></i>
+                <a href="/dashboard" class="block hover:bg-gray-700 hover:text-white p-3 rounded flex items-center justify-center">
+                    <i class="fa-solid fa-chart-simple text-2xl" style="color: #74C0FC;"></i>
                 </a>
-                <a href="/sales/creates" class="block hover:bg-gray-700 hover:text-white p-3 rounded flex items-center justify-center">
-                    <i class="fa-solid fa-cash-register text-2xl" style="color: #63E6BE;"></i>
+                <a href="/manage" class="block hover:bg-gray-700 hover:text-white p-3 rounded flex items-center justify-center">
+                    <i class="fa-solid fa-user text-2xl" style="color: #63E6BE;"></i>
                 </a>
-                <a href="/staff" class="block hover:bg-gray-700 hover:text-white p-3 rounded flex items-center justify-center">
-                    <i class="fa-solid fa-chart-line text-2xl" style="color: #FFD43B;"></i>
-                </a>
-                <a href="/profile/edit-combined" class="block hover:bg-gray-700 hover:text-white p-3 rounded">
-                    <i class="fa-solid fa-user text-2xl" style="color: #8f8f8f;"></i>
-                </a>
+
             </div>
         </div>
 

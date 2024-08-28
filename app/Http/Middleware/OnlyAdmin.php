@@ -22,7 +22,7 @@ class OnlyAdmin
 
 
 
-        return redirect('transaction');
+        return redirect('/');
 
     }
 }

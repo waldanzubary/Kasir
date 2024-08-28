@@ -145,11 +145,11 @@ class AuthController extends Controller
 
         // Jika pengguna ditemukan dan kata sandi cocok
         if ($user && $credentials['password'] == $user->password) {
-            
+
             // Masukkan pengguna ke dalam sesi
             Auth::login($user);
             $request->session()->regenerate();
-            
+
             // Cek status pengguna
             if ($user->status == 'active') {
                 // Jika status pengguna aktif, redirect berdasarkan role
@@ -184,7 +184,7 @@ class AuthController extends Controller
             if ($role == 'Admin') {
                 return redirect('/dashboard');
             } elseif ($role == 'User') {
-                return redirect('/transaction');
+                return redirect('/staff');
             }
         }
 
