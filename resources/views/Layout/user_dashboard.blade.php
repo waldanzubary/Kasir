@@ -74,21 +74,22 @@
     </style>
 </head>
 <body class="bg-slate-100">
-    <div class="flex flex-col lg:flex-row min-h-screen">
+    <div class="flex flex-col lg:flex-row min-h-screen  ">
         <!-- Sidebar -->
-        <div class="sidebar sidebar-hidden bg-white lg:sidebar-visible flex flex-col items-center pt-8">
+        <div class="sidebar sidebar-hidden bg-white lg:sidebar-visible flex flex-col items-center pt-8 h-full">
             <div class="flex flex-col space-y-6">
-                <a href="/Warehouse" class="block hover:bg-gray-700 hover:text-white p-3 rounded">
+                <a href="/Warehouse" class="block hover:bg-gray-700 hover:text-white p-3 rounded flex items-center justify-center">
                     <i class="fa-solid fa-boxes-stacked text-2xl" style="color: #74C0FC;"></i>
                 </a>
-                <a href="/sales/creates" class="block hover:bg-gray-700 hover:text-white p-3 rounded">
+                <a href="/sales/creates" class="block hover:bg-gray-700 hover:text-white p-3 rounded flex items-center justify-center">
                     <i class="fa-solid fa-cash-register text-2xl" style="color: #63E6BE;"></i>
                 </a>
-                <a href="/staff" class="block hover:bg-gray-700 hover:text-white p-3 rounded">
+                <a href="/staff" class="block hover:bg-gray-700 hover:text-white p-3 rounded flex items-center justify-center">
                     <i class="fa-solid fa-chart-line text-2xl" style="color: #FFD43B;"></i>
                 </a>
             </div>
         </div>
+
 
         <!-- Main Content -->
         <div class="flex-1 content">

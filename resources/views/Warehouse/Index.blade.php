@@ -19,6 +19,13 @@
             </div>
             @if($item->stock == 0)
             <div class="absolute top-0 right-0 bg-red-500 text-white px-2 py-1 m-5 rounded-md text-sm font-medium">OUTSTOCK</div>
+            @else
+            <div class="absolute top-0 right-0 bg-green-500 text-white px-2 py-1 m-5 rounded-md text-sm font-medium">INSTOCK</div>
+
+
+
+
+
             @endif
         </div>
         <div class="p-4">

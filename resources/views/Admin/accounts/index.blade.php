@@ -1,6 +1,6 @@
-@extends('Layout.dashboard')
+@extends('Layout.user_dashboard')
 
-@section('title', 'Manage Accounts')
+@section('title', 'Sales Transactions')
 
 @section('content')
 <!DOCTYPE html>

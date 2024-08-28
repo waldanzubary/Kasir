@@ -1,6 +1,6 @@
-@extends('Layout.dashboard')
+@extends('Layout.user_dashboard')
 
-@section('title', 'Edit Account')
+@section('title', 'Sales Transactions')
 
 @section('content')
 <!-- Begin Page Content -->

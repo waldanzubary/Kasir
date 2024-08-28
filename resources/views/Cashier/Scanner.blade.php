@@ -34,19 +34,35 @@
             </div>
             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-5 gap-2">
                 @foreach ($items as $item)
+
                     <button type="button" class="shadow-lg rounded-lg bg-white w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg overflow-hidden mt-2" onclick="addItem({{ json_encode($item) }})">
+                        <div class=" flex p-2 absolute ">
+
+                            <span id="status-{{ $item->id }}" class="status rounded p-1 text-sm font-semibold">{{ $item->status }}</span>
+                        </div>
                         <figure>
                             <img src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->itemName }}" class="object-cover w-full h-44 p-1 rounded-lg">
+
                         </figure>
-                        <div class="card-body p-4">
+
+
+
+                        <div class="card-body p-2">
+
+
                             <div class="flex flex-col h-12">
+
+
                                 <p class="text-sm text-black font-semibold text-left break-words">
                                     {{ $item->itemName }}
                                 </p>
                                 <p class="text-xs text-neutral-400 font-semibold text-left break-words">
                                     Rp.{{ $item->price }}
                                 </p>
+
                             </div>
+
+
                         </div>
                     </button>
                 @endforeach
@@ -305,6 +321,19 @@ function submitSale() {
         }
     });
 }
+
+
+document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.status').forEach(function (badge) {
+            if (badge.textContent.trim() === 'outStock') {
+                badge.classList.add('bg-red-500', 'text-white');
+                badge.classList.remove('bg-green-500');
+            } else {
+                badge.classList.add('bg-green-500', 'text-white');
+                badge.classList.remove('bg-red-500');
+            }
+        });
+    });
 
     </script>
 </body>
