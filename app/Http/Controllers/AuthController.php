@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\WelcomeMail;
 use App\Mail\PaymentMail;
+use Carbon\Carbon;
 
 class AuthController extends Controller
 {
@@ -91,6 +92,11 @@ class AuthController extends Controller
     public function selectActiveDateNoTrial()
     {
         return view('Authorization/select-active-date-no-trial');
+    }
+
+    public function selectActiveDateExtend()
+    {
+        return view('Authorization/select-active-date-extend');
     }
 
     public function setActiveDate(Request $request)
@@ -184,5 +190,69 @@ class AuthController extends Controller
 
         return redirect('login');
     }
+
+    public function editCombined()
+    {
+        $user = Auth::user();
+        $user->active_date = $user->active_date ? Carbon::parse($user->active_date) : null;
+        return view('profile.edit_combined', compact('user'));
+    }
+
+    // Update user profile and shop information
+    public function updateCombined(Request $request)
+    {
+        $request->validate([
+            // User Profile Fields
+            'username' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+
+            // Shop Information Fields
+            'shop_name' => 'nullable|string|max:255',
+            'address' => 'nullable|string|max:255',
+            'city' => 'nullable|string|max:255',
+            'zip_code' => 'nullable|string|max:10',
+            'phone' => 'nullable|string|max:20',
+        ]);
+
+        $user = Auth::user();
+
+        // Update user profile fields
+        $user->update($request->only('username', 'email'));
+
+        // Update shop information fields
+        $user->update($request->only('shop_name', 'address', 'city', 'zip_code', 'phone'));
+
+        return redirect()->route('profile.edit_combined')->with('status', 'Profil dan informasi toko berhasil diperbarui.');
+    }
+
+    // Show password change form
+    public function editPassword()
+    {
+        return view('profile.edit_password');
+    }
+
+    // Update password
+    public function updatePassword(Request $request)
+{
+    // Validate the input
+    $request->validate([
+        'current_password' => 'required|string',
+        'new_password' => 'required|string|min:8|confirmed',
+    ]);
+
+    $user = Auth::user();
+
+    // Check if the current password matches the stored password
+    if ($request->current_password !== $user->password) {
+        return back()->withErrors(['current_password' => 'Password saat ini tidak cocok.']);
+    }
+
+    // Update the password without hashing
+    $user->password = $request->new_password;
+    $user->save();
+
+    return redirect()->route('profile.edit_combined')->with('status', 'Password berhasil diperbarui.');
+}
+
 
 }

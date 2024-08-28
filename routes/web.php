@@ -25,12 +25,17 @@ Route::get('register', [AuthController::class, 'register'])->middleware('guest')
 Route::post('register', [AuthController::class, 'registerProccess'])->middleware('guest');
 Route::get('select-active-date', [AuthController::class, 'selectActiveDate'])->middleware('auth')->middleware('OnlyStaff')->name('selectActiveDate');
 Route::get('select-active-date-no-trial', [AuthController::class, 'selectActiveDateNoTrial'])->middleware('auth')->middleware('OnlyStaff')->name('selectActiveDateNoTrial');
+Route::get('select-active-date-extend', [AuthController::class, 'selectActiveDateExtend'])->middleware('auth')->middleware('OnlyStaff')->name('selectActiveDateExtend');
 Route::post('set-active-date', [AuthController::class, 'setActiveDate'])->name('setActiveDate');
 Route::post('login', [AuthController::class, 'authenticating'])->middleware('guest');
 Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/redirect-dashboard', [AuthController::class, 'redirectBasedOnRole'])->name('redirect.dashboard');
 
 Route::get('/sent-email', [AuthController::class, 'sendEmail']);
+Route::get('/profile/edit-combined', [AuthController::class, 'editCombined'])->name('profile.edit_combined');
+Route::patch('/profile/update-combined', [AuthController::class, 'updateCombined'])->name('profile.update_combined');
+Route::get('/profile/edit-password', [AuthController::class, 'editPassword'])->name('profile.edit_password');
+Route::patch('/profile/update-password', [AuthController::class, 'updatePassword'])->name('profile.update_password');
 
 //Warehouse
 Route::get('Warehouse', [WarehouseController::class, 'Warehouse'])->middleware('auth')->middleware('OnlyStaff');

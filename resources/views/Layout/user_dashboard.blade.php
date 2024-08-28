@@ -87,6 +87,9 @@
                 <a href="/staff" class="block hover:bg-gray-700 hover:text-white p-3 rounded">
                     <i class="fa-solid fa-chart-line text-2xl" style="color: #FFD43B;"></i>
                 </a>
+                <a href="/profile/edit-combined" class="block hover:bg-gray-700 hover:text-white p-3 rounded">
+                    <i class="fa-solid fa-user text-2xl" style="color: #8f8f8f;"></i>
+                </a>
             </div>
         </div>
 

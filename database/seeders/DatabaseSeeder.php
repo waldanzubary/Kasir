@@ -16,8 +16,29 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         User::factory()->create([
-            'username' => 'Test User',
-            'email' => 'test@example.com',
+            'username' => 'ADMIN',
+            'email' => 'admin@gmail.com',
+            'password' => '12345678', // set a password for this user
+            'role' => 'Admin', // if you want this user to have a specific role
+            'city' => 'Jakarta',
+            'address' => 'ADMIN',
+            'phone' => '1234567890',
+            'shop_name' => 'ADMIN',
+            'zip_code' => 'ADMIN',
+            'status' => 'active',
+        ]);
+
+        User::factory()->create([
+            'username' => 'Mirza',
+            'email' => 'mirzazubari83@gmail.com',
+            'password' => '12345678', // set a password for this user
+            'role' => 'User', // if you want this user to have a specific role
+            'city' => 'Jakarta',
+            'address' => 'Legenda Wisata Vivaldi',
+            'phone' => '0864162442',
+            'shop_name' => 'SEDAP MANTAP',
+            'zip_code' => '16965',
+            'status' => 'inactive',
         ]);
     }
 }
