@@ -22,7 +22,7 @@ class OnlyCashier
 
         }
 
-        return redirect('transaction');
+        return redirect('/');
 
 
 
