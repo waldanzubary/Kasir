@@ -178,18 +178,29 @@ class AuthController extends Controller
     public function redirectBasedOnRole()
     {
         if (Auth::check()) {
+            $user = Auth::user();
+            
+            // Check if the user's account is active
+            if ($user->status == 'active') {
+                $role = $user->role;
 
-            $role = Auth::user()->role;
-
-            if ($role == 'Admin') {
-                return redirect('/dashboard');
-            } elseif ($role == 'User') {
-                return redirect('/staff');
+                // Redirect based on role
+                if ($role == 'Admin') {
+                    return redirect('/dashboard');
+                } elseif ($role == 'User') {
+                    return redirect('/staff');
+                }
+            } else {
+                // If the account is not active, redirect to the select active date page
+                return redirect()->route('selectActiveDateNoTrial')
+                    ->with('status', 'inactive')
+                    ->with('message', 'Your account is not active. Please select the duration for your active date.');
             }
         }
 
         return redirect('login');
     }
+
 
     public function editCombined()
     {
