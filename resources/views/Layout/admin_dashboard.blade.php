@@ -9,7 +9,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-
     <style>
         .mber {
             font-weight: bold;
@@ -24,7 +23,9 @@
             background-color: #f5f5f5;
             z-index: 50;
             transition: transform 0.3s ease;
-            width: 64px; /* Set smaller width for the sidebar */
+            width: 200px; /* Increase width for keterangan */
+            padding-top: 1rem;
+            padding-bottom: 1rem;
         }
 
         .sidebar-hidden {
@@ -44,7 +45,7 @@
         /* Content Styles */
         .content {
             transition: margin-left 0.3s ease;
-            margin-left: 64px; /* Adjust margin to match sidebar width by default */
+            margin-left: 200px; /* Adjust margin to match sidebar width by default */
         }
 
         @media (max-width: 1023px) {
@@ -71,28 +72,108 @@
         .profile-icon {
             margin-left: 1rem;
         }
+
+        /* Sidebar Item Styles */
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            border-radius: 0.375rem;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+            color: #757575; /* Dark color for the text */
+        }
+
+        .sidebar-item:hover {
+            background-color: #eeecd3;
+        }
+
+        .sidebar-item.active {
+            background-color: #e9ebbb; /* Light blue background for active item */
+            border-left: 4px solid #e2e05c; /* Blue border on the left for active item */
+            color: #111827; /* Dark color for the text */
+        }
+
+        .sidebar-item-icon {
+            margin-right: 0.75rem;
+            color: #6b7280; /* Gray color for the icon */
+        }
+
+        .sidebar-item-text {
+            font-size: 0.875rem;
+        }
+
+        /* User Info Styles */
+        .user-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding: 0 1rem;
+            text-align: center;
+        }
+
+        .user-info img {
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            margin-bottom: 0.5rem;
+        }
+
+        .user-info h4 {
+            margin: 0;
+            font-weight: bold;
+            color: #111827; /* Dark color for the text */
+        }
+
+        .user-info p {
+            margin: 0;
+            color: #6b7280; /* Gray color for the text */
+        }
+
+        /* Store Name Styles */
+        .store-name {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #1f2937; /* Dark color for the text */
+            text-align: center;
+            margin-bottom: 1rem;
+        }
     </style>
 </head>
 <body class="bg-slate-100">
-    <div class="flex flex-col lg:flex-row min-h-screen  ">
+    <div class="flex flex-col lg:flex-row min-h-screen">
         <!-- Sidebar -->
-        <div class="sidebar sidebar-hidden bg-white lg:sidebar-visible flex flex-col items-center pt-8 h-full">
-            <div class="flex flex-col space-y-6">
-                <a href="/dashboard" class="block hover:bg-gray-700 hover:text-white p-3 rounded flex items-center justify-center">
-                    <i class="fa-solid fa-chart-simple text-2xl" style="color: #74C0FC;"></i>
+        <div class="sidebar sidebar-hidden bg-white lg:sidebar-visible flex flex-col">
+            <!-- Store Name -->
+            <div class="store-name">
+                UMKM Store
+            </div>
+            
+            <!-- User Info -->
+            <div class="user-info mt-10">
+                <img src="{{ asset('Done.jpg') }}" alt="User Avatar" />
+                <h4>{{ Auth::user()->shop_name }}</h4>
+                <p>{{ Auth::user()->username }}</p>
+            </div>
+            
+            <div class="flex flex-col space-y-6 mt-10">
+                <a href="/dashboard" class="sidebar-item {{ request()->is('dashboard') ? 'active' : '' }}">
+                    <i class="fa-solid fa-chart-simple sidebar-item-icon text-2xl" style="color: #74C0FC;"></i>
+                    <span class="sidebar-item-text">Dashboard</span>
                 </a>
-                <a href="/manage" class="block hover:bg-gray-700 hover:text-white p-3 rounded flex items-center justify-center">
-                    <i class="fa-solid fa-user text-2xl" style="color: #63E6BE;"></i>
+                <a href="/manage" class="sidebar-item {{ request()->is('manage') ? 'active' : '' }}">
+                    <i class="fa-solid fa-user sidebar-item-icon text-2xl" style="color: #63E6BE;"></i>
+                    <span class="sidebar-item-text">Manage</span>
                 </a>
-
             </div>
         </div>
-
 
         <!-- Main Content -->
         <div class="flex-1 content">
             <!-- Navbar -->
-            <div class="navbar ">
+            <div class="navbar">
                 <div class="flex-none">
                     <!-- Hamburger Button -->
                     <button class="btn btn-square btn-ghost sm:hidden block" onclick="toggleSidebar()">
@@ -102,9 +183,9 @@
                     </button>
                 </div>
                 <div class="navbar-title">
-                    <a class="text-xl mber">Transaction</a>
+                    <a class="text-xl mber">Manage Web</a>
                 </div>
-                <div class="flex-none profile-icon gap-2    ">
+                <div class="flex-none profile-icon gap-2">
                     @if(Auth::check())
                         {{ Auth::user()->username }}
                     @endif
@@ -122,16 +203,12 @@
             </div>
 
             <!-- Main Section -->
-            <div class="">
+            <div>
                 <main>
                     @yield('content')
                 </main>
             </div>
-
-
-
         </div>
-
     </div>
 
     <!-- JavaScript -->

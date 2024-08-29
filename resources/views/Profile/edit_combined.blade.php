@@ -27,7 +27,7 @@
                                 <strong class="text-gray-700">{{ __('Phone:') }}</strong>
                                 <p class="text-gray-600">{{ $user->phone }}</p>
                             </div>
-
+                            
                             <!-- Shop Name -->
                             <div>
                                 <strong class="text-gray-700">{{ __('Store Name:') }}</strong>

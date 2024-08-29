@@ -10,11 +10,14 @@
     .blues {
         color: rgba(75, 192, 192, 1);
     }
+    .yellow{
+        color: rgb(211, 211, 94)
+    }
 </style>
 <div class="stats shadow justify-center flex">
     <div class="stat place-items-center ">
         <div class="stat-title">Total Revenue / month</div>
-        <div class="stat-value blues">Rp. {{ $totalRevenue }}</div>
+        <div class="stat-value yellow">Rp. {{ $totalRevenue }}</div>
         <div class="stat-desc">From {{ $startOfMonth->format('F jS') }} to {{ $endOfMonth->format('F jS') }}</div>
     </div>
 

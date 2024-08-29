@@ -45,7 +45,7 @@
                         <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $item->active_date }}</td>
                         <td>
                             <!-- Edit Button -->
-                            <a href="{{ route('accounts.edit', $item->id) }}" class="btn btn-primary">Edit</a>
+                            <a href="{{ route('accounts.edit', $item->id) }}" class="btn btn-warning">Edit</a>
                             <a href="" class="btn btn-primary">Detail</a>
 
                             <!-- Delete Button -->
