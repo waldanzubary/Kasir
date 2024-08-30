@@ -80,6 +80,21 @@
         <div class="flex-1">
             <a class="btn btn-ghost normal-case text-xl" href="/">STARBHAK Mart</a>
         </div>
+        <div class="flex-none profile-icon gap-2">
+            @if(Auth::check())
+                {{ Auth::user()->username }}
+            @endif
+            <div class="dropdown dropdown-end">
+                <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
+                    <div class="w-10 rounded-full">
+                        <img alt="User Avatar" src="{{ asset('Done.png') }}" />
+                    </div>
+                </div>
+                <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-300 rounded-box z-[1] mt-3 w-52 p-2 shadow">
+                    <li><a href="{{ route('logout') }}">Logout</a></li>
+                </ul>
+            </div>
+        </div>
     </div>
 
     <!-- Active Date Selection -->

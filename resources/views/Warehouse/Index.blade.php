@@ -8,24 +8,18 @@
     </a>
 </div>
 
-
 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 p-3">
     @foreach ($items as $item)
-    <div class="max-w-full mx-auto rounded-md bg-white overflow-hidden shadow-md hover:shadow-lg">
+    <div class="max-w-full mx-auto rounded-md bg-white overflow-hidden shadow-md card-hov">
         <div class="relative p-3">
-            <img src="{{ $item->image ? asset('storage/' . $item->image) : asset('null.jpg') }}" alt="{{ $item->itemName }}" class=" w-64 object-cover h-48">
+            <img src="{{ $item->image ? asset('storage/' . $item->image) : asset('null.jpg') }}" alt="{{ $item->itemName }}" class="w-64 object-cover h-48">
             <div class="">
                 <img src="{{ asset('storage/' . $item->barcode) }}" alt="Barcode" class="w-16 absolute top-0 m-5 left-0">
             </div>
             @if($item->stock == 0)
-            <div class="absolute top-0 right-0 bg-red-500 text-white px-2 py-1 m-5 rounded-md text-sm font-medium">OUTSTOCK</div>
+            <div class="absolute top-0 right-0 bg-red-500 text-white px-2 py-1 m-5 rounded-md text-sm font-medium">OUT STOCK</div>
             @else
-            <div class="absolute top-0 right-0 bg-green-500 text-white px-2 py-1 m-5 rounded-md text-sm font-medium">INSTOCK</div>
-
-
-
-
-
+            <div class="absolute top-0 right-0 bg-green-500 text-white px-2 py-1 m-5 rounded-md text-sm font-medium">IN STOCK</div>
             @endif
         </div>
         <div class="p-4">
@@ -69,6 +63,17 @@
     </div>
 </div>
 
+<style>
+    .card-hov {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card-hov:hover {
+        background-color: rgb(248, 248, 248);
+        transform: translateY(-5px); /* Moves the card up slightly */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Adds a shadow effect */
+    }
+</style>
 <!-- Bootstrap core JavaScript-->
 <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
 <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
@@ -86,4 +91,20 @@
 <script src="{{ asset('js/demo/chart-area-demo.js') }}"></script>
 <script src="{{ asset('js/demo/chart-pie-demo.js') }}"></script>
 <script src="{{ asset('js/book.js') }}"></script>
+
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        @if (session('success'))
+            Swal.fire({
+                title: 'Success!',
+                text: "Item created successfully!",
+                icon: 'success',
+                confirmButtonText: 'OK'
+            });
+        @endif
+    });
+</script>
 @endsection

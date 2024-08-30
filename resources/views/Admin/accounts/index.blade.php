@@ -13,7 +13,6 @@
 </head>
 <body>
 
-
     <div class="overflow-x-auto rounded-lg p-6">
         <table class="min-w-full bg-white divide-y divide-gray-200 rounded-lg shadow-lg">
             <thead class="bg-gray-50">
@@ -25,13 +24,6 @@
                     <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                     <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Active Date till</th>
                     <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
-
-                    {{-- <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>
-                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">City</th>
-                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Address</th>
-                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Shop Name</th>
-                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Zip-code</th> --}}
-
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
@@ -41,7 +33,7 @@
                         <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500">{{ $item->username }}</td>
                         <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500">{{ $item->email }}</td>
                         <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $item->role }}</td>
-                        <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $item->status }}</td>
+                        <td class="px-4 py-4 whitespace-nowrap text-sm font-medium {{ $item->status == 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }} rounded-md">{{ $item->status }}</td>
                         <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $item->active_date }}</td>
                         <td>
                             <!-- Edit Button -->
@@ -60,7 +52,6 @@
             </tbody>
         </table>
     </div>
-
 
 </body>
 </html>

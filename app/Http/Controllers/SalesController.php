@@ -64,7 +64,7 @@ class SalesController extends Controller
         $itemModel->reduceStock($item['quantity']);
     }
 
-    return redirect()->route('sales.create')->with('success', 'Sale created successfully!');
+    return redirect()->back();
 }
 
 

@@ -4,17 +4,20 @@
 
 @section('content')
 
-
-
 <style>
     .blues {
         color: rgba(75, 192, 192, 1);
     }
-    .yellow{
-        color: rgb(211, 211, 94)
+    .yellow {
+        color: rgb(211, 211, 94);
+    }
+    .chart-container {
+        max-width: 600px; /* Mengatur lebar maksimum container chart */
+        margin: auto; /* Untuk memusatkan chart di halaman */
     }
 </style>
-<div class="stats shadow justify-center flex">
+
+<div class="stats shadow justify-center flex ml-6 mr-6 mt-5">
     <div class="stat place-items-center ">
         <div class="stat-title">Total Revenue / month</div>
         <div class="stat-value yellow">Rp. {{ $totalRevenue }}</div>
@@ -35,7 +38,8 @@
 </div>
 
 <div class="chart-container mt-6">
-    <canvas id="monthlySalesChart"></canvas>
+    <!-- Atur width dan height canvas -->
+    <canvas id="monthlySalesChart" width="400" height="600"></canvas>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -55,6 +59,8 @@
                 }]
             },
             options: {
+                responsive: true,  // Mengatur agar chart responsif
+                maintainAspectRatio: false,  // Menonaktifkan rasio aspek default
                 scales: {
                     y: {
                         beginAtZero: true

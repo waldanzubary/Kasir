@@ -12,7 +12,15 @@
     <title>Create Sale</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daisyui@2.26.1/dist/full.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <style>
+        .hover-card:hover {
+            transform: translateY(-5px);
+            transition: transform 0.3s ease-out;
+            background-color: rgb(248, 248, 248);
+        }
+    </style>
 </head>
 <body>
     <form id="saleForm" action="{{ route('sales.stores') }}" method="POST" class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 mt-4 ml-7 mr-7">
@@ -30,26 +38,33 @@
 
             <input type="hidden" id="isConfirmed" name="isConfirmed" value="false">
 
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-5 gap-2 mt-5">
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-5 gap-4 mt-5">
                 @foreach ($items as $item)
-                    <button type="button" class="shadow-lg rounded-lg bg-white w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg overflow-hidden mt-2" onclick="addItem({{ json_encode($item) }})">
-                        <div class="flex p-2 absolute">
-                            <span id="status-{{ $item->id }}" class="status rounded p-1 text-sm font-semibold">{{ $item->status }}</span>
+                    <button type="button" class="shadow-lg rounded-lg bg-white w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg overflow-hidden mt-2 hover-card transform transition-transform duration-300 ease-in-out hover:scale-105" onclick="addItem({{ json_encode($item) }})">
+                        <div class="relative">
+                            <div class="flex p-2 absolute top-0 left-0">
+                                <span id="status-{{ $item->id }}" class="status bg-gray-200 text-gray-800 rounded p-1 text-xs font-semibold">{{ $item->status }}</span>
+                            </div>
+                            <figure>
+                                <img src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->itemName }}" class="object-cover w-full h-44 rounded-t-lg">
+                            </figure>
                         </div>
-                        <figure>
-                            <img src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->itemName }}" class="object-cover w-full h-44 p-1 rounded-lg">
-                        </figure>
-                        <div class="card-body p-2">
-                            <div class="flex flex-col h-12">
-                                <p class="text-sm text-black font-semibold text-left break-words">{{ $item->itemName }}</p>
-                                <p class="text-xs text-neutral-400 font-semibold text-left break-words">Rp.{{ $item->price }}</p>
+                        <div class="card-body p-4">
+                            <div class="flex flex-col h-full justify-between">
+                                <div>
+                                    <p class="text-sm text-black font-semibold text-left break-words">{{ $item->itemName }}</p>
+                                    <p class="text-xs text-neutral-400 font-semibold text-left mt-1 break-words">Rp.{{ number_format($item->price, 0, ',', '.') }}</p>
+                                </div>
                                 <!-- Display stock information -->
-                                <p class="text-xs text-red-500 font-semibold text-left break-words">Stock: {{ $item->stock }}</p>
+                                <div class="mt-2">
+                                    <p class="text-xs text-red-500 font-semibold text-left">Stock: {{ $item->stock }}</p>
+                                </div>
                             </div>
                         </div>
                     </button>
                 @endforeach
             </div>
+            
         </main>
 
         <!-- Sidebar -->
@@ -96,7 +111,7 @@
                 </div>
             </div>
 
-            <button type="button" class="btn w-full mt-4 text-white" style="background-color: #74C0FC" onclick="toggleModal()">Submit Sale</button>
+            <button type="button" class="btn w-full mt-4 text-white" style="background-color: #dfdc40" onclick="toggleModal()">Submit Sale</button>
         </aside>
     </form>
 
@@ -211,22 +226,28 @@
         }
 
         function changeQuantity(itemId, delta) {
-            const itemDiv = $(`#item-${itemId}`);
-            const quantityInput = itemDiv.find('input[name$="[quantity]"]');
-            let currentQuantity = parseInt(quantityInput.val());
-            let newQuantity = currentQuantity + delta;
-            let itemStock = parseInt(itemDiv.data('stock'));
+    const itemDiv = $(`#item-${itemId}`);
+    const quantityInput = itemDiv.find('input[name$="[quantity]"]');
+    let currentQuantity = parseInt(quantityInput.val());
+    let newQuantity = currentQuantity + delta;
+    let itemStock = parseInt(itemDiv.data('stock'));
 
-            if (newQuantity <= 0) {
-                removeItem(itemId);
-            } else if (newQuantity > itemStock) {
-                alert('The quantity exceeds the available stock.');
-                return;
-            } else {
-                quantityInput.val(newQuantity);
-                updateTotalPrice();
-            }
-        }
+    if (newQuantity <= 0) {
+        removeItem(itemId);
+    } else if (newQuantity > itemStock) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Quantity Error',
+            text: 'The quantity exceeds the available stock.',
+        });
+        return;
+    } else {
+        quantityInput.val(newQuantity);
+        updateTotalPrice();
+    }
+}
+
+
 
         function removeItem(itemId) {
             $(`#item-${itemId}`).remove();
@@ -292,6 +313,8 @@
             $('#saleForm').submit();
         }
     </script>
+    
+
 </body>
 </html>
 

@@ -22,39 +22,41 @@ class WarehouseController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'itemName' => 'required|string|max:255',
-            'price' => 'required|integer',
-            'stock' => 'required|integer',
-            'image' => 'nullable|image|max:2048',
-        ]);
+{
+    $validated = $request->validate([
+        'itemName' => 'required|string|max:255',
+        'price' => 'required|integer',
+        'stock' => 'required|integer',
+        'image' => 'nullable|image|max:2048',
+    ]);
 
-        // Create a new item instance
-        $item = new Items($validated);
-        $item->user_id = Auth::id();  // Associate item with the authenticated user
-        $item->setStatus();
-        $item->save();
+    // Create a new item instance
+    $item = new Items($validated);
+    $item->user_id = Auth::id();  // Associate item with the authenticated user
+    $item->setStatus();
+    $item->save();
 
-        $barcodeData = $item->id;
-        $barcodeUrl = "https://barcodeapi.org/api/128/{$barcodeData}";
-        $response = Http::get($barcodeUrl);
+    $barcodeData = $item->id;
+    $barcodeUrl = "https://barcodeapi.org/api/128/{$barcodeData}";
+    $response = Http::get($barcodeUrl);
 
-        if ($response->successful()) {
-            $barcodeImagePath = 'barcodes/' . $barcodeData . '.png';
-            Storage::disk('public')->put($barcodeImagePath, $response->body());
-            $item->barcode = $barcodeImagePath;
-        }
-
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('images', 'public');
-            $item->image = $imagePath;
-        }
-
-        $item->save();
-
-        return redirect('Warehouse');
+    if ($response->successful()) {
+        $barcodeImagePath = 'barcodes/' . $barcodeData . '.png';
+        Storage::disk('public')->put($barcodeImagePath, $response->body());
+        $item->barcode = $barcodeImagePath;
     }
+
+    if ($request->hasFile('image')) {
+        $imagePath = $request->file('image')->store('images', 'public');
+        $item->image = $imagePath;
+    }
+
+    $item->save();
+
+    // Set a flash message
+    return redirect('Warehouse')->with('success', 'Item added successfully!');
+}
+
 
     public function edit($id)
     {

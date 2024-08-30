@@ -117,12 +117,6 @@
     </style>
 </head>
 <body class="bg-base-100 flex flex-col min-h-screen">
-    <!-- Navbar -->
-    <div class="navbar bg-base-100">
-        <div class="flex-1">
-            <a class="btn btn-ghost normal-case text-xl" href="/">UMKM Cashier</a>
-        </div>
-    </div>
 
     <!-- Login Card -->
     <div class="flex-grow flex items-center justify-center">

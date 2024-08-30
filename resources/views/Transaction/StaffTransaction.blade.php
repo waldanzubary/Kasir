@@ -17,7 +17,7 @@
                 <input type="date" id="end_date" name="end_date" value="{{ request('end_date') }}" class="mt-1 block w-full border border-gray-300 rounded-lg  p-2 shadow-sm">
             </div>
             <div class="flex items-end ">
-                <button type="submit" class="btn btn-primary">Filter</button>
+                <button type="submit" class="btn btn-warning">Filter</button>
             </div>
         </form>
     </div>
@@ -29,7 +29,7 @@
             <!-- Stats Section -->
             <div class="rounded-lg mb-10">
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-8">
-                    <div class="bg-white p-6 rounded-lg shadow-lg w-full">
+                    <div class="bg-white p-6 rounded-lg shadow-lg w-full card">
                         <div class="flex items-center space-x-4">
                             <div class="stat-figure text-secondary">
                                 <i class="fa-solid fa-people-carry-box text-2xl" style="color: #63E6BE;"></i>
@@ -40,8 +40,8 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="bg-white p-6 rounded-lg shadow-lg w-full">
+        
+                    <div class="bg-white p-6 rounded-lg shadow-lg w-full card">
                         <div class="flex items-center space-x-4">
                             <div class="stat-figure text-secondary">
                                 <i class="fa-solid fa-truck-ramp-box text-2xl" style="color: #74C0FC;"></i>
@@ -52,8 +52,8 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="bg-white p-6 rounded-lg shadow-lg w-full">
+        
+                    <div class="bg-white p-6 rounded-lg shadow-lg w-full card">
                         <div class="flex items-center space-x-4">
                             <div class="stat-figure text-secondary">
                                 <i class="fa-solid fa-coins text-2xl" style="color: #FFD43B;"></i>
@@ -129,6 +129,17 @@
     </div>
 </div>
 
+<style>
+    .card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+        background-color: rgb(255, 255, 219);
+        transform: translateY(-5px); /* Moves the card up slightly */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Adds a shadow effect */
+    }
+</style>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {

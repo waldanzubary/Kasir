@@ -20,7 +20,7 @@
             top: 0;
             left: 0;
             height: 100%;
-            background-color: #f5f5f5;
+            background-color: #FFDD57; /* Yellow background for the sidebar */
             z-index: 50;
             transition: transform 0.3s ease;
             width: 200px; /* Increase width for keterangan */
@@ -145,7 +145,7 @@
 <body class="bg-slate-100">
     <div class="flex flex-col lg:flex-row min-h-screen">
         <!-- Sidebar -->
-        <div class="sidebar sidebar-hidden bg-white lg:sidebar-visible flex flex-col">
+        <div class="sidebar sidebar-hidden lg:sidebar-visible flex flex-col">
             <!-- Store Name -->
             <div class="store-name">
                 UMKM Store

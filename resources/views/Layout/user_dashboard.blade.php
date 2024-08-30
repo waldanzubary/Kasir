@@ -20,7 +20,7 @@
             top: 0;
             left: 0;
             height: 100%;
-            background-color: #f5f5f5;
+            background-color: #FFDD57; /* Yellow background for the sidebar */
             z-index: 50;
             transition: transform 0.3s ease;
             width: 200px; /* Set width for the sidebar */
@@ -85,12 +85,12 @@
         }
 
         .sidebar-item:hover {
-            background-color: #eeecd3;
+            background-color: #f3e8a9; /* Light yellow background for hover */
         }
 
         .sidebar-item.active {
-            background-color: #e9ebbb; /* Light blue background for active item */
-            border-left: 4px solid #e2e05c; /* Blue border on the left for active item */
+            background-color: #f4ffce; /* White background for active item */
+            border-left: 4px solid #bebe8d; /* Blue border on the left for active item */
             color: #111827; /* Dark color for the text */
         }
 
@@ -145,7 +145,7 @@
 <body class="bg-slate-100">
     <div class="flex flex-col lg:flex-row min-h-screen">
         <!-- Sidebar -->
-        <div class="sidebar sidebar-hidden bg-white lg:sidebar-visible flex flex-col">
+        <div class="sidebar sidebar-hidden lg:sidebar-visible flex flex-col">
             <!-- Store Name -->
             <div class="store-name">
                 UMKM Store
@@ -160,19 +160,19 @@
             
             <div class="flex flex-col space-y-6 mt-10">
                 <a href="/Warehouse" class="sidebar-item {{ request()->is('Warehouse') ? 'active' : '' }}">
-                    <i class="fa-solid fa-boxes-stacked sidebar-item-icon text-2xl" style="color: #74C0FC;"></i>
+                    <i class="fa-solid fa-boxes-stacked sidebar-item-icon text-2xl" style="color: #c56d6d;"></i>
                     <span class="sidebar-item-text">Items</span>
                 </a>
                 <a href="/sales/creates" class="sidebar-item {{ request()->is('sales/creates') ? 'active' : '' }}">
-                    <i class="fa-solid fa-cash-register sidebar-item-icon text-2xl" style="color: #63E6BE;"></i>
+                    <i class="fa-solid fa-cash-register sidebar-item-icon text-2xl" style="color: #ae9ecc;"></i>
                     <span class="sidebar-item-text">Cashier</span>
                 </a>
                 <a href="/staff" class="sidebar-item {{ request()->is('staff') ? 'active' : '' }}">
-                    <i class="fa-solid fa-chart-line sidebar-item-icon text-2xl" style="color: #FFD43B;"></i>
+                    <i class="fa-solid fa-chart-line sidebar-item-icon text-2xl" style="color: #6bac74;"></i>
                     <span class="sidebar-item-text">Report</span>
                 </a>
                 <a href="/profile/edit-combined" class="sidebar-item {{ request()->is('profile/edit-combined') ? 'active' : '' }}">
-                    <i class="fa-solid fa-user sidebar-item-icon text-2xl" style="color: #8f8f8f;"></i>
+                    <i class="fa-solid fa-user sidebar-item-icon text-2xl" style="color: #8d8d8d;"></i>
                     <span class="sidebar-item-text">Profile</span>
                 </a>
             </div>
