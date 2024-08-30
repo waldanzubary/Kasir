@@ -5,73 +5,51 @@
 @section('content')
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Sale</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daisyui@2.26.1/dist/full.css">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <body>
-    <form id="saleForm" action="{{ route('sales.stores') }}" method="POST" class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4">
+    <form id="saleForm" action="{{ route('sales.stores') }}" method="POST" class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 mt-4 ml-7 mr-7">
         @csrf
         <!-- Main Content -->
-        <main class="flex-1   ">
-            <div class="form-control ">
-
+        <main class="flex-1">
+            <div class="form-control">
                 <input type="text" id="barcode_input" name="barcode" class="input input-bordered w-full" placeholder="Scan barcode here">
             </div>
-                @if (session('success'))
-                    <div class="alert alert-success mb-4">
-                        {{ session('success') }}
-                    </div>
-                @endif
+            @if (session('success'))
+                <div class="alert alert-success mb-4">
+                    {{ session('success') }}
+                </div>
+            @endif
 
-                <input type="hidden" id="isConfirmed" name="isConfirmed" value="false">
+            <input type="hidden" id="isConfirmed" name="isConfirmed" value="false">
 
-                <div class="flex justify-center">
-                <h2 class="text-xl font-bold mt-2 text-gray-800">OR</h2>
-            </div>
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-5 gap-2">
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-5 gap-2 mt-5">
                 @foreach ($items as $item)
-
                     <button type="button" class="shadow-lg rounded-lg bg-white w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg overflow-hidden mt-2" onclick="addItem({{ json_encode($item) }})">
-                        <div class=" flex p-2 absolute ">
-
+                        <div class="flex p-2 absolute">
                             <span id="status-{{ $item->id }}" class="status rounded p-1 text-sm font-semibold">{{ $item->status }}</span>
                         </div>
                         <figure>
                             <img src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->itemName }}" class="object-cover w-full h-44 p-1 rounded-lg">
-
                         </figure>
-
-
-
                         <div class="card-body p-2">
-
-
                             <div class="flex flex-col h-12">
-
-
-                                <p class="text-sm text-black font-semibold text-left break-words">
-                                    {{ $item->itemName }}
-                                </p>
-                                <p class="text-xs text-neutral-400 font-semibold text-left break-words">
-                                    Rp.{{ $item->price }}
-                                </p>
-
+                                <p class="text-sm text-black font-semibold text-left break-words">{{ $item->itemName }}</p>
+                                <p class="text-xs text-neutral-400 font-semibold text-left break-words">Rp.{{ $item->price }}</p>
+                                <!-- Display stock information -->
+                                <p class="text-xs text-red-500 font-semibold text-left break-words">Stock: {{ $item->stock }}</p>
                             </div>
-
-
                         </div>
                     </button>
                 @endforeach
             </div>
-
-
-
-
-
         </main>
 
         <!-- Sidebar -->
@@ -90,12 +68,18 @@
             </div>
             <hr class="my-4">
 
-            <div class="form-control mb-4 ">
+            <div class="form-control mb-4">
                 <label class="block text-sm font-medium text-gray-700 mb-3">Payment Method:</label>
                 <div class="flex grid grid-cols-3 gap-3">
-                    <button type="button" class="btn   w-17 h-14" data-value="Cash" onclick="selectPaymentMethod('Cash', this)"> <div class="flex flex-col"><i class="fa-solid fa-money-bill-1-wave  text-xl" style="color: #63E6BE; "></i> <p class="text-xs">Cash</p></div></button>
-                    <button type="button" class="btn  w-17 h-14" data-value="E-Wallet" onclick="selectPaymentMethod('E-Wallet', this)"><div class="flex flex-col"><i class="fa-solid fa-wallet text-xl" style="color: #74C0FC;"></i><p class="text-xs">E-Wallet</p></div></button>
-                    <button type="button" class="btn  w-17 h-14" data-value="Bank" onclick="selectPaymentMethod('Bank', this)"><div class="flex flex-col"><i class="fa-solid fa-landmark text-xl" style="color: #FFD43B;"></i> <p class="text-xs">Bank</p></div></button>
+                    <button type="button" class="btn w-17 h-14" data-value="Cash" onclick="selectPaymentMethod('Cash', this)">
+                        <div class="flex flex-col"><i class="fa-solid fa-money-bill-1-wave text-xl" style="color: #63E6BE;"></i><p class="text-xs">Cash</p></div>
+                    </button>
+                    <button type="button" class="btn w-17 h-14" data-value="E-Wallet" onclick="selectPaymentMethod('E-Wallet', this)">
+                        <div class="flex flex-col"><i class="fa-solid fa-wallet text-xl" style="color: #74C0FC;"></i><p class="text-xs">E-Wallet</p></div>
+                    </button>
+                    <button type="button" class="btn w-17 h-14" data-value="Bank" onclick="selectPaymentMethod('Bank', this)">
+                        <div class="flex flex-col"><i class="fa-solid fa-landmark text-xl" style="color: #FFD43B;"></i><p class="text-xs">Bank</p></div>
+                    </button>
                 </div>
                 <input type="hidden" id="payment" name="payment" required>
             </div>
@@ -112,7 +96,7 @@
                 </div>
             </div>
 
-            <button type="button" class=" btn w-full mt-4 text-white" style="background-color: #74C0FC " onclick="toggleModal()">Submit Sale</button>
+            <button type="button" class="btn w-full mt-4 text-white" style="background-color: #74C0FC" onclick="toggleModal()">Submit Sale</button>
         </aside>
     </form>
 
@@ -172,67 +156,74 @@
         });
 
         function addItem(item) {
-    const container = $('#items-container');
-    let existingItem = $(`#item-${item.id}`);
+            const container = $('#items-container');
+            let existingItem = $(`#item-${item.id}`);
 
-    if (existingItem.length) {
-        // Item already exists, just update the quantity
-        let quantityInput = existingItem.find('input[name$="[quantity]"]');
-        let newQuantity = parseInt(quantityInput.val()) + 1;
-        quantityInput.val(newQuantity);
-        updateItemStock(item.id, newQuantity);
-    } else {
-        // Add new item
-        const itemId = `item-${item.id}`;
-        const itemDiv = `
-           <div class="item mt-4 p-4 bg-gray-100 rounded-lg shadow-lg" id="${itemId}">
-    <div class="flex items-start space-x-4 w-full">
-        <!-- Image Section -->
-        <img src="/storage/${item.image}" alt="${item.itemName}" class="w-24 h-24 rounded-md object-cover shadow-md">
+            if (existingItem.length) {
+                let quantityInput = existingItem.find('input[name$="[quantity]"]');
+                let currentQuantity = parseInt(quantityInput.val());
+                let newQuantity = currentQuantity + 1;
 
-        <!-- Item Details Section -->
-        <div class="flex-1">
+                if (newQuantity > item.stock) {
+                    alert('The quantity exceeds the available stock.');
+                    return;
+                }
 
-            <p class="font-semibold text-gray-800 text-sm">${item.itemName}</p>
-            <p class="text-gray-600 mt-1 mb-2 text-sm">Rp.${item.price}</p>
+                quantityInput.val(newQuantity);
+            } else {
+                // Check if item stock is zero or less
+                if (item.stock <= 0) {
+                    alert('Item is out of stock.');
+                    return;
+                }
 
-            <div class="flex items-center mb-4 ">
-                <!-- Quantity Buttons -->
-                <button type="button" class="  rounded-lg  " onclick="changeQuantity(${item.id}, -1)">
-                    <i class="text-lg text--rose-600 font-bold">-</i>
-                </button>
-                <input type="text" id="quantity-display-${item.id}" name="items[${itemCount}][quantity]" value="1" class="w-16 bg-transparent text-center  outline-none">
-                <button type="button" class=" " onclick="changeQuantity(${item.id}, 1)">
-                    <i class="text-lg text-green-600 font-bold">+</i>
-                </button>
-            </div>
-        </div>
-    </div>
+                const itemId = `item-${item.id}`;
+                const itemDiv = `
+                   <div class="item mt-4 p-4 bg-gray-100 rounded-lg shadow-lg" id="${itemId}" data-stock="${item.stock}">
+                       <div class="flex items-start space-x-4 w-full">
+                           <img src="/storage/${item.image}" alt="${item.itemName}" class="w-24 h-24 rounded-md object-cover shadow-md">
+                           <div class="flex-1">
+                               <p class="font-semibold text-gray-800 text-sm">${item.itemName}</p>
+                               <p class="text-gray-600 mt-1 mb-2 text-sm">Rp.${item.price}</p>
+                               <!-- Display stock information -->
+                               <p class="text-red-500 text-xs">Stock: ${item.stock}</p>
+                               <div class="flex items-center mb-4">
+                                   <button type="button" class="rounded-lg" onclick="changeQuantity(${item.id}, -1)">
+                                       <i class="text-lg text-rose-600 font-bold">-</i>
+                                   </button>
+                                   <input type="text" id="quantity-display-${item.id}" name="items[${itemCount}][quantity]" value="1" class="w-16 bg-transparent text-center outline-none">
+                                   <button type="button" onclick="changeQuantity(${item.id}, 1)">
+                                       <i class="text-lg text-green-600 font-bold">+</i>
+                                   </button>
+                               </div>
+                           </div>
+                       </div>
+                       <input type="hidden" name="items[${itemCount}][item_id]" value="${item.id}">
+                       <input type="hidden" name="items[${itemCount}][price]" value="${item.price}">
+                   </div>
+                `;
 
-    <!-- Hidden Item ID -->
-    <input type="hidden" name="items[${itemCount}][item_id]" value="${item.id}">
-    <input type="hidden" name="items[${itemCount}][price]" value="${item.price}">
-</div>
+                container.append(itemDiv);
+                itemCount++;
+            }
 
-        `;
-
-        container.append(itemDiv);
-        itemCount++;
-    }
-
-    updateTotalPrice();
-}
+            updateTotalPrice();
+        }
 
         function changeQuantity(itemId, delta) {
             const itemDiv = $(`#item-${itemId}`);
             const quantityInput = itemDiv.find('input[name$="[quantity]"]');
-            let newQuantity = parseInt(quantityInput.val()) + delta;
+            let currentQuantity = parseInt(quantityInput.val());
+            let newQuantity = currentQuantity + delta;
+            let itemStock = parseInt(itemDiv.data('stock'));
 
             if (newQuantity <= 0) {
                 removeItem(itemId);
+            } else if (newQuantity > itemStock) {
+                alert('The quantity exceeds the available stock.');
+                return;
             } else {
                 quantityInput.val(newQuantity);
-                updateItemStock(itemId, newQuantity);
                 updateTotalPrice();
             }
         }
@@ -242,100 +233,66 @@
             updateTotalPrice();
         }
 
-        function updateItemStock(itemId, quantity) {
-            // Update stock or make an AJAX call if needed
-        }
-
         function updateTotalPrice() {
-            let totalPrice = 0;
+            let total = 0;
 
             $('#items-container .item').each(function() {
-                let quantity = $(this).find('input[name$="[quantity]"]').val();
-                let price = $(this).find('p.text-gray-600').text().replace('Rp.', '').trim();
-                totalPrice += quantity * parseFloat(price);
+                let price = parseFloat($(this).find('input[name$="[price]"]').val());
+                let quantity = parseInt($(this).find('input[name$="[quantity]"]').val());
+                total += price * quantity;
             });
 
-            $('#total_price').val(totalPrice.toFixed(2));
+            $('#total_price').val(total.toFixed(2));
         }
 
-        function selectPaymentMethod(value, button) {
-            $('#payment').val(value);
-            $('#modal_payment_method').val(value);
+        function selectPaymentMethod(method, button) {
+            $('#payment').val(method);
 
-            if (value === 'Cash') {
+            $('.btn').removeClass('btn-primary');
+            $(button).addClass('btn-primary');
+
+            if (method === 'Cash') {
                 $('#cash-fields').removeClass('hidden');
-                $('#modal_cash_fields').removeClass('hidden');
             } else {
                 $('#cash-fields').addClass('hidden');
-                $('#modal_cash_fields').addClass('hidden');
             }
+
+            $('#modal_payment_method').val(method);
         }
 
         function calculateChange() {
-            let cashAmount = parseFloat($('#cash_amount').val()) || 0;
-            let totalPrice = parseFloat($('#total_price').val()) || 0;
+            let totalPrice = parseFloat($('#total_price').val());
+            let cashAmount = parseFloat($('#cash_amount').val());
             let change = cashAmount - totalPrice;
+
             $('#change_amount').val(change.toFixed(2));
         }
 
         function toggleModal() {
-    const paymentMethod = $('#payment').val();
+            const modal = $('#modal');
+            const paymentMethod = $('#payment').val();
+            const totalPrice = $('#total_price').val();
 
-    // Cek apakah metode pembayaran sudah dipilih
-    if (!paymentMethod) {
-        alert('Please select a payment method before proceeding.');
-        return;
-    }
+            $('#modal_total_price').val(totalPrice);
+            $('#modal_payment_method').val(paymentMethod);
 
-    // Jika metode pembayaran sudah dipilih, tampilkan modal
-    const modal = $('#modal');
-    const totalPrice = $('#total_price').val();
-
-    $('#modal_total_price').val(totalPrice);
-    $('#modal_payment_method').val(paymentMethod);
-
-    if (paymentMethod === 'Cash') {
-        $('#modal_cash_amount').val($('#cash_amount').val());
-        $('#modal_change_amount').val($('#change_amount').val());
-    } else {
-        $('#modal_cash_amount').val('');
-        $('#modal_change_amount').val('');
-    }
-
-    modal.toggleClass('hidden');
-}
-
-
-function submitSale() {
-    $('#isConfirmed').val('true');
-    $.ajax({
-        url: $('#saleForm').attr('action'),
-        type: 'POST',
-        data: $('#saleForm').serialize(),
-        success: function(response) {
-            // Assuming response includes a URL or you can redirect back to a specific route
-            window.location.href = "{{ route('sales.creates') }}";
-        },
-        error: function(xhr) {
-            alert('An error occurred while processing the sale.');
-        }
-    });
-}
-
-
-document.addEventListener('DOMContentLoaded', function () {
-        document.querySelectorAll('.status').forEach(function (badge) {
-            if (badge.textContent.trim() === 'outStock') {
-                badge.classList.add('bg-red-500', 'text-white');
-                badge.classList.remove('bg-green-500');
+            if (paymentMethod === 'Cash') {
+                $('#modal_cash_fields').removeClass('hidden');
+                $('#modal_cash_amount').val($('#cash_amount').val());
+                $('#modal_change_amount').val($('#change_amount').val());
             } else {
-                badge.classList.add('bg-green-500', 'text-white');
-                badge.classList.remove('bg-red-500');
+                $('#modal_cash_fields').addClass('hidden');
             }
-        });
-    });
 
+            modal.toggleClass('hidden');
+        }
+
+        function submitSale() {
+            $('#isConfirmed').val('true');
+            $('#saleForm').submit();
+        }
     </script>
 </body>
 </html>
+
 @endsection

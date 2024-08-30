@@ -111,7 +111,7 @@
     <!-- Navbar -->
     <div class="navbar bg-base-100">
         <div class="flex-1">
-            <a class="btn btn-ghost normal-case text-xl" href="/">STARBHAK Mart</a>
+            <a class="btn btn-ghost normal-case text-xl" href="/">UMKM Cashier</a>
         </div>
     </div>
 
@@ -121,13 +121,13 @@
             <!-- Left Side -->
             <div class="left-side">
                 <img src="assets/img/cashier.png" alt="Cashier" />
-                <h2>Join STARBHAK Mart Today!</h2>
+                <h2>Join UMKM Cashier Today!</h2>
             </div>
 
             <!-- Right Side -->
             <div class="right-side">
                 <div class="card-body">
-                    <h2 class="card-title mb-4">Register</h2>
+                    <h2 class="card-title mb-4">Register User</h2>
                     <form id="register-form" action="" method="post">
                         @csrf
                         @if ($errors->any())
@@ -172,7 +172,7 @@
                     
                         <!-- Step 2: Remaining Fields -->
                         <div class="form-step" id="step-2">
-                            <h2 class="card-title mb-4 mt-4">Register</h2>
+                            <h2 class="card-title mb-4 mt-4">Register Shop</h2>
                             <div class="form-control">
                                 <label class="label" for="phone">
                                     <span class="label-text">Phone</span>

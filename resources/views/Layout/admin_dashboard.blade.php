@@ -153,7 +153,7 @@
             
             <!-- User Info -->
             <div class="user-info mt-10">
-                <img src="{{ asset('Done.jpg') }}" alt="User Avatar" />
+                <img src="{{ asset('Done.png') }}" alt="User Avatar" />
                 <h4>{{ Auth::user()->shop_name }}</h4>
                 <p>{{ Auth::user()->username }}</p>
             </div>
@@ -192,7 +192,7 @@
                     <div class="dropdown dropdown-end">
                         <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
                             <div class="w-10 rounded-full">
-                                <img alt="User Avatar" src="{{ asset('Done.jpg') }}" />
+                                <img alt="User Avatar" src="{{ asset('Done.png') }}" />
                             </div>
                         </div>
                         <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-300 rounded-box z-[1] mt-3 w-52 p-2 shadow">

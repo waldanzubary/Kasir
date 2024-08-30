@@ -1,7 +1,7 @@
 @extends('Layout.user_dashboard')
 
 @section('content')
-<div class="flex sm:justify-start justify-center mb-1 p-3">
+<div class="flex sm:justify-start justify-center mb-1 p-3 mt-4 ml-6">
     <a href="Warehouse/create" class="py-3 px-8 bg-gradient-to-r bg-green-500 hover:bg-green-600 text-white rounded-lg shadow-lg ">
         <i class="fa-solid fa-plus mr-2 text-lg"></i>
         <span class="text-lg font-semibold">Add More Item</span>

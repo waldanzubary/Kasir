@@ -141,8 +141,8 @@
                 datasets: [{
                     label: 'Total Sales',
                     data: @json($amounts),
-                    backgroundColor: 'rgba(79, 70, 229, 0.5)', // Soft purple
-                    borderColor: '#4f46e5', // Dark purple
+                    backgroundColor: 'rgba(255, 205, 86, 0.5)', // Soft purple
+                    borderColor: '#FFCD56', // Dark purple
                     borderWidth: 2,
                     barThickness: 28, // Width of each bar
                     borderRadius: 8, // Rounded corners
