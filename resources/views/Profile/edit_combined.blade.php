@@ -1,167 +1,122 @@
 @extends('Layout.user_dashboard')
 
 @section('content')
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 bg-white border-b border-gray-200">
+<div class="py-12 bg-gray-100 min-h-screen">
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
+            <div class="p-8">
+                <!-- User Information Section -->
+                <div class="mb-12">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">User Information</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        @php
+                            $userInfo = [
+                                'Username' => $user->username,
+                                'Email' => $user->email,
+                                'Phone' => $user->phone,
+                                'Store Name' => $user->shop_name,
+                                'Active Date' => $user->active_date ? $user->active_date->format('d-m-Y') : 'Not available',
+                                'Inactive in' => $user->active_date ? sprintf('%02d days', now()->diffInDays($user->active_date)) : 'Not available',
+                            ];
+                        @endphp
 
-                    <!-- User Information Section -->
-                    <div class="space-y-4 mb-8">
-                        <h2 class="text-xl font-bold">User Information</h2>
+                        @foreach ($userInfo as $label => $value)
+                            <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
+                                <h3 class="text-sm font-medium text-gray-500">{{ __($label) }}</h3>
+                                <p class="mt-1 text-lg font-semibold text-gray-800">{{ $value }}</p>
+                            </div>
+                        @endforeach
+                    </div>
+
+                    <div class="mt-8">
+                        <a href="/select-active-date-extend" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                            {{ __('Extend Subscription') }}
+                        </a>
+                    </div>
+                </div>
+
+                <hr class="my-8 border-gray-200">
+
+                <!-- Form Edit Profile and Shop -->
+                <form method="POST" action="{{ route('profile.update_combined') }}" class="space-y-8">
+                    @csrf
+                    @method('PATCH')
+
+                    <!-- User Profile Section -->
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-800 mb-6">Edit Profile</h2>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <!-- Username -->
                             <div>
-                                <strong class="text-gray-700">{{ __('Username:') }}</strong>
-                                <p class="text-gray-600">{{ $user->username }}</p>
+                                <label for="username" class="block text-sm font-medium text-gray-700 mb-1">{{ __('Username') }}</label>
+                                <input id="username" type="text" name="username" value="{{ old('username', $user->username) }}" required autofocus class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                @error('username')
+                                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
                             </div>
 
                             <!-- Email -->
                             <div>
-                                <strong class="text-gray-700">{{ __('Email:') }}</strong>
-                                <p class="text-gray-600">{{ $user->email }}</p>
+                                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">{{ __('Email') }}</label>
+                                <input id="email" type="email" name="email" value="{{ old('email', $user->email) }}" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                @error('email')
+                                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
                             </div>
+                        </div>
 
-                            <!-- Phone -->
-                            <div>
-                                <strong class="text-gray-700">{{ __('Phone:') }}</strong>
-                                <p class="text-gray-600">{{ $user->phone }}</p>
-                            </div>
-                            
-                            <!-- Shop Name -->
-                            <div>
-                                <strong class="text-gray-700">{{ __('Store Name:') }}</strong>
-                                <p class="text-gray-600">{{ $user->shop_name }}</p>
-                            </div>
-
-                            <!-- Active Date -->
-                            <div>
-                                <strong class="text-gray-700">{{ __('Active Date:') }}</strong>
-                                <p class="text-gray-600">
-                                    {{ $user->active_date ? $user->active_date->format('d-m-Y') : 'Tidak tersedia' }}
-                                </p>
-                            </div>
-
-                            <!-- Days Until Active Date -->
-                            <div>
-                                <strong class="text-gray-700">{{ __('Inactive in:') }}</strong>
-                                <p class="text-gray-600">
-                                    @if($user->active_date)
-                                        {{ sprintf('%02d', now()->diffInDays($user->active_date)) }} days
-                                    @else
-                                        Tidak tersedia
-                                    @endif
-                                </p>
-                            </div>
-
-                            <div>
-                                <a href="/select-active-date-extend">
-                                    <button class="px-4 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                                        {{ __('Extend Subscription') }}
-                                    </button>
-                                </a>
-            
-                            </div>
+                        <div class="mt-6">
+                            <a href="{{ route('profile.edit_password') }}" class="inline-flex items-center px-4 py-2 bg-gray-800 text-white font-semibold rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
+                                </svg>
+                                {{ __('Change Password') }}
+                            </a>
                         </div>
                     </div>
 
-                    <hr class="my-8 border-gray-300">
+                    <hr class="my-8 border-gray-200">
 
-                    <!-- Form Edit Profile and Shop -->
-                    <form method="POST" action="{{ route('profile.update_combined') }}">
-                        @csrf
-                        @method('PATCH')
+                    <!-- Shop Information Section -->
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-800 mb-6">Edit Store Information</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            @php
+                                $shopFields = [
+                                    'shop_name' => 'Store Name',
+                                    'address' => 'Address',
+                                    'city' => 'City',
+                                    'zip_code' => 'Zip Code',
+                                    'phone' => 'Phone',
+                                ];
+                            @endphp
 
-                        <!-- User Profile Section -->
-                        <div class="space-y-6">
-                            <h2 class="text-xl font-bold mb-4">Edit Profile</h2>
-                            
-                            <!-- Username -->
-                            <div>
-                                <label for="username" class="block font-medium text-sm text-gray-700">{{ __('Username') }}</label>
-                                <input id="username" type="text" name="username" value="{{ old('username', $user->username) }}" required autofocus class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-transparent">
-                                @error('username')
-                                    <span class="text-red-500 text-sm mt-2">{{ $message }}</span>
-                                @enderror
-                            </div>
-
-                            <!-- Email -->
-                            <div class="mt-4">
-                                <label for="email" class="block font-medium text-sm text-gray-700">{{ __('Email') }}</label>
-                                <input id="email" type="email" name="email" value="{{ old('email', $user->email) }}" required class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-transparent">
-                                @error('email')
-                                    <span class="text-red-500 text-sm mt-2">{{ $message }}</span>
-                                @enderror
-                            </div>
-
-                            <div class="mt-4">
-                                <a href="{{ route('profile.edit_password') }}" class="px-4 py-2 bg-gray-600 text-white font-semibold rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
-                                    {{ __('Change Password') }}
-                                </a>
-                            </div>
+                            @foreach ($shopFields as $field => $label)
+                                <div>
+                                    <label for="{{ $field }}" class="block text-sm font-medium text-gray-700 mb-1">{{ __($label) }}</label>
+                                    <input id="{{ $field }}" type="text" name="{{ $field }}" value="{{ old($field, $user->$field) }}" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                    @error($field)
+                                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            @endforeach
                         </div>
+                    </div>
 
-                        <hr class="my-8 border-gray-300">
-
-                        <!-- Shop Information Section -->
-                        <div class="space-y-6 mt-8">
-                            <h2 class="text-xl font-bold mb-4">Edit Store Information</h2>
-
-                            <!-- Shop Name -->
-                            <div>
-                                <label for="shop_name" class="block font-medium text-sm text-gray-700">{{ __('Store Name') }}</label>
-                                <input id="shop_name" type="text" name="shop_name" value="{{ old('shop_name', $user->shop_name) }}" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-transparent">
-                                @error('shop_name')
-                                    <span class="text-red-500 text-sm mt-2">{{ $message }}</span>
-                                @enderror
-                            </div>
-
-                            <!-- Address -->
-                            <div>
-                                <label for="address" class="block font-medium text-sm text-gray-700">{{ __('Address') }}</label>
-                                <input id="address" type="text" name="address" value="{{ old('address', $user->address) }}" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-transparent">
-                                @error('address')
-                                    <span class="text-red-500 text-sm mt-2">{{ $message }}</span>
-                                @enderror
-                            </div>
-
-                            <!-- City -->
-                            <div>
-                                <label for="city" class="block font-medium text-sm text-gray-700">{{ __('City') }}</label>
-                                <input id="city" type="text" name="city" value="{{ old('city', $user->city) }}" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-transparent">
-                                @error('city')
-                                    <span class="text-red-500 text-sm mt-2">{{ $message }}</span>
-                                @enderror
-                            </div>
-
-                            <!-- Zip Code -->
-                            <div>
-                                <label for="zip_code" class="block font-medium text-sm text-gray-700">{{ __('Zip Code') }}</label>
-                                <input id="zip_code" type="text" name="zip_code" value="{{ old('zip_code', $user->zip_code) }}" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-transparent">
-                                @error('zip_code')
-                                    <span class="text-red-500 text-sm mt-2">{{ $message }}</span>
-                                @enderror
-                            </div>
-
-                            <!-- Phone -->
-                            <div>
-                                <label for="phone" class="block font-medium text-sm text-gray-700">{{ __('Phone') }}</label>
-                                <input id="phone" type="text" name="phone" value="{{ old('phone', $user->phone) }}" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-transparent">
-                                @error('phone')
-                                    <span class="text-red-500 text-sm mt-2">{{ $message }}</span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="flex items-center justify-end mt-8">
-                            <button type="submit" class="px-4 py-2 bg-green-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                                {{ __('Save Changes') }}
-                            </button>
-                        </div>
-                        
-                    </form>
-                </div>
+                    <div class="flex items-center justify-end mt-8">
+                        <button type="submit" class="inline-flex items-center px-6 py-3 bg-green-600 text-white font-semibold rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            {{ __('Save Changes') }}
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
+</div>
 @endsection
