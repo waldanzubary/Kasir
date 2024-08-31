@@ -121,7 +121,7 @@
         <div class="container mx-auto text-center">
             <h2 class="text-3xl font-bold mb-8">About UMKM Cashier</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10">
-                <div class="flex justify-center items-center">
+                <div class="flex justify-center items-center hover:scale-105 transform transition duration-300">
                     <img src="{{ asset('assets/img/about.png') }}" class="rounded-lg shadow-lg w-full md:w-3/4" alt="About Us">
                 </div>
                 <div class="text-left space-y-4">
@@ -135,28 +135,28 @@
         <div class="container mx-auto text-center">
             <h2 class="text-3xl font-bold mb-8">Our Features</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-8">
-                <div class="feature-card p-6 bg-white shadow-md rounded-lg hover:scale-105 transform transition duration-300">
+                <div class="feature-card p-6 bg-gray-100 shadow-md rounded-lg hover:scale-105 transform transition duration-300">
                     <div class="icon text-primary mb-4">
                         <i class="fas fa-shopping-cart text-4xl"></i>
                     </div>
                     <h3 class="text-xl font-semibold mb-2">Sales Management</h3>
                     <p class="text-gray-600">Easily record and track sales transactions, generate invoices, and manage receipts with an intuitive point-of-sale (POS) system.</p>
                 </div>
-                <div class="feature-card p-6 bg-white shadow-md rounded-lg hover:scale-105 transform transition duration-300">
+                <div class="feature-card p-6 bg-gray-100 shadow-md rounded-lg hover:scale-105 transform transition duration-300">
                     <div class="icon text-primary mb-4">
                         <i class="fas fa-shipping-fast text-4xl"></i>
                     </div>
                     <h3 class="text-xl font-semibold mb-2">Inventory Control</h3>
                     <p class="text-gray-600">Keep track of stock levels, manage product listings, and receive notifications for low stock to ensure optimal inventory management.</p>
                 </div>
-                <div class="feature-card p-6 bg-white shadow-md rounded-lg hover:scale-105 transform transition duration-300">
+                <div class="feature-card p-6 bg-gray-100 shadow-md rounded-lg hover:scale-105 transform transition duration-300">
                     <div class="icon text-primary mb-4">
                         <i class="fas fa-tags text-4xl"></i>
                     </div>
                     <h3 class="text-xl font-semibold mb-2">Reporting and Analytics</h3>
                     <p class="text-gray-600">Access insightful reports and analytics on sales performance, inventory status, and financial metrics to make informed business decisions.</p>
                 </div>
-                <div class="feature-card p-6 bg-white shadow-md rounded-lg hover:scale-105 transform transition duration-300">
+                <div class="feature-card p-6 bg-gray-100 shadow-md rounded-lg hover:scale-105 transform transition duration-300">
                     <div class="icon text-primary mb-4">
                         <i class="fas fa-credit-card text-4xl"></i>
                     </div>

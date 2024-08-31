@@ -8,9 +8,10 @@
     </a>
 </div>
 
+<!-- Container with AOS Animation -->
 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 p-3">
     @foreach ($items as $item)
-    <div class="max-w-full mx-auto rounded-md bg-white overflow-hidden shadow-md card-hov">
+    <div class="max-w-full mx-auto rounded-md bg-white overflow-hidden shadow-md card-hov fade-up">
         <div class="relative p-3">
             <img src="{{ $item->image ? asset('storage/' . $item->image) : asset('null.jpg') }}" alt="{{ $item->itemName }}" class="w-64 object-cover h-48">
             <div class="">
@@ -63,9 +64,10 @@
     </div>
 </div>
 
+<!-- CSS Animations -->
 <style>
     .card-hov {
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
     }
 
     .card-hov:hover {
@@ -73,7 +75,26 @@
         transform: translateY(-5px); /* Moves the card up slightly */
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Adds a shadow effect */
     }
+
+    @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-up {
+            animation: fadeUp 0.6s ease-out;
+        }
 </style>
+
+<!-- AOS CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+
 <!-- Bootstrap core JavaScript-->
 <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
 <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
@@ -95,6 +116,9 @@
 <!-- SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+<!-- AOS JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         @if (session('success'))
@@ -105,6 +129,9 @@
                 confirmButtonText: 'OK'
             });
         @endif
+
+        // Initialize AOS animations
+        AOS.init();
     });
 </script>
 @endsection

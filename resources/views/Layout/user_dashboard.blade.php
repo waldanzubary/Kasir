@@ -60,7 +60,7 @@
             align-items: center;
             justify-content: space-between;
             padding: 0 1rem;
-            background-color: #f5f5f5;
+            background-color: #ffffff;
         }
 
         .navbar-title {
@@ -143,57 +143,31 @@
     </style>
 </head>
 <body class="bg-slate-100">
-    <div class="flex flex-col lg:flex-row min-h-screen">
-        <!-- Sidebar -->
-        <div class="sidebar sidebar-hidden lg:sidebar-visible flex flex-col">
-            <!-- Store Name -->
-            <div class="store-name">
-                UMKM Store
-            </div>
-            
-            <!-- User Info -->
-            <div class="user-info mt-10">
-                <img src="{{ asset('Done.png') }}" alt="User Avatar" />
-                <h4>{{ Auth::user()->shop_name }}</h4>
-                <p>{{ Auth::user()->username }}</p>
-            </div>
-            
-            <div class="flex flex-col space-y-6 mt-10">
-                <a href="/Warehouse" class="sidebar-item {{ request()->is('Warehouse') ? 'active' : '' }}">
-                    <i class="fa-solid fa-boxes-stacked sidebar-item-icon text-2xl" style="color: #c56d6d;"></i>
-                    <span class="sidebar-item-text">Items</span>
-                </a>
-                <a href="/sales/creates" class="sidebar-item {{ request()->is('sales/creates') ? 'active' : '' }}">
-                    <i class="fa-solid fa-cash-register sidebar-item-icon text-2xl" style="color: #ae9ecc;"></i>
-                    <span class="sidebar-item-text">Cashier</span>
-                </a>
-                <a href="/staff" class="sidebar-item {{ request()->is('staff') ? 'active' : '' }}">
-                    <i class="fa-solid fa-chart-line sidebar-item-icon text-2xl" style="color: #6bac74;"></i>
-                    <span class="sidebar-item-text">Report</span>
-                </a>
-                <a href="/profile/edit-combined" class="sidebar-item {{ request()->is('profile/edit-combined') ? 'active' : '' }}">
-                    <i class="fa-solid fa-user sidebar-item-icon text-2xl" style="color: #8d8d8d;"></i>
-                    <span class="sidebar-item-text">Profile</span>
-                </a>
-            </div>
-        </div>
 
-        <!-- Main Content -->
-        <div class="flex-1 content">
+
+
             <!-- Navbar -->
-            <div class="navbar">
-                <div class="flex-none">
+            <div class="navbar flex flex-row justify-between">
+                
                     <!-- Hamburger Button -->
                     <button class="btn btn-square btn-ghost sm:hidden block" onclick="toggleSidebar()">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                         </svg>
                     </button>
-                </div>
-                <div class="navbar-title">
+              
+              
                     <a class="text-xl mber">Transaction</a>
-                </div>
-                <div class="flex-none profile-icon gap-2">
+      
+              
+
+                <div class="flex gap-5">
+                    <a class="" href="">Cashier</a>
+                    <a href="">Item</a>
+                    <a href="">Dashboard</a>
+                   </div>
+
+                   <div class="flex-none profile-icon gap-2">
                     @if(Auth::check())
                         {{ Auth::user()->username }}
                     @endif
@@ -204,10 +178,11 @@
                             </div>
                         </div>
                         <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-300 rounded-box z-[1] mt-3 w-52 p-2 shadow">
-                            <li><a href="logout">Logout</a></li>
+                            <li><a href="{{ route('logout') }}">Logout</a></li>
                         </ul>
                     </div>
                 </div>
+              
             </div>
 
             <!-- Main Section -->
@@ -217,14 +192,32 @@
                 </main>
             </div>
         </div>
-    </div>
+
 
     <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         function toggleSidebar() {
             const sidebar = document.querySelector('.sidebar');
             sidebar.classList.toggle('sidebar-hidden');
             sidebar.classList.toggle('sidebar-visible');
+        }
+        function confirmBack() {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Do you want to back to menu?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                cancelButtonText: 'No, cancel!',
+                confirmButtonText: 'Yes!',
+                
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "{{ route('welcome') }}";
+                }
+            });
         }
     </script>
 </body>

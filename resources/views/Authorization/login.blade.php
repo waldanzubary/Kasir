@@ -159,6 +159,10 @@
                             </label>
                             <input type="password" id="password" name="password" class="input input-bordered" required/>
                         </div>
+                        <!-- Forgot Password Link -->
+                        <div class="text-right mt-2">
+                            <a href="/forgot-password" class="link link-primary">Forgot Password?</a>
+                        </div>
                         <div class="form-control mt-6">
                             <button type="submit" class="btn btn-warning mt-3">Sign in</button>
                         </div>

@@ -1,48 +1,50 @@
-@extends('Layout.user_dashboard')
+@extends('Layout.admin_dashboard')
 
 @section('title', 'Sales Transactions')
 
 @section('content')
-<!-- Begin Page Content -->
-<!-- Content Row -->
 <div class="container mx-auto p-6">
     <div class="flex justify-center">
         <div class="w-full max-w-lg">
             <div class="card bg-base-200 shadow-lg border border-base-300 rounded-lg">
                 <div class="card-header text-xl font-semibold p-4 border-b border-base-300">Edit Account</div>
                 <div class="card-body p-6">
-                    <form action="{{ route('accounts.update', $user->id) }}" method="POST">
+                    <form action="{{ route('accounts.updateStatus', $user->id) }}" method="POST">
                         @csrf
                         @method('PUT')
 
-                        <!-- Username -->
+                        <!-- Hanya Tampilkan Form Status Jika Admin -->
+                        @if(Auth::user()->role == 'Admin')
                         <div class="form-control mb-5">
-                            <label for="username" class="label">
-                                <span class="label-text font-medium">Name</span>
+                            <label for="status" class="label">
+                                <span class="label-text font-medium">Status</span>
                             </label>
-                            <input type="text" id="username" name="username" class="input input-bordered" value="{{ $user->username }}" required>
-                        </div>
-
-                        <!-- Email -->
-                        <div class="form-control mb-5">
-                            <label for="email" class="label">
-                                <span class="label-text font-medium">Email</span>
-                            </label>
-                            <input type="email" id="email" name="email" class="input input-bordered" value="{{ $user->email }}" required>
-                        </div>
-
-                        <!-- Role -->
-                        <div class="form-control mb-5">
-                            <label for="role" class="label">
-                                <span class="label-text font-medium">Role</span>
-                            </label>
-                            <select id="role" name="role" class="select select-bordered" required>
-                                <option value="Admin" {{ $user->role == 'Admin' ? 'selected' : '' }}>Admin</option>
-                                <option value="Warehouse Staff" {{ $user->role == 'Warehouse Staff' ? 'selected' : '' }}>Warehouse Staff</option>
-                                <option value="User" {{ $user->role == 'User' ? 'selected' : '' }}>User</option>
-                                <option value="Cashier" {{ $user->role == 'Cashier' ? 'selected' : '' }}>Cashier</option>
+                            <select id="status" name="status" class="select select-bordered">
+                                <option value="active" {{ $user->status == 'active' ? 'selected' : '' }}>Active</option>
+                                <option value="inactive" {{ $user->status == 'inactive' ? 'selected' : '' }}>Inactive</option>
                             </select>
                         </div>
+                        @else
+                        <!-- Menampilkan data lain tanpa input field jika bukan admin -->
+                        <div class="form-control mb-5">
+                            <label class="label">
+                                <span class="label-text font-medium">Name</span>
+                            </label>
+                            <p class="text-gray-500">{{ $user->username }}</p>
+                        </div>
+                        <div class="form-control mb-5">
+                            <label class="label">
+                                <span class="label-text font-medium">Email</span>
+                            </label>
+                            <p class="text-gray-500">{{ $user->email }}</p>
+                        </div>
+                        <div class="form-control mb-5">
+                            <label class="label">
+                                <span class="label-text font-medium">Role</span>
+                            </label>
+                            <p class="text-gray-500">{{ $user->role }}</p>
+                        </div>
+                        @endif
 
                         <div class="flex justify-end">
                             <button type="submit" class="btn btn-primary">Update Account</button>

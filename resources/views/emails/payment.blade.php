@@ -139,6 +139,7 @@
                                                 We appreciate your trust in our services.
                                             </div>
                                         </td>
+                                        <a href="{{ $activationLink }}">Activate Account</a>
                                     </tr>
                                 </table>
                             </div>

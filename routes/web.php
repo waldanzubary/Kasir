@@ -17,7 +17,7 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('welcome');
 
 //Auth
 Route::get('login', [AuthController::class, 'login'])->name('login');
@@ -32,10 +32,18 @@ Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/redirect-dashboard', [AuthController::class, 'redirectBasedOnRole'])->name('redirect.dashboard');
 
 Route::get('/sent-email', [AuthController::class, 'sendEmail']);
+Route::get('/activate-account/{token}', [AuthController::class, 'activateAccount']);
 Route::get('/profile/edit-combined', [AuthController::class, 'editCombined'])->name('profile.edit_combined');
 Route::patch('/profile/update-combined', [AuthController::class, 'updateCombined'])->name('profile.update_combined');
 Route::get('/profile/edit-password', [AuthController::class, 'editPassword'])->name('profile.edit_password');
 Route::patch('/profile/update-password', [AuthController::class, 'updatePassword'])->name('profile.update_password');
+
+Route::put('/accounts/{id}/update-status', [AuthController::class, 'updateStatus'])->name('accounts.updateStatus');
+
+Route::get('/activation-sent', function () {
+    return view('auth.activation_sent'); 
+});
+
 
 //Warehouse
 Route::get('Warehouse', [WarehouseController::class, 'Warehouse'])->middleware('auth')->middleware('OnlyStaff');
@@ -55,6 +63,7 @@ Route::post('/sales', [CashierController::class, 'store'])->name('sales.store')-
 Route::get('/sales/creates', [SalesController::class, 'create'])->name('sales.creates')->middleware('OnlyCashier');
 Route::post('/sales/stores', [SalesController::class, 'store'])->name('sales.stores')->middleware('OnlyCashier');
 Route::post('/sales/barcode', [SalesController::class, 'barcode'])->name('sales.barcode')->middleware('OnlyCashier');
+Route::post('/scan-barcode', 'SaleController@scanBarcode');
 
 //transaction
 Route::get('/transaction', [TransactionController::class, 'transaction'])->name('transaction.index');

@@ -20,6 +20,22 @@
             transition: transform 0.3s ease-out;
             background-color: rgb(248, 248, 248);
         }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-up {
+            animation: fadeUp 0.6s ease-out;
+        }
+
     </style>
 </head>
 <body>
@@ -28,7 +44,7 @@
         <!-- Main Content -->
         <main class="flex-1">
             <div class="form-control">
-                <input type="text" id="barcode_input" name="barcode" class="input input-bordered w-full" placeholder="Scan barcode here">
+                <input type="text" id="barcode_input" name="barcode" class="input input-bordered w-full" placeholder="Scan barcode here" value="{{ session('scanned_barcode') }}">
             </div>
             @if (session('success'))
                 <div class="alert alert-success mb-4">
@@ -38,7 +54,7 @@
 
             <input type="hidden" id="isConfirmed" name="isConfirmed" value="false">
 
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-5 gap-4 mt-5">
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-5 gap-4 mt-5 fade-up">
                 @foreach ($items as $item)
                     <button type="button" class="shadow-lg rounded-lg bg-white w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg overflow-hidden mt-2 hover-card transform transition-transform duration-300 ease-in-out hover:scale-105" onclick="addItem({{ json_encode($item) }})">
                         <div class="relative">
@@ -145,6 +161,37 @@
         let itemCount = 0;
 
         $(document).ready(function() {
+            $('#barcode_input').on('change', function() {
+                let barcode = $(this).val();
+
+                $.ajax({
+                    url: "{{ route('sales.barcode') }}",
+                    type: "POST",
+                    data: {
+                        barcode: barcode,
+                        _token: $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            addItem(response.item);
+                            $('#barcode_input').val('');
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function(xhr) {
+                        alert('Item not found');
+                    }
+                });
+            });
+            let scannedBarcode = '{{ session('scanned_barcode') }}';
+            if (scannedBarcode) {
+                // Trigger the barcode input change event
+                $('#barcode_input').val(scannedBarcode).trigger('change');
+                // Clear the session
+                @php session()->forget('scanned_barcode'); @endphp
+            }
+
             $('#barcode_input').on('change', function() {
                 let barcode = $(this).val();
 

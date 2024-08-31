@@ -9,10 +9,30 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\WelcomeMail;
 use App\Mail\PaymentMail;
+use App\Mail\Password;
 use Carbon\Carbon;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
+    public function updateStatus(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        // Only admin can update status
+        if (Auth::user()->role == 'Admin') {
+            $request->validate([
+                'status' => 'required|in:active,inactive',
+            ]);
+
+            $user->status = $request->status;
+            $user->save();
+
+            return redirect()->route('accounts.index')->with('success', 'Status updated successfully.');
+        } else {
+            return redirect()->route('accounts.index')->with('error', 'You are not authorized to change the status.');
+        }
+    }
 
     public function sendEmail()
     {
@@ -105,6 +125,7 @@ class AuthController extends Controller
 
         if ($request->has('duration')) {
             $duration = $request->input('duration');
+            $activationToken = Str::random(60); // Generate a random token
 
             switch ($duration) {
                 case '5_days':
@@ -120,18 +141,41 @@ class AuthController extends Controller
                     return redirect()->back()->withErrors(['Invalid duration selected']);
             }
 
-            $user->status = 'active';  // Update status to active
+            $user->activation_token = $activationToken; // Store token
+            $user->status = 'inactive';  // Ensure status is 'inactive' until activation
             $user->save();
 
-            // Send confirmation email
-            $email = new PaymentMail($user); // Assuming WelcomeMail is the mailable class for confirmation emails
-            Mail::to($user->email)->send($email); // Send email to the user's registered email address
+            // Send activation email
+            $email = new PaymentMail($user, $activationToken); // Pass the user and token to the email
+            Mail::to($user->email)->send($email);
 
-            return redirect('/staff')->with('status', 'Your account is now active and a confirmation email has been sent.');
+            // Log out the user
+            Auth::logout();
+
+            // Redirect to a static page
+            return redirect('/activation-sent')->with('status', 'Your account setup is complete. Please check your email to activate your account.');
         }
 
         return redirect()->back()->withErrors(['Please select a duration']);
     }
+
+            
+    public function activateAccount($token)
+    {
+        $user = User::where('activation_token', $token)->first();
+
+        if (!$user) {
+            return redirect('login')->withErrors(['message' => 'Invalid activation token.']);
+        }
+
+        $user->activation_token = null; // Clear the token
+        $user->status = 'active'; // Update status
+        $user->save();
+
+        return redirect('login');
+    }
+
+
 
 
 
