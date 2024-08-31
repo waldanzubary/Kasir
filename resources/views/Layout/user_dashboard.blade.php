@@ -60,7 +60,7 @@
             align-items: center;
             justify-content: space-between;
             padding: 0 1rem;
-            background-color: #ffffff;
+            background-color: #f5f5f5;
         }
 
         .navbar-title {
@@ -143,46 +143,62 @@
     </style>
 </head>
 <body class="bg-slate-100">
+    <div class="flex flex-col lg:flex-row min-h-screen">
+        <!-- Sidebar -->
+        <div class="sidebar sidebar-hidden lg:sidebar-visible flex flex-col">
+            <!-- Store Name -->
+            <div class="store-name">
+                UMKM Store
+            </div>
+            
+            <!-- User Info -->
+            <div class="user-info mt-10">
+                <img src="{{ asset('Done.png') }}" alt="User Avatar" />
+                <h4>{{ Auth::user()->shop_name }}</h4>
+                <p>{{ Auth::user()->username }}</p>
+            </div>
+            
+            <div class="flex flex-col space-y-6 mt-10">
+                <a href="/Warehouse" class="sidebar-item {{ request()->is('Warehouse') ? 'active' : '' }}">
+                    <i class="fa-solid fa-boxes-stacked sidebar-item-icon text-2xl" style="color: #c56d6d;"></i>
+                    <span class="sidebar-item-text">Items</span>
+                </a>
+                <a href="/sales/creates" class="sidebar-item {{ request()->is('sales/creates') ? 'active' : '' }}">
+                    <i class="fa-solid fa-cash-register sidebar-item-icon text-2xl" style="color: #ae9ecc;"></i>
+                    <span class="sidebar-item-text">Cashier</span>
+                </a>
+                <a href="/staff" class="sidebar-item {{ request()->is('staff') ? 'active' : '' }}">
+                    <i class="fa-solid fa-chart-line sidebar-item-icon text-2xl" style="color: #6bac74;"></i>
+                    <span class="sidebar-item-text">Report</span>
+                </a>
+                <a href="/profile/edit-combined" class="sidebar-item {{ request()->is('profile/edit-combined') ? 'active' : '' }}">
+                    <i class="fa-solid fa-user sidebar-item-icon text-2xl" style="color: #8d8d8d;"></i>
+                    <span class="sidebar-item-text">Profile</span>
+                </a>
+            </div>
+        </div>
 
-
-
+        <!-- Main Content -->
+        <div class="flex-1 content">
             <!-- Navbar -->
-            <div class="navbar flex flex-row justify-between">
-                
+            <div class="navbar">
+                <div class="flex-none">
                     <!-- Hamburger Button -->
                     <button class="btn btn-square btn-ghost sm:hidden block" onclick="toggleSidebar()">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                         </svg>
                     </button>
-              
-              
-                    <a class="text-xl mber">Transaction</a>
-      
-              
-
-                <div class="flex gap-5">
-                    <a class="" href="">Cashier</a>
-                    <a href="">Item</a>
-                    <a href="">Dashboard</a>
-                   </div>
-
-                   <div class="flex-none profile-icon gap-2">
-                    @if(Auth::check())
-                        {{ Auth::user()->username }}
-                    @endif
-                    <div class="dropdown dropdown-end">
-                        <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
-                            <div class="w-10 rounded-full">
-                                <img alt="User Avatar" src="{{ asset('Done.png') }}" />
-                            </div>
-                        </div>
-                        <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-300 rounded-box z-[1] mt-3 w-52 p-2 shadow">
-                            <li><a href="{{ route('logout') }}">Logout</a></li>
-                        </ul>
-                    </div>
                 </div>
-              
+                <div class="navbar-title">
+                    <a class="text-xl mber">Transaction</a>
+                </div>
+                <button id="logout" type="button" class="inline-flex items-center px-4 py-2 bg-orange-500 text-white font-semibold rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition" onclick="confirmBack()">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                    </svg>
+                    Back to Menu
+                </button>
             </div>
 
             <!-- Main Section -->
@@ -192,7 +208,7 @@
                 </main>
             </div>
         </div>
-
+    </div>
 
     <!-- JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
