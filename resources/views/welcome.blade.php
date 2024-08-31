@@ -10,7 +10,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .hero-bg {
-            background-image: url('assets/img/hero-bg-2.png');
+            background-image: url('assets/img/se.jpg');
             background-size: cover;
             background-position: center;
         }
@@ -75,15 +75,15 @@
 </head>
 
 <body class="index-page bg-base-100 flex flex-col min-h-screen">
-    <div class="navbar bg-yellow-400 sticky top-0 z-50 shadow-md">
+    <div class="navbar bg-white sticky top-0 z-50 shadow-md">
         <div class="flex-1">
-            <a class="btn btn-ghost normal-case text-xl" style="color: white">UMKM Cashier</a>
+            <a class="btn btn-ghost normal-case text-xl" >UMKM Cashier</a>
         </div>
         <div class="flex-none">
             @if (Route::has('login'))
                 <ul class="menu menu-horizontal px-1">
                     @auth
-                        <li><a href="{{ route('redirect.dashboard') }}" class="btn">Dashboard</a></li>
+                        <li><a href="{{ route('redirect.dashboard') }}" class="btn bg-blue-400 text-white">Dashboard</a></li>
                     @else
                         <li><a href="{{ route('login') }}" class="btn">Log in</a></li>
                         @if (Route::has('register'))
@@ -99,6 +99,7 @@
         <div class="container mx-auto flex flex-col justify-center items-center animate-fadeInUp">
             <h1 class="text-5xl font-bold mb-4">Welcome to UMKM Cashier!</h1>
             <p class="text-xl mb-6">Manage your UMKM store here!</p>
+
         </div>
         <svg class="hero-waves" xmlns="http://www.w3.org/2000/svg" viewBox="0 24 150 28" preserveAspectRatio="none">
             <defs>
@@ -120,16 +121,145 @@
     <section id="about" class="section py-20 bg-base-100">
         <div class="container mx-auto text-center">
             <h2 class="text-3xl font-bold mb-8">About UMKM Cashier</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10">
-                <div class="flex justify-center items-center hover:scale-105 transform transition duration-300">
-                    <img src="{{ asset('assets/img/about.png') }}" class="rounded-lg shadow-lg w-full md:w-3/4" alt="About Us">
+
+            <div class="space-y-8">
+                <!-- Product 1 -->
+                <div class="flex flex-col sm:flex-row items-center overflow-hidden p-6">
+                  <img src="{{ asset('assets/img/about.png') }}" alt="Product 1"
+                       class="w-full sm:w-1/3 h-auto object-cover rounded-lg transition-transform duration-300 ease-in-out transform hover:scale-105">
+                  <div class="mt-6 sm:mt-0 sm:ml-6 w-full sm:w-2/3 text-left">
+                    <h3 class="text-2xl font-semibold mb-2 text-black">Dashboard</h3>
+                    <p class="text-black">The UMKM Cashier website is designed to streamline and simplify the financial management processes for small and medium enterprises (SMEs) and micro-businesses. This web-based application provides a comprehensive solution for managing sales transactions, inventory, and customer data in an efficient and user-friendly interface.</p>
+                  </div>
                 </div>
-                <div class="text-left space-y-4">
-                    <p class="text-lg">The UMKM Cashier website is designed to streamline and simplify the financial management processes for small and medium enterprises (SMEs) and micro-businesses. This web-based application provides a comprehensive solution for managing sales transactions, inventory, and customer data in an efficient and user-friendly interface.</p>
+
+                <!-- Product 2 -->
+                <div class="flex flex-col sm:flex-row items-center overflow-hidden p-6">
+                  <div class="order-2 sm:order-1 mt-6 sm:mt-0 sm:ml-6 w-full text-left sm:w-2/3">
+                    <h3 class="text-2xl font-semibold mb-2 text-black">Warehouse</h3>
+                    <p class="text-black">Add new items, print their barcodes, and see how effortlessly you can manage your inventory. With a sleek design and a stylish barcode display, everything becomes more organized and professional. Don’t hesitate to give it a try and see the effectiveness for yourself.</p>
+                  </div>
+                  
+                  <img src="{{ asset('assets/img/about2.png') }}" alt="Product 2"
+                       class="order-1 sm:order-2 w-full sm:w-1/3 h-auto object-cover rounded-lg transition-transform duration-300 ease-in-out transform hover:scale-105">
                 </div>
-            </div>
+
+                <!-- Product 3 -->
+                <div class="flex flex-col sm:flex-row items-center overflow-hidden p-6">
+                  <img src="{{ asset('assets/img/about3.png') }}" alt="Product 3"
+                       class="w-full sm:w-1/3 h-auto object-cover rounded-lg transition-transform duration-300 ease-in-out transform hover:scale-105">
+                  <div class="mt-6 sm:mt-0 sm:ml-6 w-full sm:w-2/3 text-left">
+                    <h3 class="text-2xl font-semibold mb-2 text-black">Create a sales !</h3>
+                    <p class="text-black">Don't worry about barcode readers or any additional equipment. Simply use your phone as a barcode scanner. You can manually create your sales or use your phone to scan barcodes.</p>
+                  </div>
+                </div>
+              </div>
+
+
         </div>
+
+
+
     </section>
+
+    <div class="flex justify-center">
+    <h2 class="text-3xl font-bold mb-8">ONLY 5 STEP !</h2>
+</div>
+
+    <div class="flex flex-row justify-center">
+
+    <ul class="timeline">
+        <li>
+          <div class="timeline-start">Step 1</div>
+          <div class="timeline-middle">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              class="h-5 w-5">
+              <path
+                fill-rule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                clip-rule="evenodd" />
+            </svg>
+          </div>
+          <div class="timeline-end timeline-box">Register an account</div>
+          <hr />
+        </li>
+        <li>
+          <hr />
+          <div class="timeline-start">Step 2</div>
+          <div class="timeline-middle">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              class="h-5 w-5">
+              <path
+                fill-rule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                clip-rule="evenodd" />
+            </svg>
+          </div>
+          <div class="timeline-end timeline-box">Try trial or subs</div>
+          <hr />
+        </li>
+        <li>
+          <hr />
+          <div class="timeline-start">Step 3</div>
+          <div class="timeline-middle">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              class="h-5 w-5">
+              <path
+                fill-rule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                clip-rule="evenodd" />
+            </svg>
+          </div>
+          <div class="timeline-end timeline-box">Manage item</div>
+          <hr />
+        </li>
+        <li>
+          <hr />
+          <div class="timeline-start">Step 4</div>
+          <div class="timeline-middle">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              class="h-5 w-5">
+              <path
+                fill-rule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                clip-rule="evenodd" />
+            </svg>
+          </div>
+          <div class="timeline-end timeline-box">Print the barcode</div>
+          <hr />
+        </li>
+        <li>
+          <hr />
+          <div class="timeline-start">Step 5</div>
+          <div class="timeline-middle">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              class="h-5 w-5">
+              <path
+                fill-rule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                clip-rule="evenodd" />
+            </svg>
+          </div>
+          <div class="timeline-end timeline-box">Use it as well</div>
+        </li>
+      </ul>
+    </div>
+
 
     <section id="features" class="section py-20 bg-base-100">
         <div class="container mx-auto text-center">

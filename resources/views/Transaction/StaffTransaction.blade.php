@@ -17,7 +17,7 @@
                 <input type="date" id="end_date" name="end_date" value="{{ request('end_date') }}" class="mt-1 block w-full border border-gray-300 rounded-lg  p-2 shadow-sm">
             </div>
             <div class="flex items-end ">
-                <button type="submit" class="btn btn-warning">Filter</button>
+                <button type="submit" class="btn bg-green-500 text-white">Filter</button>
             </div>
         </form>
     </div>
@@ -29,7 +29,7 @@
             <!-- Stats Section -->
             <div class="rounded-lg mb-10">
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-8">
-                    <div class="bg-white p-6 rounded-lg shadow-lg w-full card">
+                    <div class="bg-white p-6 rounded-lg shadow-lg w-full">
                         <div class="flex items-center space-x-4">
                             <div class="stat-figure text-secondary">
                                 <i class="fa-solid fa-people-carry-box text-2xl" style="color: #63E6BE;"></i>
@@ -40,8 +40,8 @@
                             </div>
                         </div>
                     </div>
-        
-                    <div class="bg-white p-6 rounded-lg shadow-lg w-full card">
+
+                    <div class="bg-white p-6 rounded-lg shadow-lg w-full">
                         <div class="flex items-center space-x-4">
                             <div class="stat-figure text-secondary">
                                 <i class="fa-solid fa-truck-ramp-box text-2xl" style="color: #74C0FC;"></i>
@@ -52,8 +52,8 @@
                             </div>
                         </div>
                     </div>
-        
-                    <div class="bg-white p-6 rounded-lg shadow-lg w-full card">
+
+                    <div class="bg-white p-6 rounded-lg shadow-lg w-full">
                         <div class="flex items-center space-x-4">
                             <div class="stat-figure text-secondary">
                                 <i class="fa-solid fa-coins text-2xl" style="color: #FFD43B;"></i>
@@ -84,7 +84,7 @@
                         <p class="text-center text-gray-500">No transactions found.</p>
                     @else
                         <a href="{{ route('sales.exportPDF', ['start_date' => request('start_date'), 'end_date' => request('end_date')]) }}" class="btn bg-rose-500 text-white">Export as PDF</a>
-                    @endif
+
                 </div>
                 <div>
 
@@ -114,6 +114,7 @@
                             </tbody>
                         </table>
                     </div>
+                    @endif
 
                 </div>
             </div>
@@ -129,17 +130,6 @@
     </div>
 </div>
 
-<style>
-    .card {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .card:hover {
-        background-color: rgb(255, 255, 219);
-        transform: translateY(-5px); /* Moves the card up slightly */
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Adds a shadow effect */
-    }
-</style>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -152,8 +142,8 @@
                 datasets: [{
                     label: 'Total Sales',
                     data: @json($amounts),
-                    backgroundColor: 'rgba(255, 205, 86, 0.5)', // Soft purple
-                    borderColor: '#FFCD56', // Dark purple
+                    backgroundColor: 'rgba(79, 70, 229, 0.5)', // Soft purple
+                    borderColor: '#4f46e5', // Dark purple
                     borderWidth: 2,
                     barThickness: 28, // Width of each bar
                     borderRadius: 8, // Rounded corners

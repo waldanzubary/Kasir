@@ -25,7 +25,7 @@
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
             max-width: 500px;
             text-align: center;
-            border-top: 10px solid #f1c40f; /* Yellow accent */
+            border-top: 10px solid #10B981;
             animation: slideDown 1s ease-out;
         }
 

@@ -65,7 +65,7 @@
                             <!-- Username -->
                             <div>
                                 <label for="username" class="block text-sm font-medium text-gray-700 mb-1">{{ __('Username') }}</label>
-                                <input id="username" type="text" name="username" value="{{ old('username', $user->username) }}" required autofocus class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-transparent sm:text-sm">
+                                <input id="username" type="text" name="username" value="{{ old('username', $user->username) }}" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-transparent sm:text-sm">
                                 @error('username')
                                     <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                                 @enderror

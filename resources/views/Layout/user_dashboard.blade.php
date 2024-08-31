@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
@@ -9,191 +11,52 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    <style>
-        .mber {
-            font-weight: bold;
-        }
 
-        /* Sidebar Styles */
-        .sidebar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 100%;
-            background-color: #FFDD57; /* Yellow background for the sidebar */
-            z-index: 50;
-            transition: transform 0.3s ease;
-            width: 200px; /* Set width for the sidebar */
-            padding-top: 1rem;
-            padding-bottom: 1rem;
-        }
-
-        .sidebar-hidden {
-            transform: translateX(-100%);
-        }
-
-        .sidebar-visible {
-            transform: translateX(0);
-        }
-
-        @media (min-width: 1024px) {
-            .sidebar {
-                transform: translateX(0); /* Sidebar always shown on large screens */
-            }
-        }
-
-        /* Content Styles */
-        .content {
-            transition: margin-left 0.3s ease;
-            margin-left: 200px; /* Adjust margin to match sidebar width by default */
-        }
-
-        @media (max-width: 1023px) {
-            .content {
-                margin-left: 0; /* No margin on mobile screens */
-            }
-        }
-
-        /* Navbar Styles */
-        .navbar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 1rem;
-            background-color: #f5f5f5;
-        }
-
-        .navbar-title {
-            flex: 1;
-            text-align: center;
-            font-weight: bold;
-        }
-
-        .profile-icon {
-            margin-left: 1rem;
-        }
-
-        /* Sidebar Item Styles */
-        .sidebar-item {
-            display: flex;
-            align-items: center;
-            padding: 0.75rem 1rem;
-            border-radius: 0.375rem;
-            transition: background-color 0.3s ease;
-            text-decoration: none;
-            color: #757575; /* Dark color for the text */
-        }
-
-        .sidebar-item:hover {
-            background-color: #f3e8a9; /* Light yellow background for hover */
-        }
-
-        .sidebar-item.active {
-            background-color: #f4ffce; /* White background for active item */
-            border-left: 4px solid #bebe8d; /* Blue border on the left for active item */
-            color: #111827; /* Dark color for the text */
-        }
-
-        .sidebar-item-icon {
-            margin-right: 0.75rem;
-            color: #6b7280; /* Gray color for the icon */
-        }
-
-        .sidebar-item-text {
-            font-size: 0.875rem;
-        }
-
-        /* User Info Styles */
-        .user-info {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-bottom: 1rem;
-            padding: 0 1rem;
-            text-align: center;
-        }
-
-        .user-info img {
-            border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            object-fit: cover;
-            margin-bottom: 0.5rem;
-        }
-
-        .user-info h4 {
-            margin: 0;
-            font-weight: bold;
-            color: #111827; /* Dark color for the text */
-        }
-
-        .user-info p {
-            margin: 0;
-            color: #6b7280; /* Gray color for the text */
-        }
-
-        /* Store Name Styles */
-        .store-name {
-            font-size: 1.25rem;
-            font-weight: bold;
-            color: #1f2937; /* Dark color for the text */
-            text-align: center;
-            margin-bottom: 1rem;
-        }
-    </style>
 </head>
 <body class="bg-slate-100">
     <div class="flex flex-col lg:flex-row min-h-screen">
         <!-- Sidebar -->
-        <div class="sidebar sidebar-hidden lg:sidebar-visible flex flex-col">
-            <!-- Store Name -->
-            <div class="store-name">
-                UMKM Store
-            </div>
-            
-            <!-- User Info -->
-            <div class="user-info mt-10">
-                <i class="fa-solid fa-user sidebar-item-icon fa-4x mb-3" style="color: #8d8d8d;"></i>
-                <h4>{{ Auth::user()->shop_name }}</h4>
-                <p>{{ Auth::user()->username }}</p>
-            </div>
-            
-            <div class="flex flex-col space-y-6 mt-10">
-                <a href="/Warehouse" class="sidebar-item {{ request()->is('Warehouse') ? 'active' : '' }}">
-                    <i class="fa-solid fa-boxes-stacked sidebar-item-icon text-2xl" style="color: #c56d6d;"></i>
-                    <span class="sidebar-item-text">Items</span>
-                </a>
-                <a href="/sales/creates" class="sidebar-item {{ request()->is('sales/creates') ? 'active' : '' }}">
-                    <i class="fa-solid fa-cash-register sidebar-item-icon text-2xl" style="color: #ae9ecc;"></i>
-                    <span class="sidebar-item-text">Cashier</span>
-                </a>
-                <a href="/staff" class="sidebar-item {{ request()->is('staff') ? 'active' : '' }}">
-                    <i class="fa-solid fa-chart-line sidebar-item-icon text-2xl" style="color: #6bac74;"></i>
-                    <span class="sidebar-item-text">Report</span>
-                </a>
+        <div class="sidebar sidebar-hidden lg:sidebar-visible">
+            <div class="h-full p-3 space-y-2 w-60 bg-white">
+                <div class="flex items-center p-2 space-x-4">
+                    <img src="https://source.unsplash.com/100x100/?portrait" alt="" class="w-12 h-12 rounded-full dark:bg-gray-500">
+                    <div>
+                        <h2 class="text-lg font-semibold">{{ Auth::user()->shop_name }}</h2>
+                        <span class="flex items-center space-x-1">
+                            <a rel="noopener noreferrer" href="/profile/edit-combined" class="text-xs hover:underline ">{{ Auth::user()->username }}</a>
+                        </span>
+                    </div>
+                </div>
+                <div class=" ">
+                    <ul class="pt-2 pb-4 space-y-1 text-sm">
+                        <li class="">
+                            <a rel="noopener noreferrer" href="/Warehouse" class="flex items-center p-2 space-x-3 rounded-md {{ request()->is('Warehouse') ? 'bg-blue-100' : '' }}">
+                                <i class="fa-solid fa-boxes-stacked sidebar-item-icon text-xl" style="color: #c56d6d;"></i>
+                                <span>Items</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a rel="noopener noreferrer" href="/sales/creates" class="flex items-center p-2 space-x-3 rounded-md {{ request()->is('sales/creates') ? 'bg-blue-100' : '' }}">
+                                <i class="fa-solid fa-cash-register sidebar-item-icon text-xl" style="color: #ae9ecc;"></i>
+                                <span>Cashier</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a rel="noopener noreferrer" href="/staff" class="flex items-center p-2 space-x-3 rounded-md {{ request()->is('staff') ? 'bg-blue-100' : '' }}">
+                                <i class="fa-solid fa-chart-line sidebar-item-icon text-xl" style="color: #6bac74;"></i>
+                                <span>Staff</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
+
 
         <!-- Main Content -->
         <div class="flex-1 content">
             <!-- Navbar -->
-            <div class="navbar">
-                <div class="flex-none">
-                    <!-- Hamburger Button -->
-                    <button class="btn btn-square btn-ghost sm:hidden block" onclick="toggleSidebar()">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                        </svg>
-                    </button>
-                </div>
-                <div class="navbar-title">
-                    <a class="text-xl mber">Transaction</a>
-                </div>
-                <a href="/profile/edit-combined" class="sidebar-item {{ request()->is('profile/edit-combined') ? 'active' : '' }}">
-                    <span class="sidebar-item-text">Profile</span>
-                    <i class="fa-solid fa-user sidebar-item-icon text-2xl ml-3" style="color: #8d8d8d;"></i>
-                </a>
-            </div>
+
 
             <!-- Main Section -->
             <div>
@@ -222,7 +85,7 @@
                 cancelButtonColor: '#d33',
                 cancelButtonText: 'No, cancel!',
                 confirmButtonText: 'Yes!',
-                
+
             }).then((result) => {
                 if (result.isConfirmed) {
                     window.location.href = "{{ route('welcome') }}";
