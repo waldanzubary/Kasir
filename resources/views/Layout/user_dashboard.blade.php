@@ -153,7 +153,7 @@
             
             <!-- User Info -->
             <div class="user-info mt-10">
-                <img src="{{ asset('Done.png') }}" alt="User Avatar" />
+                <i class="fa-solid fa-user sidebar-item-icon fa-4x mb-3" style="color: #8d8d8d;"></i>
                 <h4>{{ Auth::user()->shop_name }}</h4>
                 <p>{{ Auth::user()->username }}</p>
             </div>
@@ -170,10 +170,6 @@
                 <a href="/staff" class="sidebar-item {{ request()->is('staff') ? 'active' : '' }}">
                     <i class="fa-solid fa-chart-line sidebar-item-icon text-2xl" style="color: #6bac74;"></i>
                     <span class="sidebar-item-text">Report</span>
-                </a>
-                <a href="/profile/edit-combined" class="sidebar-item {{ request()->is('profile/edit-combined') ? 'active' : '' }}">
-                    <i class="fa-solid fa-user sidebar-item-icon text-2xl" style="color: #8d8d8d;"></i>
-                    <span class="sidebar-item-text">Profile</span>
                 </a>
             </div>
         </div>
@@ -193,12 +189,10 @@
                 <div class="navbar-title">
                     <a class="text-xl mber">Transaction</a>
                 </div>
-                <button id="logout" type="button" class="inline-flex items-center px-4 py-2 bg-orange-500 text-white font-semibold rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition" onclick="confirmBack()">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
-                    </svg>
-                    Back to Menu
-                </button>
+                <a href="/profile/edit-combined" class="sidebar-item {{ request()->is('profile/edit-combined') ? 'active' : '' }}">
+                    <span class="sidebar-item-text">Profile</span>
+                    <i class="fa-solid fa-user sidebar-item-icon text-2xl ml-3" style="color: #8d8d8d;"></i>
+                </a>
             </div>
 
             <!-- Main Section -->

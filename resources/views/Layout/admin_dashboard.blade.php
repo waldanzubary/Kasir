@@ -153,7 +153,7 @@
             
             <!-- User Info -->
             <div class="user-info mt-10">
-                <img src="{{ asset('Done.png') }}" alt="User Avatar" />
+                <i class="fa-solid fa-user sidebar-item-icon fa-4x mb-3" style="color: #63E6BE;"></i>
                 <h4>{{ Auth::user()->shop_name }}</h4>
                 <p>{{ Auth::user()->username }}</p>
             </div>

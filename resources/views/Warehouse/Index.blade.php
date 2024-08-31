@@ -9,7 +9,7 @@
 </div>
 
 <!-- Container with AOS Animation -->
-<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-2 p-3">
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-2 p-3">
     @foreach ($items as $item)
     <div class="max-w-full mx-auto rounded-md bg-white overflow-hidden shadow-md card-hov fade-up">
         <div class="relative p-3">
