@@ -19,13 +19,16 @@
         <div class="sidebar sidebar-hidden lg:sidebar-visible">
             <div class="h-full p-3 space-y-2 w-60 bg-white">
                 <div class="flex items-center p-2 space-x-4">
-                    <img src="https://source.unsplash.com/100x100/?portrait" alt="" class="w-12 h-12 rounded-full dark:bg-gray-500">
+                    <div class="w-12 h-12 rounded-full dark:bg-gray-500 flex items-center justify-center text-white bg-gray-700">
+                        <span class="text-lg font-semibold">{{ substr(Auth::user()->username, 0, 1) }}</span>
+                    </div>
                     <div>
                         <h2 class="text-lg font-semibold">{{ Auth::user()->shop_name }}</h2>
                         <span class="flex items-center space-x-1">
-                            <a rel="noopener noreferrer" href="/profile/edit-combined" class="text-xs hover:underline ">{{ Auth::user()->username }}</a>
+                            <a rel="noopener noreferrer" href="/profile/edit-combined" class="text-xs hover:underline">{{ Auth::user()->username }}</a>
                         </span>
                     </div>
+
                 </div>
                 <div class=" ">
                     <ul class="pt-2 pb-4 space-y-1 text-sm">

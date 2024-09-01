@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="container mx-auto p-6">
-    <div class="flex justify-center">
+    <div class="flex justify-center h-screen items-center ">
         <div class="w-full max-w-lg">
             <div class="card bg-base-200 shadow-lg border border-base-300 rounded-lg">
                 <div class="card-header text-xl font-semibold p-4 border-b border-base-300">Edit Account</div>

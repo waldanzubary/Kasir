@@ -34,7 +34,7 @@
             max-width: 80%;
             height: auto;
             margin-bottom: 1rem;
-            animation: bounce 2s infinite; /* Bounce animation */
+
         }
 
         .left-side h2 {

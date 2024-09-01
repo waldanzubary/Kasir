@@ -11,30 +11,31 @@ use Carbon\Carbon;
 class DashboardController extends Controller
 {
     public function Dashboard()
-    {
-        // Define the time frame for the current month
-        $startOfMonth = Carbon::now()->startOfMonth();
-        $endOfMonth = Carbon::now()->endOfMonth();
+{
+    // Define the time frame for the current month
+    $startOfMonth = Carbon::now()->startOfMonth();
+    $endOfMonth = Carbon::now()->endOfMonth();
 
-        // Fetch data for analytics
-        $totalRevenue = Sale::whereBetween('sale_date', [$startOfMonth, $endOfMonth])->sum('total_price');
-        $totalItemsSold = Sale::join('sales_items', 'sales.id', '=', 'sales_items.sale_id')
-                            ->whereBetween('sale_date', [$startOfMonth, $endOfMonth])
-                            ->sum('sales_items.quantity');
-        $totalMembership = User::where('role', 'user')->count();
-        $totalMembershipChange = User::where('role', 'user')
-                                    ->where('created_at', '>', now()->subMonth())
-                                    ->count();
+    // Fetch data for analytics
+    $totalMembership = User::count();
+    $totalMembershipChange = User::where('role', 'user')
+                                ->where('created_at', '>', now()->subMonth())
+                                ->count();
 
-        // Prepare data for charts
-        $monthlySales = Sale::selectRaw('DATE_FORMAT(sale_date, "%Y-%m-%d") as date, SUM(total_price) as total')
-                            ->groupBy('date')
-                            ->whereBetween('sale_date', [$startOfMonth, $endOfMonth])
-                            ->get()
-                            ->pluck('total', 'date');
+    // Account statistics
+    $totalActiveUsers = User::where('status', 'active')->count(); // Assuming 'status' is the correct field
+    $totalInactiveUsers = User::where('status', 'inactive')->count();
+    $monthlyNewUsers = User::where('role', 'user')
+                          ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+                          ->count();
 
-        return view('Admin.dashboard', compact('totalRevenue', 'totalItemsSold', 'totalMembership', 'totalMembershipChange', 'monthlySales', 'startOfMonth', 'endOfMonth'));
-    }
+    return view('Admin.dashboard', compact(
+        'totalMembership',
+        'totalMembershipChange', 'totalActiveUsers', 'totalInactiveUsers',
+        'monthlyNewUsers'
+    ));
+}
+
 
 
 

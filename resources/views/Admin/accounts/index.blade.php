@@ -33,18 +33,18 @@
                         <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500">{{ $item->username }}</td>
                         <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500">{{ $item->email }}</td>
                         <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $item->role }}</td>
-                        <td class="px-4 py-4 whitespace-nowrap text-sm font-medium {{ $item->status == 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }} rounded-md">{{ $item->status }}</td>
+                        <td class="px-4 py-4 whitespace-nowrap text-sm font-medium {{ $item->status == 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }} ">{{ $item->status }}</td>
                         <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $item->active_date }}</td>
                         <td>
                             <!-- Edit Button -->
-                            <a href="{{ route('accounts.edit', $item->id) }}" class="btn btn-warning">Edit</a>
-                            <a href="" class="btn btn-primary">Detail</a>
+                            <a href="{{ route('accounts.edit', $item->id) }}" class="text-yellow-500 mr-3">Edit</a>
+                            <a href="" class="text-blue-500 mr-3">Detail</a>
 
                             <!-- Delete Button -->
                             <form action="{{ route('accounts.destroy', $item->id) }}" method="POST" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger ml-3" onclick="return confirm('Are you sure you want to delete this account?')">Delete</button>
+                                <button type="submit" class="text-red-500" onclick="return confirm('Are you sure you want to delete this account?')">Delete</button>
                             </form>
                         </td>
                     </tr>
