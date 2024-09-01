@@ -23,9 +23,9 @@ Route::get('/', function () {
 Route::get('login', [AuthController::class, 'login'])->name('login');
 Route::get('register', [AuthController::class, 'register'])->middleware('guest');
 Route::post('register', [AuthController::class, 'registerProccess'])->middleware('guest');
-Route::get('select-active-date', [AuthController::class, 'selectActiveDate'])->middleware('auth')->middleware('OnlyStaff')->name('selectActiveDate');
-Route::get('select-active-date-no-trial', [AuthController::class, 'selectActiveDateNoTrial'])->middleware('auth')->middleware('OnlyStaff')->name('selectActiveDateNoTrial');
-Route::get('select-active-date-extend', [AuthController::class, 'selectActiveDateExtend'])->middleware('auth')->middleware('OnlyStaff')->name('selectActiveDateExtend');
+Route::get('select-active-date', [AuthController::class, 'selectActiveDate'])->middleware('auth')->name('selectActiveDate');
+Route::get('select-active-date-no-trial', [AuthController::class, 'selectActiveDateNoTrial'])->middleware('auth')->name('selectActiveDateNoTrial');
+Route::get('select-active-date-extend', [AuthController::class, 'selectActiveDateExtend'])->middleware('auth')->name('selectActiveDateExtend');
 Route::post('set-active-date', [AuthController::class, 'setActiveDate'])->name('setActiveDate');
 Route::post('login', [AuthController::class, 'authenticating'])->middleware('guest');
 Route::get('logout', [AuthController::class, 'logout'])->name('logout');
@@ -41,33 +41,33 @@ Route::patch('/profile/update-password', [AuthController::class, 'updatePassword
 Route::put('/accounts/{id}/update-status', [AuthController::class, 'updateStatus'])->name('accounts.updateStatus');
 
 Route::get('/activation-sent', function () {
-    return view('auth.activation_sent'); 
+    return view('auth.activation_sent');
 });
 
 
 //Warehouse
-Route::get('Warehouse', [WarehouseController::class, 'Warehouse'])->middleware('auth')->middleware('OnlyStaff');
-Route::get('Warehouse/create', [WarehouseController::class, 'CreateIndex'])->name('items.create')->middleware('OnlyStaff');
-Route::post('items', [WarehouseController::class, 'store'])->name('items.store')->middleware('OnlyStaff');
-Route::get('/warehouse/{id}/edit', [WarehouseController::class, 'edit'])->name('warehouse.edit')->middleware('OnlyStaff');
-Route::put('/warehouse/{id}', [WarehouseController::class, 'update'])->name('warehouse.update')->middleware('OnlyStaff');
-Route::delete('/warehouse/{id}', [WarehouseController::class, 'destroy'])->name('warehouse.destroy')->middleware('OnlyStaff');
+Route::get('Warehouse', [WarehouseController::class, 'Warehouse'])->middleware('auth');
+Route::get('Warehouse/create', [WarehouseController::class, 'CreateIndex'])->name('items.create')->middleware('auth');
+Route::post('items', [WarehouseController::class, 'store'])->name('items.store')->middleware('auth');
+Route::get('/warehouse/{id}/edit', [WarehouseController::class, 'edit'])->name('warehouse.edit')->middleware('auth');
+Route::put('/warehouse/{id}', [WarehouseController::class, 'update'])->name('warehouse.update')->middleware('auth');
+Route::delete('/warehouse/{id}', [WarehouseController::class, 'destroy'])->name('warehouse.destroy')->middleware('auth');
 
-Route::get('/warehouse/{id}/download-barcode', [WarehouseController::class, 'downloadBarcode'])->name('warehouse.downloadBarcode');
+Route::get('/warehouse/{id}/download-barcode', [WarehouseController::class, 'downloadBarcode'])->name('warehouse.downloadBarcode')->middleware('auth');
 
 
 //cashier
-Route::get('/sales/create', [CashierController::class, 'create'])->name('sales.create')->middleware('OnlyCashier');
+Route::get('/sales/create', [CashierController::class, 'create'])->name('sales.create')->middleware('OnlyCashier')->middleware('auth');
 Route::post('/sales', [CashierController::class, 'store'])->name('sales.store')->middleware('OnlyCashier');
 
-Route::get('/sales/creates', [SalesController::class, 'create'])->name('sales.creates')->middleware('OnlyCashier');
-Route::post('/sales/stores', [SalesController::class, 'store'])->name('sales.stores')->middleware('OnlyCashier');
-Route::post('/sales/barcode', [SalesController::class, 'barcode'])->name('sales.barcode')->middleware('OnlyCashier');
+Route::get('/sales/creates', [SalesController::class, 'create'])->name('sales.creates')->middleware('OnlyCashier')->middleware('auth');
+Route::post('/sales/stores', [SalesController::class, 'store'])->name('sales.stores')->middleware('OnlyCashier')->middleware('auth');
+Route::post('/sales/barcode', [SalesController::class, 'barcode'])->name('sales.barcode')->middleware('OnlyCashier')->middleware('auth');
 Route::post('/scan-barcode', 'SaleController@scanBarcode');
 
 //transaction
 Route::get('/transaction', [TransactionController::class, 'transaction'])->name('transaction.index');
-Route::get('/transaction/{id}', [TransactionController::class, 'show'])->name('sales.show');
+Route::get('/transaction/{id}', [TransactionController::class, 'show'])->name('sales.show')->middleware('auth');
 
 Route::get('staff', [StaffController::class, 'transactions'])->name('sales.transactions');
 Route::get('/transactions/export-pdf', [StaffController::class, 'exportPdf'])->name('sales.exportPDF');
@@ -81,13 +81,13 @@ Route::get('/latest-sale', [TotalController::class, 'latest'])->name('sales.late
 
 
 //admin
-Route::get('/dashboard', [DashboardController::class, 'dashboard']);
+Route::get('/dashboard', [DashboardController::class, 'dashboard'])->middleware('auth')->middleware('OnlyAdmin');
 
-Route::get('/manage', [DashboardController::class, 'manageaccount'])->name('accounts.index')
+Route::get('/manage', [DashboardController::class, 'manageaccount'])->name('accounts.index')->middleware('auth')->middleware('OnlyAdmin')
 ;
-Route::get('accounts/edit/{id}', [DashboardController::class, 'edit'])->name('accounts.edit');
-Route::put('accounts/update/{id}', [DashboardController::class, 'update'])->name('accounts.update');
-Route::delete('accounts/destroy/{id}', [DashboardController::class, 'destroy'])->name('accounts.destroy');
+Route::get('accounts/edit/{id}', [DashboardController::class, 'edit'])->name('accounts.edit')->middleware('auth')->middleware('OnlyAdmin');
+Route::put('accounts/update/{id}', [DashboardController::class, 'update'])->name('accounts.update')->middleware('auth')->middleware('OnlyAdmin');
+Route::delete('accounts/destroy/{id}', [DashboardController::class, 'destroy'])->name('accounts.destroy')->middleware('auth')->middleware('OnlyAdmin');
 
 
 
