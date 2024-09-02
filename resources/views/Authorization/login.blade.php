@@ -18,7 +18,7 @@
         }
 
         .left-side {
-            background-color: #FDE047; /* Yellow background */
+            background-color: rgb(75, 80, 77); /* Yellow background */
             flex: 1;
             display: flex;
             flex-direction: column;
@@ -112,7 +112,7 @@
 
         @keyframes blink-caret {
             from, to { border-color: transparent; }
-            50% { border-color: orange; }
+            50% { border-color: green; }
         }
     </style>
 </head>
@@ -124,7 +124,7 @@
             <!-- Left Side -->
             <div class="left-side">
                 <img src="assets/img/cashier.png" alt="Cashier" />
-                <h2>Manage Your UMKM Store Efficiently!</h2>
+                <h2 style="color: white">Manage Your UMKM Store Efficiently!</h2>
             </div>
 
             <!-- Right Side -->
@@ -164,7 +164,7 @@
                             <a href="/forgot-password" class="link link-primary">Forgot Password?</a>
                         </div>
                         <div class="form-control mt-6">
-                            <button type="submit" class="btn btn-warning mt-3">Sign in</button>
+                            <button type="submit" class="btn mt-3" style="background-color: rgb(75, 80, 77); color: white">Sign in</button>
                         </div>
                     </form>
                     <div class="text-center mt-4">

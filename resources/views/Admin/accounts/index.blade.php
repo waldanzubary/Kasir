@@ -38,7 +38,7 @@
                         <td>
                             <!-- Edit Button -->
                             <a href="{{ route('accounts.edit', $item->id) }}" class="text-yellow-500 mr-3">Edit</a>
-                            <a href="" class="text-blue-500 mr-3">Detail</a>
+                            <a href="{{ route('accounts.show', $item->id) }}" class="text-blue-500 mr-3">Detail</a>
 
                             <!-- Delete Button -->
                             <form action="{{ route('accounts.destroy', $item->id) }}" method="POST" style="display:inline;">

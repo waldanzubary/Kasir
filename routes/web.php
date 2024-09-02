@@ -82,7 +82,7 @@ Route::get('/latest-sale', [TotalController::class, 'latest'])->name('sales.late
 
 //admin
 Route::get('/dashboard', [DashboardController::class, 'dashboard'])->middleware('auth')->middleware('OnlyAdmin');
-
+Route::get('/accounts/{id}', [DashboardController::class, 'ShowAccount'])->name('accounts.show');
 Route::get('/manage', [DashboardController::class, 'manageaccount'])->name('accounts.index')->middleware('auth')->middleware('OnlyAdmin')
 ;
 Route::get('accounts/edit/{id}', [DashboardController::class, 'edit'])->name('accounts.edit')->middleware('auth')->middleware('OnlyAdmin');

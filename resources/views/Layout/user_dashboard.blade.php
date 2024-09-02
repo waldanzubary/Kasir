@@ -15,7 +15,7 @@
         <div class="sidebar sidebar-hidden lg:sidebar-visible">
             <div class="h-full p-3 space-y-2 w-60 bg-white">
                 <div class="flex items-center p-2 space-x-4">
-                    <div class="w-12 h-12 rounded-full dark:bg-gray-500 flex items-center justify-center text-white bg-gray-700">
+                    <div class="w-12 h-12 rounded-full dark:bg-gray-500 flex items-center justify-center text-white">
                         <span class="text-lg font-semibold">{{ substr(Auth::user()->username, 0, 1) }}</span>
                     </div>
                     <div>

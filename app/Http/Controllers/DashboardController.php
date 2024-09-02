@@ -18,14 +18,14 @@ class DashboardController extends Controller
 
     // Fetch data for analytics
     $totalMembership = User::count();
-    $totalMembershipChange = User::where('role', 'user')
+    $totalMembershipChange = User::where('role', 'User')
                                 ->where('created_at', '>', now()->subMonth())
                                 ->count();
 
     // Account statistics
     $totalActiveUsers = User::where('status', 'active')->count(); // Assuming 'status' is the correct field
     $totalInactiveUsers = User::where('status', 'inactive')->count();
-    $monthlyNewUsers = User::where('role', 'user')
+    $monthlyNewUsers = User::where('role', 'User')
                           ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
                           ->count();
 
@@ -45,6 +45,11 @@ class DashboardController extends Controller
         return view('admin.accounts.index', ['users'=> $users] );
     }
 
+    public function ShowAccount($id)
+    {
+        $user = User::findOrFail($id);
+        return view('admin.accounts.show', ['user' => $user]);
+    }
 
     public function edit($id)
     {

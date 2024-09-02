@@ -35,7 +35,7 @@
         }
 
         .left-side {
-            background-color: #FDE047; /* Yellow background */
+            background-color: rgb(75, 80, 77); /* Yellow background */
             flex: 1;
             display: flex;
             flex-direction: column;
@@ -115,7 +115,7 @@
             <!-- Left Side -->
             <div class="left-side">
                 <img src="assets/img/cashier.png" alt="Cashier" />
-                <h2>Join UMKM Cashier Today!</h2>
+                <h2 style="color: white">Join UMKM Cashier Today!</h2>
             </div>
 
             <!-- Right Side -->
@@ -160,7 +160,7 @@
                                 <input type="password" id="password" name="password" class="input input-bordered" required/>
                             </div>
                             <div class="form-control mt-6">
-                                <button type="button" id="next-btn" class="btn btn-warning">Next</button>
+                                <button type="button" id="next-btn" class="btn" style="background-color: rgb(75, 80, 77); color: white">Next</button>
                             </div>
                         </div>
                     
@@ -198,7 +198,7 @@
                                 <input type="text" id="shop_name" name="shop_name" class="input input-bordered" required/>
                             </div>
                             <div class="form-control mt-6 mb-8">
-                                <button type="submit" class="btn btn-warning">Register</button>
+                                <button type="submit" class="btn" style="background-color: rgb(75, 80, 77); color: white">Register</button>
                             </div>
                         </div>
                     </form>
