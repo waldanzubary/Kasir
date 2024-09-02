@@ -14,11 +14,24 @@
 </head>
 
 <style>
+    @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
+        .fade-up {
+            animation: fadeUp 0.6s ease-out;
+        }
 
 </style>
 <body>
-    <form id="saleForm" action="{{ route('sales.stores') }}" method="POST" class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4">
+    <form id="saleForm" action="{{ route('sales.stores') }}" method="POST" class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 mr-4">
         @csrf
         <!-- Main Content -->
         <main class="flex-1   ">
@@ -37,7 +50,7 @@
                 <div class="flex justify-center">
 
             </div>
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-5 gap-2">
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-5 gap-2 fade-up">
                 @foreach ($items as $item)
                 <button type="button" class="shadow-lg rounded-lg bg-white w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg overflow-hidden mt-2 hover-card transform transition-transform duration-300 ease-in-out hover:scale-105" onclick="addItem({{ json_encode($item) }})">
                     <div class="relative">

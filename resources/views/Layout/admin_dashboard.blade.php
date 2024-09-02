@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
@@ -10,8 +8,6 @@
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-
 </head>
 <body class="bg-slate-100">
     <div class="flex flex-col lg:flex-row min-h-screen">
@@ -28,7 +24,6 @@
                             <a rel="noopener noreferrer" href="/profile/edit-combined" class="text-xs hover:underline">{{ Auth::user()->username }}</a>
                         </span>
                     </div>
-
                 </div>
                 <div class=" ">
                     <ul class="pt-2 pb-4 space-y-1 text-sm">
@@ -44,17 +39,17 @@
                                 <span>Manage</span>
                             </a>
                         </li>
-
                     </ul>
                 </div>
             </div>
         </div>
 
-
         <!-- Main Content -->
         <div class="flex-1 content">
-            <!-- Navbar -->
-
+            <!-- AppBar (Navbar) -->
+            <nav class="bg-transparent p-5">
+                <!-- You can add navigation links, buttons, or logos here in the future -->
+            </nav>
 
             <!-- Main Section -->
             <div>
@@ -83,7 +78,6 @@
                 cancelButtonColor: '#d33',
                 cancelButtonText: 'No, cancel!',
                 confirmButtonText: 'Yes!',
-
             }).then((result) => {
                 if (result.isConfirmed) {
                     window.location.href = "{{ route('welcome') }}";
