@@ -1,5 +1,7 @@
 @extends('Layout.user_dashboard')
 
+@section('title', 'UMKM Warehouse')
+
 @section('content')
     <!-- Begin Page Content -->
     <!-- Content Row -->

@@ -1,5 +1,7 @@
 @extends('Layout.user_dashboard')
 
+@section('title', 'UMKM Warehouse')
+
 @section('content')
 
 <div class="flex sm:justify-end justify-center  mb-1 p-3 mt-4 ml-6 ">

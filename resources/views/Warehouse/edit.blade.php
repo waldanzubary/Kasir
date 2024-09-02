@@ -1,5 +1,7 @@
 @extends('Layout.user_dashboard')
 
+@section('title', 'UMKM Warehouse')
+
 @section('content')
 
 <div class="container mx-auto p-6">

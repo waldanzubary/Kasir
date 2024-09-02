@@ -1,6 +1,6 @@
 @extends('Layout.total')
 
-@section('title', 'Sales Transactions')
+@section('title', 'UMKM Transactions')
 
 @section('content')
 

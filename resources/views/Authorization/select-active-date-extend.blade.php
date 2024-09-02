@@ -1,6 +1,6 @@
 @extends('Layout.user_dashboard')
 
-@section('title', 'Sales Transactions')
+@section('title', 'UMKM Subscription')
 
 @section('content')
     <!-- Active Date Selection -->
