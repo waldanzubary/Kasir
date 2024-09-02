@@ -9,8 +9,11 @@
     <link href="https://cdn.jsdelivr.net/npm/daisyui@latest/dist/full.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        .navbar{
+            background-color: rgb(75, 80, 77);
+        }
         .hero-bg {
-            background-image: url('assets/img/se.jpg');
+            background-image: url('assets/img/se.png');
             background-size: cover;
             background-position: center;
         }
@@ -75,9 +78,9 @@
 </head>
 
 <body class="index-page bg-base-100 flex flex-col min-h-screen">
-    <div class="navbar bg-white sticky top-0 z-50 shadow-md">
+    <div class="navbar sticky top-0 z-50 shadow-md">
         <div class="flex-1">
-            <a class="btn btn-ghost normal-case text-xl" >UMKM Cashier</a>
+            <a class="btn btn-ghost normal-case text-xl" style="color: white">UMKM Cashier</a>
         </div>
         <div class="flex-none">
             @if (Route::has('login'))
@@ -183,7 +186,7 @@
                 clip-rule="evenodd" />
             </svg>
           </div>
-          <div class="timeline-end timeline-box">Register an account</div>
+          <div class="timeline-end timeline-box transition-transform duration-300 ease-in-out transform hover:scale-105">Register an account</div>
           <hr />
         </li>
         <li>
@@ -201,7 +204,7 @@
                 clip-rule="evenodd" />
             </svg>
           </div>
-          <div class="timeline-end timeline-box">Try trial or subs</div>
+          <div class="timeline-end timeline-box transition-transform duration-300 ease-in-out transform hover:scale-105">Try trial or subs</div>
           <hr />
         </li>
         <li>
@@ -219,7 +222,7 @@
                 clip-rule="evenodd" />
             </svg>
           </div>
-          <div class="timeline-end timeline-box">Manage item</div>
+          <div class="timeline-end timeline-box transition-transform duration-300 ease-in-out transform hover:scale-105">Manage item</div>
           <hr />
         </li>
         <li>
@@ -237,7 +240,7 @@
                 clip-rule="evenodd" />
             </svg>
           </div>
-          <div class="timeline-end timeline-box">Print the barcode</div>
+          <div class="timeline-end timeline-box transition-transform duration-300 ease-in-out transform hover:scale-105">Print the barcode</div>
           <hr />
         </li>
         <li>
@@ -255,7 +258,7 @@
                 clip-rule="evenodd" />
             </svg>
           </div>
-          <div class="timeline-end timeline-box">Use it as well</div>
+          <div class="timeline-end timeline-box transition-transform duration-300 ease-in-out transform hover:scale-105">Use it as well</div>
         </li>
       </ul>
     </div>

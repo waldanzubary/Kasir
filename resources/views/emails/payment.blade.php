@@ -131,6 +131,7 @@
                                                 <p>Thank you for choosing our service!</p>
                                             </div>
                                         </td>
+                                        <a href="{{ $activationLink }}">Activate Account</a>
                                     </tr>
                                     <!-- Footer Message -->
                                     <tr>
@@ -139,7 +140,7 @@
                                                 We appreciate your trust in our services.
                                             </div>
                                         </td>
-                                        <a href="{{ $activationLink }}">Activate Account</a>
+                                        
                                     </tr>
                                 </table>
                             </div>
