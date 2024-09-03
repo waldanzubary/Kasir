@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light"> <!-- Set the data-theme to light -->
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,33 +9,31 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         #register-form {
-    max-height: 500px; /* Adjust the height as needed */
-    overflow-y: auto;
-    padding-right: 15px; /* Adds padding for scrollbar visibility */
-    }
+            max-height: 500px;
+            overflow-y: auto;
+            padding-right: 15px;
+        }
 
-    /* Additional styling for form steps if needed */
-    .form-step {
-        display: none; /* Initially hide all steps */
-    }
+        .form-step {
+            display: none;
+        }
 
-    .form-step.active {
-        display: block; /* Display only the active step */
-    }
-        .form-step { display: none; }
-        .form-step.active { display: block; }
+        .form-step.active {
+            display: block;
+        }
 
         .register-card {
             display: flex;
-            height: 500px; /* Set a fixed height for the card */
+            flex-direction: column;
+            min-height: 500px;
             border-radius: 1rem;
-            overflow: hidden; /* Hide overflow for rounded corners */
+            overflow: hidden;
             opacity: 0;
-            animation: fadeIn 1s forwards; /* Fade in animation */
+            animation: fadeIn 1s forwards;
         }
 
         .left-side {
-            background-color: rgb(75, 80, 77); /* Yellow background */
+            background-color: rgb(75, 80, 77);
             flex: 1;
             display: flex;
             flex-direction: column;
@@ -43,15 +41,15 @@
             justify-content: center;
             padding: 2rem;
             text-align: center;
-            transform: translateX(-20px); /* Start from left */
-            animation: slideIn 1s forwards; /* Slide in animation */
+            transform: translateY(-20px);
+            animation: slideIn 1s forwards;
         }
 
         .left-side img {
             max-width: 80%;
             height: auto;
             margin-bottom: 1rem;
-            animation: bounce 2s infinite; /* Bounce animation */
+            animation: bounce 2s infinite;
         }
 
         .left-side h2 {
@@ -59,13 +57,13 @@
             font-family: monospace;
             white-space: nowrap;
             overflow: hidden;
-            border-right: .15em solid orange; /* Cursor effect */
-            animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite; /* Typing and cursor blinking animations */
+            border-right: .15em solid orange;
+            animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
         }
 
         .right-side {
             flex: 1;
-            background-color: #ffffff; /* White background */
+            background-color: #ffffff;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -73,27 +71,17 @@
         }
 
         @keyframes fadeIn {
-            to {
-                opacity: 1;
-            }
+            to { opacity: 1; }
         }
 
         @keyframes slideIn {
-            to {
-                transform: translateX(0);
-            }
+            to { transform: translateY(0); }
         }
 
         @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {
-                transform: translateY(0);
-            }
-            40% {
-                transform: translateY(-30px);
-            }
-            60% {
-                transform: translateY(-15px);
-            }
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-30px); }
+            60% { transform: translateY(-15px); }
         }
 
         @keyframes typing {
@@ -105,20 +93,30 @@
             from, to { border-color: transparent; }
             50% { border-color: orange; }
         }
+
+        @media (min-width: 768px) {
+            .register-card {
+                flex-direction: row;
+                height: 500px;
+            }
+
+            .left-side {
+                transform: translateX(-20px);
+            }
+
+            @keyframes slideIn {
+                to { transform: translateX(0); }
+            }
+        }
     </style>
 </head>
 <body class="bg-base-100 flex flex-col min-h-screen">
-
-    <!-- Register Form -->
-    <div class="flex-grow flex items-center justify-center">
-        <div class="register-card shadow-xl">
-            <!-- Left Side -->
+    <div class="flex-grow flex items-center justify-center p-4">
+        <div class="register-card shadow-xl w-full max-w-4xl">
             <div class="left-side">
                 <img src="assets/img/cashier.png" alt="Cashier" />
                 <h2 style="color: white">Join UMKM Cashier Today!</h2>
             </div>
-
-            <!-- Right Side -->
             <div class="right-side">
                 <div class="card-body">
                     <h2 class="card-title mb-4">Register User</h2>
@@ -139,7 +137,6 @@
                             </div>
                         @endif
                     
-                        <!-- Step 1: Email, Username, Password -->
                         <div class="form-step active" id="step-1">
                             <div class="form-control">
                                 <label class="label" for="email">
@@ -164,7 +161,6 @@
                             </div>
                         </div>
                     
-                        <!-- Step 2: Remaining Fields -->
                         <div class="form-step" id="step-2">
                             <h2 class="card-title mb-4 mt-4">Register Shop</h2>
                             <div class="form-control">
@@ -183,7 +179,7 @@
                                 <label class="label" for="address">
                                     <span class="label-text">Address</span>
                                 </label>
-                                <textarea id="address" name="address" class="input input-bordered" required></textarea>
+                                <textarea id="address" name="address" class="textarea textarea-bordered" required></textarea>
                             </div>
                             <div class="form-control mt-4">
                                 <label class="label" for="zip_code">

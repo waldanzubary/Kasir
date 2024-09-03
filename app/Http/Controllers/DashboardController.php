@@ -7,6 +7,7 @@ use App\Models\Sale;
 use App\Models\Items;
 use App\Models\User;
 use Carbon\Carbon;
+use App\Models\ActiveDateHistory;
 
 class DashboardController extends Controller
 {
@@ -29,10 +30,16 @@ class DashboardController extends Controller
                           ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
                           ->count();
 
+    // Fetch subscription history
+    $subscriptions = ActiveDateHistory::all(); // Get all subscription data
+
     return view('Admin.dashboard', compact(
         'totalMembership',
-        'totalMembershipChange', 'totalActiveUsers', 'totalInactiveUsers',
-        'monthlyNewUsers'
+        'totalMembershipChange',
+        'totalActiveUsers',
+        'totalInactiveUsers',
+        'monthlyNewUsers',
+        'subscriptions' // Pass the subscription data to the view
     ));
 }
 
@@ -41,7 +48,7 @@ class DashboardController extends Controller
 
     public function ManageAccount()
     {
-        $users = User::all();
+        $users = User::where('role', 'User')->get();
         return view('admin.accounts.index', ['users'=> $users] );
     }
 

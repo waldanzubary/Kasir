@@ -7,48 +7,43 @@
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
             <div class="p-8">
-                <!-- Header with Logout Button -->
-                <div class="flex justify-between items-center mb-8">
-                    <div class="relative">
-                        <!-- Optional header content -->
-                    </div>
-                </div>
-
                 <!-- User Information Section -->
                 <div class="mb-12">
                     <h2 class="text-2xl font-bold text-gray-600 mb-6">User Information</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        @php
-                            $userInfo = [
-                                'Username' => $user->username,
-                                'Email' => $user->email,
-                                'Phone' => $user->phone,
-                                'Store Name' => $user->shop_name,
-                                'Active Date' => $user->active_date ? $user->active_date->format('d-m-Y') : 'Not available',
-                                'Inactive in' => $user->active_date ? sprintf('%02d days', now()->diffInDays($user->active_date)) : 'Not available',
-                            ];
-                        @endphp
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead>
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Label</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Value</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            @php
+                                $userInfo = [
+                                    'Username' => $user->username,
+                                    'Email' => $user->email,
+                                    'Phone' => $user->phone,
+                                    'Store Name' => $user->shop_name,
+                                    'Active Date' => $user->active_date ? $user->active_date->toDateString() : 'Not available',
+                                    'Inactive in' => $user->active_date ? sprintf('%02d days', now()->diffInDays($user->active_date)) : 'Not available',
+                                ];
+                            @endphp
 
-                        @foreach ($userInfo as $label => $value)
-                            <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
-                                <h3 class="text-sm font-medium text-gray-500">{{ __($label) }}</h3>
-                                <p class="mt-1 text-lg font-semibold text-gray-600">{{ $value }}</p>
-                            </div>
-                        @endforeach
-                    </div>
+                            @foreach ($userInfo as $label => $value)
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $label }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $value }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
 
                     <div class="mt-8 flex justify-between items-center">
                         <a href="/select-active-date-extend" class="inline-flex items-center px-4 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition">
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                            </svg>
-                            {{ __('Extend Subscription') }}
+                            <i class="fas fa-calendar-plus mr-2"></i> Extend Subscription
                         </a>
                         <button id="logout-menu" type="button" class="inline-flex items-center px-4 py-2 bg-red-500 text-white font-semibold rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition" onclick="confirmLogout()">
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
-                            </svg>
-                            Logout
+                            <i class="fas fa-sign-out-alt mr-2"></i> Logout
                         </button>
                     </div>
                 </div>
@@ -66,7 +61,7 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <!-- Username -->
                             <div>
-                                <label for="username" class="block text-sm font-medium text-gray-700 mb-1">{{ __('Username') }}</label>
+                                <label for="username" class="block text-sm font-medium text-gray-700 mb-1">Username</label>
                                 <input id="username" type="text" name="username" value="{{ old('username', $user->username) }}" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-transparent sm:text-sm">
                                 @error('username')
                                     <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
@@ -75,7 +70,7 @@
 
                             <!-- Email -->
                             <div>
-                                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">{{ __('Email') }}</label>
+                                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
                                 <input id="email" type="email" name="email" value="{{ old('email', $user->email) }}" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-transparent sm:text-sm">
                                 @error('email')
                                     <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
@@ -85,10 +80,7 @@
 
                         <div class="mt-6">
                             <a href="{{ route('profile.edit_password') }}" class="inline-flex items-center px-4 py-2 bg-gray-600 text-white font-semibold rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition">
-                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
-                                </svg>
-                                {{ __('Change Password') }}
+                                <i class="fas fa-key mr-2"></i> Change Password
                             </a>
                         </div>
                     </div>
@@ -123,13 +115,38 @@
 
                     <div class="flex items-center justify-end mt-8">
                         <button type="submit" class="inline-flex items-center px-6 py-3 bg-green-500 text-white font-semibold rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition">
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                            {{ __('Save Changes') }}
+                            <i class="fas fa-save mr-2"></i> Save Changes
                         </button>
                     </div>
                 </form>
+
+                <!-- Subscription Information Section -->
+                <div class="mt-12">
+                    <h2 class="text-2xl font-bold text-gray-600 mb-6">Subscription Information</h2>
+                    @if ($subscriptions->isEmpty())
+                        <p class="text-gray-500">No subscriptions available.</p>
+                    @else
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead>
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Duration</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Activated At</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Active Date</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                @foreach ($subscriptions as $subscription)
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $subscription->duration }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $subscription->activated_at }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $subscription->active_date }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    @endif
+                </div>
+
             </div>
         </div>
     </div>
@@ -138,36 +155,33 @@
 
 <style>
     @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        from {
+            opacity: 0;
+            transform: translateY(20px);
         }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
 
-        .fade-up {
-            animation: fadeUp 0.6s ease-out;
-        }
+    .fade-up {
+        animation: fadeUp 0.6s ease-out;
+    }
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     function confirmLogout() {
         Swal.fire({
-            title: 'Are you sure?',
-            text: "Do you want to logout?",
+            title: 'Are you sure you want to logout?',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
             confirmButtonText: 'Yes, logout!',
-            cancelButtonText: 'No, cancel!'
+            cancelButtonText: 'Cancel'
         }).then((result) => {
             if (result.isConfirmed) {
-                window.location.href = "{{ route('logout') }}";
+                window.location.href = '{{ route('logout') }}';
             }
         });
     }

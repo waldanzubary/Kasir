@@ -12,6 +12,7 @@ use App\Mail\PaymentMail;
 use App\Mail\Password;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
+use App\Models\ActiveDateHistory;
 
 class AuthController extends Controller
 {
@@ -145,6 +146,14 @@ class AuthController extends Controller
             $user->status = 'inactive';  // Ensure status is 'inactive' until activation
             $user->save();
 
+            // Save to history table
+            ActiveDateHistory::create([
+                'user_id' => $user->id,
+                'duration' => $duration,
+                'activated_at' => $user->active_date,
+                'active_date' => $user->active_date, // Store the active date
+            ]);
+
             // Send activation email
             $email = new PaymentMail($user, $activationToken); // Pass the user and token to the email
             Mail::to($user->email)->send($email);
@@ -158,6 +167,7 @@ class AuthController extends Controller
 
         return redirect()->back()->withErrors(['Please select a duration']);
     }
+
 
             
     public function activateAccount($token)
@@ -250,7 +260,18 @@ class AuthController extends Controller
     {
         $user = Auth::user();
         $user->active_date = $user->active_date ? Carbon::parse($user->active_date) : null;
-        return view('profile.edit_combined', compact('user'));
+        
+        // Retrieve subscriptions for the authenticated user
+        $subscriptions = ActiveDateHistory::where('user_id', Auth::id())->get();
+        
+        return view('profile.edit_combined', compact('user', 'subscriptions'));
+    }
+
+    public function editCombinedAdmin()
+    {
+        $user = Auth::user();
+        $user->active_date = $user->active_date ? Carbon::parse($user->active_date) : null;
+        return view('profile.edit_combined_admin', compact('user'));
     }
 
     // Update user profile and shop information
@@ -283,7 +304,7 @@ class AuthController extends Controller
     // Show password change form
     public function editPassword()
     {
-        return view('profile.edit_password');
+        return view('auth.forgot-password');
     }
 
     // Update password

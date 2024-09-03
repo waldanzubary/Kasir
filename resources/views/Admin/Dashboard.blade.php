@@ -5,11 +5,10 @@
 @section('content')
 
 <div class="container mx-auto p-6">
-     <!-- Filter Form -->
+    <!-- Filter Form -->
 
     <div class="flex flex-col md:flex-row gap-6">
         <!-- Main Content -->
-
 
         <div class="flex-1 w-full lg:w-3/4">
             <!-- Stats Section -->
@@ -21,7 +20,7 @@
                                 <i class="fa-solid fa-user text-2xl" style="color: #63E6BE;"></i>
                             </div>
                             <div>
-                                <div class="text-sm font-semibold text-gray-600">Total User active</div>
+                                <div class="text-sm font-semibold text-gray-600">Total User Active</div>
                                 <div class="text-2xl font-bold text-gray-800">{{ $totalActiveUsers }}</div>
                             </div>
                         </div>
@@ -33,7 +32,7 @@
                                 <i class="fa-solid fa-user text-2xl" style="color: #f33535;"></i>
                             </div>
                             <div>
-                                <div class="text-sm font-semibold text-gray-600">Total User inactive</div>
+                                <div class="text-sm font-semibold text-gray-600">Total User Inactive</div>
                                 <div class="text-2xl font-bold text-gray-800">{{ $totalInactiveUsers }}</div>
                             </div>
                         </div>
@@ -45,7 +44,7 @@
                                 <i class="fa-solid fa-user text-2xl" style="color: #242424;"></i>
                             </div>
                             <div>
-                                <div class="text-sm font-semibold text-gray-600">Total User</div>
+                                <div class="text-sm font-semibold text-gray-600">Total Users</div>
                                 <div class="text-2xl font-bold text-gray-800">{{ $totalMembership }}</div>
                             </div>
                         </div>
@@ -55,21 +54,41 @@
 
             <!-- Chart Section -->
             <div class="bg-white p-6 rounded-lg shadow-lg mb-8">
-                <h2 class="text-xl font-semibold text-gray-800 mb-4">User statitic</h2>
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">User Statistics</h2>
                 <div class="relative w-full h-64 md:h-96">
                     <canvas id="monthlySalesChart"></canvas>
                 </div>
             </div>
 
-
-
-
-
+            <!-- Subscription History Section -->
+            <div class="bg-white p-6 rounded-lg shadow-lg mb-8">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Subscription History</h2>
+                <table class="min-w-full bg-white">
+                    <thead>
+                        <tr>
+                            <th class="py-2 px-4 border-b">User ID</th>
+                            <th class="py-2 px-4 border-b">Duration</th>
+                            <th class="py-2 px-4 border-b">Activated At</th>
+                            <th class="py-2 px-4 border-b">Active Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($subscriptions as $subscription)
+                        <tr>
+                            <td class="py-2 px-4 border-b">{{ $subscription->user_id }}</td>
+                            <td class="py-2 px-4 border-b">{{ $subscription->duration }}</td>
+                            <td class="py-2 px-4 border-b">{{ $subscription->activated_at }}</td>
+                            <td class="py-2 px-4 border-b">{{ $subscription->active_date }}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <!-- Right Sidebar -->
         <div class="w-full lg:w-1/4 bg-white rounded-lg p-6 lg:sticky lg:top-0">
-            <h2 class="text-lg font-semibold text-gray-800 mb-4">Account overview</h2>
+            <h2 class="text-lg font-semibold text-gray-800 mb-4">Account Overview</h2>
             <div class="relative w-full h-64 flex justify-center">
                 <canvas id="salesOverviewChart"></canvas>
             </div>
@@ -79,7 +98,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-
     document.addEventListener('DOMContentLoaded', function() {
         // Monthly New Users Chart
         const ctxMonthlyNewUsers = document.getElementById('monthlySalesChart').getContext('2d');
@@ -178,7 +196,7 @@
                     tooltip: {
                         callbacks: {
                             label: function(tooltipItem) {
-                                return tooltipItem.label + ': ' + tooltipItem.raw.toLocaleString() + ' users'; // Tooltip text
+                                return tooltipItem.raw + ' users'; // Tooltip text for pie chart
                             }
                         }
                     }
@@ -186,8 +204,6 @@
             }
         });
     });
-
-
 </script>
 
 @endsection

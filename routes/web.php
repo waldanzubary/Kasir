@@ -12,6 +12,7 @@ use App\Http\Controllers\ItemScanController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\WarehouseController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\SubscriptionController;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 
@@ -30,10 +31,12 @@ Route::post('set-active-date', [AuthController::class, 'setActiveDate'])->name('
 Route::post('login', [AuthController::class, 'authenticating'])->middleware('guest');
 Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/redirect-dashboard', [AuthController::class, 'redirectBasedOnRole'])->name('redirect.dashboard');
+Route::get('/forgot-password', [AuthController::class, 'editPassword'])->name('forgot.password');
 
 Route::get('/sent-email', [AuthController::class, 'sendEmail']);
 Route::get('/activate-account/{token}', [AuthController::class, 'activateAccount']);
 Route::get('/profile/edit-combined', [AuthController::class, 'editCombined'])->name('profile.edit_combined');
+Route::get('/profile/edit-combined-admin', [AuthController::class, 'editCombinedAdmin'])->name('profile.edit_combined_admin');
 Route::patch('/profile/update-combined', [AuthController::class, 'updateCombined'])->name('profile.update_combined');
 Route::get('/profile/edit-password', [AuthController::class, 'editPassword'])->name('profile.edit_password');
 Route::patch('/profile/update-password', [AuthController::class, 'updatePassword'])->name('profile.update_password');
@@ -44,6 +47,9 @@ Route::get('/activation-sent', function () {
     return view('auth.activation_sent');
 });
 
+//Subscription
+Route::get('/admin/subscriptions', [SubscriptionController::class, 'showAll'])->middleware('auth')->name('admin.subscriptions');
+Route::get('/user/subscriptions', [SubscriptionController::class, 'showForUser'])->middleware('auth')->name('user.subscriptions');
 
 //Warehouse
 Route::get('Warehouse', [WarehouseController::class, 'Warehouse'])->middleware('auth');
