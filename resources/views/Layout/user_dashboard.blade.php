@@ -14,21 +14,44 @@
             top: 0;
             left: 0;
             height: 100vh;
-            width: 15rem; /* Adjust width as needed */
+            width: 15rem;
             background-color: white;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             overflow-y: auto;
             z-index: 40;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* This pushes the logout button to the bottom */
             transition: transform 0.3s ease-in-out;
         }
 
         .main-content {
-            margin-left: 15rem; /* Adjust to match sidebar width */
+            margin-left: 15rem;
             padding: 1rem;
             flex: 1;
             overflow-y: auto;
             height: 100vh;
             box-sizing: border-box;
+        }
+
+        .sidebar ul li a {
+            transition: background-color 0.2s, transform 0.2s;
+        }
+
+        .sidebar ul li a:hover {
+            background-color: #f0f0f0;
+            transform: translateX(5px);
+        }
+
+        .sidebar .logout-btn {
+            background-color: #f87171;
+            color: white;
+            text-align: center;
+            margin-top: auto; /* Ensure the logout button stays at the bottom */
+        }
+
+        .sidebar .logout-btn:hover {
+            background-color: #ef4444;
         }
 
         @media (max-width: 1023px) {
@@ -85,6 +108,13 @@
                         </li>
                     </ul>
                 </div>
+            </div>
+            <!-- Logout Button -->
+            <div class="p-3">
+                <a href="{{ route('logout') }}" class="logout-btn flex items-center p-2 space-x-3 rounded-md">
+                    <i class="fa-solid fa-right-from-bracket text-xl"></i>
+                    <span>Logout</span>
+                </a>
             </div>
         </div>
 

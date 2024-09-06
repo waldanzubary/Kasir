@@ -92,7 +92,7 @@ class WarehouseController extends Controller
         $item->setStatus();
         $item->save();
 
-        return redirect('Warehouse');
+        return redirect('Warehouse')->with('success', 'Item updated successfully!');
     }
 
     public function destroy($id)
@@ -101,7 +101,7 @@ class WarehouseController extends Controller
         $item = Items::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
         $item->delete();
 
-        return redirect('Warehouse');
+        return redirect('Warehouse')->with('success', 'Item deleted successfully!');
     }
 
     public function downloadBarcode($id)

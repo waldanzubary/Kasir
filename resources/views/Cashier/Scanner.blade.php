@@ -15,146 +15,172 @@
 
 <style>
     @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        from {
+            opacity: 0;
+            transform: translateY(20px);
         }
-
-        .fade-up {
-            animation: fadeUp 0.6s ease-out;
+        to {
+            opacity: 1;
+            transform: translateY(0);
         }
+    }
 
+    .fade-up {
+        animation: fadeUp 0.6s ease-out;
+    }
+
+    .hover-card {
+        transition: all 0.3s ease;
+    }
+
+    .hover-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 3px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+
+    .item-title {
+        font-size: 1.25rem; /* Larger text for item name */
+        font-weight: 700; /* Bold text */
+        color: #2d3748; /* Darker color for contrast */
+    }
+
+    .item-price {
+        font-size: 1rem;
+        color: #4a5568;
+    }
+
+    .item-stock {
+        font-size: 0.875rem;
+        color: #4299e1;
+    }
 </style>
-<body>
+
+<body class="bg-gray-100">
     <form id="saleForm" action="{{ route('sales.stores') }}" method="POST" class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 mr-4">
         @csrf
         <!-- Main Content -->
-        <main class="flex-1   ">
-            <div class="form-control  mt-3 mb-2">
-
-                <input type="text" id="barcode_input" name="barcode" class="input input-bordered w-full" placeholder="Scan barcode here">
+        <main class="flex-1 bg-white rounded-lg shadow-lg p-6">
+            <div class="form-control mt-3 mb-4">
+                <input type="text" id="barcode_input" name="barcode" class="input input-bordered w-full bg-gray-50 focus:bg-white focus:ring-2 focus:ring-blue-300 transition duration-300" placeholder="Scan barcode here">
             </div>
-                @if (session('success'))
-                    <div class="alert alert-success mb-4">
-                        {{ session('success') }}
-                    </div>
-                @endif
+            @if (session('success'))
+                <div class="alert alert-success mb-4 bg-green-100 border-l-4 border-green-500 text-green-700 p-4">
+                    {{ session('success') }}
+                </div>
+            @endif
 
-                <input type="hidden" id="isConfirmed" name="isConfirmed" value="false">
+            <input type="hidden" id="isConfirmed" name="isConfirmed" value="false">
 
-                <div class="flex justify-center">
-
-            </div>
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-5 gap-2 fade-up">
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-5 gap-6 fade-up">
                 @foreach ($items as $item)
-                <button type="button" class="shadow-lg rounded-lg bg-white w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg overflow-hidden mt-2 hover-card transform transition-transform duration-300 ease-in-out hover:scale-105" onclick="addItem({{ json_encode($item) }})">
+                <button type="button" class="hover-card bg-white rounded-lg overflow-hidden shadow-md transition-all duration-300" onclick="addItem({{ json_encode($item) }})">
                     <div class="relative">
-                        <div class="flex p-2 absolute top-0 left-0">
-                            <span id="status-{{ $item->id }}" class="status bg-gray-200 text-white rounded p-1 text-xs font-semibold">{{ $item->status }}</span>
-                        </div>
-                        <figure>
-                            <img src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->itemName }}" class="object-cover w-full h-44 rounded-t-lg">
-                        </figure>
+                        <img src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->itemName }}" class="w-full h-32 object-cover rounded-t-lg">
+                        <span id="status-{{ $item->id }}" class="status absolute top-2 right-2 text-xs font-semibold px-2 py-1 rounded-full"></span>
                     </div>
-                    <div class="card-body p-4">
-                        <div class="flex flex-col h-full justify-between">
-                            <div>
-                                <p class="text-sm text-black font-semibold text-left break-words">{{ $item->itemName }}</p>
-                                <p class="text-xs text-neutral-400 font-semibold text-left mt-1 break-words">Rp.{{ number_format($item->price, 0, ',', '.') }}</p>
-                            </div>
-                            <!-- Display stock information -->
-                            <div class="mt-2">
-                                <p class="text-xs text-red-500 font-semibold text-left">Stock: {{ $item->stock }}</p>
-                            </div>
-                        </div>
+                    <div class="p-4">
+                        <h3 class="item-title truncate">{{ $item->itemName }}</h3>
+                        <p class="item-price mt-1">Rp.{{ number_format($item->price, 0, ',', '.') }}</p>
+                        <p class="item-stock mt-2">Stock: <span class="text-blue-600">{{ $item->stock }}</span></p>
                     </div>
                 </button>
-            @endforeach
+                @endforeach
             </div>
-
-
-
-
-
         </main>
 
         <!-- Sidebar -->
-        <aside class="w-full lg:w-1/4 bg-white p-6 rounded-lg shadow-md ">
-            <h2 class="text-xl font-bold mb-4 text-gray-800">Items Container</h2>
-            <hr class="my-4">
-            <div id="items-container" class="mt-4 h-[50vh] overflow-y-auto"></div>
+        <aside class="w-full lg:w-1/4 bg-white rounded-lg shadow-lg p-6">
+            <h2 class="text-xl font-bold mb-4 text-gray-800">Cart Summary</h2>
+            <hr class="my-4 border-gray-200">
+            <div id="items-container" class="mt-4 h-[50vh] overflow-y-auto custom-scrollbar pr-2"></div>
 
             <div class="form-control mt-4">
                 <input type="date" id="sale_date" name="sale_date" class="input input-bordered w-full hidden" value="{{ now()->toDateString() }}" required>
             </div>
 
-            <div class="flex justify-between items-center mt-4">
-                <p class="text-gray-700 font-semibold">Total Price :</p>
-                <input type="text" id="total_price" name="total_price" class="outline-none bg-transparent text-right font-semibold text-gray-800" readonly>
+            <div class="flex justify-between items-center mt-6">
+                <p class="text-gray-700 font-semibold">Total Price:</p>
+                <input type="text" id="total_price" name="total_price" class="outline-none bg-transparent text-right font-bold text-gray-800 text-lg" readonly>
             </div>
-            <hr class="my-4">
+            <hr class="my-4 border-gray-200">
 
-            <div class="form-control mb-4 ">
+            <div class="form-control mb-4">
                 <label class="block text-sm font-medium text-gray-700 mb-3">Payment Method:</label>
                 <div class="flex grid grid-cols-3 gap-3">
-                    <button type="button" class="btn w-17 h-14" data-value="Cash" onclick="selectPaymentMethod('Cash', this)">
-                        <div class="flex flex-col"><i class="fa-solid fa-money-bill-1-wave text-xl" style="color: #63E6BE;"></i><p class="text-xs">Cash</p></div>
+                    <button type="button" class="btn bg-white hover:bg-green-50 transition-colors duration-300" data-value="Cash" onclick="selectPaymentMethod('Cash', this)">
+                        <div class="flex flex-col items-center">
+                            <i class="fas fa-money-bill-wave text-xl text-green-500 mb-1"></i>
+                            <p class="text-xs">Cash</p>
+                        </div>
                     </button>
-                    <button type="button" class="btn w-17 h-14" data-value="E-Wallet" onclick="selectPaymentMethod('E-Wallet', this)">
-                        <div class="flex flex-col"><i class="fa-solid fa-wallet text-xl" style="color: #74C0FC;"></i><p class="text-xs">E-Wallet</p></div>
+                    <button type="button" class="btn bg-white hover:bg-blue-50 transition-colors duration-300" data-value="E-Wallet" onclick="selectPaymentMethod('E-Wallet', this)">
+                        <div class="flex flex-col items-center">
+                            <i class="fas fa-wallet text-xl text-blue-500 mb-1"></i>
+                            <p class="text-xs">E-Wallet</p>
+                        </div>
                     </button>
-                    <button type="button" class="btn w-17 h-14" data-value="Bank" onclick="selectPaymentMethod('Bank', this)">
-                        <div class="flex flex-col"><i class="fa-solid fa-landmark text-xl" style="color: #FFD43B;"></i><p class="text-xs">Bank</p></div>
+                    <button type="button" class="btn bg-white hover:bg-yellow-50 transition-colors duration-300" data-value="Bank" onclick="selectPaymentMethod('Bank', this)">
+                        <div class="flex flex-col items-center">
+                            <i class="fas fa-university text-xl text-yellow-500 mb-1"></i>
+                            <p class="text-xs">Bank</p>
+                        </div>
                     </button>
                 </div>
                 <input type="hidden" id="payment" name="payment" required>
             </div>
 
             <!-- Cash Fields -->
-            <div id="cash-fields" class="hidden">
-                <div class="form-control mb-4">
+            <div id="cash-fields" class="hidden space-y-4">
+                <div class="form-control">
                     <label for="cash_amount" class="label font-semibold text-gray-700">Nominal Cash:</label>
-                    <input type="number" id="cash_amount" class="input input-bordered w-full" min="0" onchange="calculateChange()">
+                    <input type="number" id="cash_amount" class="input input-bordered w-full bg-gray-50 focus:bg-white focus:ring-2 focus:ring-blue-300 transition duration-300" min="0" onchange="calculateChange()">
                 </div>
-                <div class="form-control mb-4">
+                <div class="form-control">
                     <label for="change_amount" class="label font-semibold text-gray-700">Change:</label>
-                    <input type="text" id="change_amount" class="input input-bordered w-full" readonly>
+                    <input type="text" id="change_amount" class="input input-bordered w-full bg-gray-100" readonly>
                 </div>
             </div>
 
-            <button type="button" class=" btn w-full mt-4 text-white bg-green-500"  onclick="toggleModal()">Submit Sale</button>
+            <button type="button" class="btn w-full mt-6 text-white bg-green-500 hover:bg-green-600 transition-colors duration-300" onclick="toggleModal()">Complete Sale</button>
         </aside>
     </form>
-
-    <!-- Modal for Confirmation -->
-    <div id="modal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
-        <div class="bg-white p-6 rounded-lg shadow-lg w-11/12 max-w-lg">
-            <h3 class="text-lg font-bold mb-4">Confirm Sale</h3>
-            <div class="mb-4 flex justify-between items-center">
-                <p class="font-semibold">Total Price:</p>
-                <input type="text" id="modal_total_price" class="outline-none bg-transparent readonly text-right font-semibold">
-            </div>
-            <div class="mb-4">
-                <label for="modal_payment_method" class="label font-semibold">Payment Method:</label>
-                <input type="text" id="modal_payment_method" class="outline-none bg-transparent readonly text-right font-semibold">
-            </div>
-            <div class="mb-4 hidden" id="modal_cash_fields">
-                <label for="modal_cash_amount" class="label font-semibold">Nominal Cash:</label>
-                <input type="number" id="modal_cash_amount" class="input input-bordered w-full" min="0" readonly>
-                <label for="modal_change_amount" class="label font-semibold">Change:</label>
-                <input type="text" id="modal_change_amount" class="input input-bordered w-full" readonly>
-            </div>
-            <div class="flex justify-end">
-                <button class="bg-blue-500 text-white p-2 rounded-md" onclick="submitSale()">Confirm</button>
-                <button class="bg-gray-500 text-white p-2 rounded-md ml-2" onclick="toggleModal()">Cancel</button>
+        <!-- Modal for Confirmation -->
+        <div id="modal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
+            <div class="bg-white p-8 rounded-lg shadow-xl w-11/12 max-w-md">
+                <h3 class="text-2xl font-bold mb-6 text-gray-800">Confirm Sale</h3>
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center">
+                        <p class="font-semibold text-gray-700">Total Price:</p>
+                        <input type="text" id="modal_total_price" class="outline-none bg-transparent text-right font-bold text-gray-800" readonly>
+                    </div>
+                    <div>
+                        <label for="modal_payment_method" class="block font-semibold text-gray-700 mb-1">Payment Method:</label>
+                        <input type="text" id="modal_payment_method" class="outline-none bg-transparent text-right font-semibold text-gray-800 w-full" readonly>
+                    </div>
+                </div>
+                <div class="flex justify-end mt-6">
+                    <button class="btn text-white bg-red-500 hover:bg-red-600 transition-colors duration-300" onclick="toggleModal()">Cancel</button>
+                    <button class="btn text-white bg-green-500 hover:bg-green-600 transition-colors duration-300 ml-3" onclick="submitSale()">Confirm</button>
+                </div>
             </div>
         </div>
-    </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>

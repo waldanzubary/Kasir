@@ -171,7 +171,7 @@
                     <div class="image-container">
                         <img src="{{ asset('assets/img/diagram.png') }}" alt="1 Month">
                     </div>
-                    <p class="price">$15.00</p>
+                    <p class="price">Rp150.000,00</p>
                     <p class="description">Activate your account for 1 month.</p>
                     <form action="{{ route('setActiveDate') }}" method="POST" class="mt-4">
                         @csrf
@@ -188,7 +188,7 @@
                     <div class="image-container">
                         <img src="{{ asset('assets/img/diagram.png') }}" alt="1 Year">
                     </div>
-                    <p class="price">$120.00</p>
+                    <p class="price">Rp1.200.000,00</p>
                     <p class="description">Activate your account for 1 year.</p>
                     <form action="{{ route('setActiveDate') }}" method="POST" class="mt-4">
                         @csrf
