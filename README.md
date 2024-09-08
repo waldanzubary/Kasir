@@ -30,4 +30,6 @@ Run:
 php artisan serve
 
 Kemudian run project python dengan run pada terminal:
+Setting project Python sesuai readme.md pada project
+Sesuaikan index camera dengan webcam atau kamera eksternal Komputer
 python scanner.py
