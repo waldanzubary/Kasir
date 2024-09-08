@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Sale;
 
 class SalesItem extends Model
 {
@@ -25,6 +26,8 @@ class SalesItem extends Model
     {
         return $this->belongsTo(Items::class);
     }
+
+
 
     
 }

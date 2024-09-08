@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\Sale;
+use App\Models\Items;
+use App\Models\SalesItem;
 use Barryvdh\DomPDF\PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,6 +16,8 @@ class StaffController extends Controller
     public function transactions(Request $request)
     {
         $query = Sale::where('user_id', Auth::id())->with('user', 'salesItems.item');
+        $query1 = Items::where('user_id', Auth::id());
+
 
         // Menerapkan filter tanggal jika disediakan
         if ($request->has('start_date') && $request->has('end_date')) {
@@ -23,10 +27,11 @@ class StaffController extends Controller
         }
 
         $sales = $query->get();
+        $items = $query1->get();
 
         // Menyiapkan data untuk grafik dan statistik
         $totalTransactions = $sales->count();
-        $totalItems = $sales->sum('salesItems_count'); // Pastikan 'salesItems_count' adalah atribut yang benar
+        $totalItems = $items->sum('stock'); // Pastikan 'salesItems_count' adalah atribut yang benar
         $totalSpent = $sales->sum('total_price');
         $months = $sales->groupBy(function ($sale) {
             return Carbon::parse($sale->sale_date)->format('F'); // Kelompokkan berdasarkan bulan
