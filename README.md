@@ -1,2 +1,1 @@
-Waldan Idiot.
-- Rafi Fitrotulloh
+Mana hak paten yang kau janjikan itu.
